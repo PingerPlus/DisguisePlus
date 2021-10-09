@@ -26,7 +26,7 @@ public class SkinDatabase {
      * The base path of the file where we're writing to
      */
 
-    private static final String BASE_FILE_PATH = System.getProperty("user.dir") + "\\database.json";
+    private static final String BASE_FILE_PATH = System.getProperty("user.dir") + "\\skins.json";
 
     /**
      * The base path of the project
