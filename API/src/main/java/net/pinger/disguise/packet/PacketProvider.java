@@ -5,11 +5,13 @@ import org.bukkit.entity.Player;
 
 public interface PacketProvider<T> {
 
-    void disguise(Player player, Skin skin);
-
-    void sendPacket(T... packet);
-
-    void sendPacket(Player player, T... packet);
+    /**
+     * This method sends all packets that contribute
+     * to changing the player properties.
+     * <p>The packets that are sent may vary depending on the version.
+     *
+     * @param player the player
+     */
 
     void sendServerPackets(Player player);
 }
