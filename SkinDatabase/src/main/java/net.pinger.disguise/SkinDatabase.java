@@ -2,7 +2,8 @@ package net.pinger.disguise;
 
 import com.google.gson.*;
 import net.disguise.database.file.Reader;
-import net.disguise.database.skin.Skin;
+import net.pinger.disguise.pack.SkinPackLoader;
+import net.pinger.disguise.skin.Skin;
 import net.pinger.disguise.skin.reader.SkinReader;
 import net.pinger.disguise.util.ConverterUtil;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class SkinDatabase {
      * The base path of the project
      */
 
-    private static final String BASE_PATH = System.getProperty("user.dir");
+    public static final String BASE_PATH = System.getProperty("user.dir");
 
     /**
      * The base file where we're writing to
@@ -44,7 +45,7 @@ public class SkinDatabase {
      * Represents the skins array returned from the database.json file
      */
 
-    private static final JsonArray SKINS_ARRAY = GSON.fromJson(Reader.read(BASE_FILE), JsonArray.class);
+    private static JsonArray SKINS_ARRAY;
 
     /**
      * The default logger implementation
@@ -61,15 +62,19 @@ public class SkinDatabase {
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
 
-        LOGGER.info("Loading all UUID's from the database.json file...");
+        if (BASE_FILE.exists()) {
+            SKINS_ARRAY = GSON.fromJson(Reader.read(BASE_FILE), JsonArray.class);;
 
-        // Loop through each skin
-        for (JsonElement element : SKINS_ARRAY) {
-            // Get the skin object
-            JsonObject object = element.getAsJsonObject();
+            LOGGER.info("Loading all UUID's from the database.json file...");
 
-            // Save the uuid
-            SKINS.add(UUID.fromString(object.get("uuid").getAsString()));
+            // Loop through each skin
+            for (JsonElement element : SKINS_ARRAY) {
+                // Get the skin object
+                JsonObject object = element.getAsJsonObject();
+
+                // Save the uuid
+                SKINS.add(UUID.fromString(object.get("uuid").getAsString()));
+            }
         }
 
         // Searching for the query
@@ -124,12 +129,17 @@ public class SkinDatabase {
                 SKINS_ARRAY.add(skin.toJsonObject());
                 SKINS.add(skin.getUniqueId());
             }
-        }
 
-        // Using guavas method toJson to convert an array to a json string
-        String json = GSON.toJson(SKINS_ARRAY);
-        try (BufferedWriter reader = new BufferedWriter(new FileWriter(BASE_FILE))) {
-            reader.write(json);
+            String json = GSON.toJson(SKINS_ARRAY);
+            try (BufferedWriter reader = new BufferedWriter(new FileWriter(BASE_FILE))) {
+                reader.write(json);
+            }
+        } else if (args[0].equalsIgnoreCase("cp")) {
+            if (args.length != 3)
+                throw new RuntimeException("You need to specify a name and give a url for checkout");
+
+            String name = args[1], url = args[2];
+            SkinPackLoader.createNewSkinPack(name, url);
         }
     }
 }

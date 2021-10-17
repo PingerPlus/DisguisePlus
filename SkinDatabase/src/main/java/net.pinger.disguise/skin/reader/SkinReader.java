@@ -1,11 +1,11 @@
 package net.pinger.disguise.skin.reader;
 
 import com.google.gson.JsonObject;
-import net.disguise.database.skin.Skin;
 import net.disguise.database.util.HttpUtil;
 import net.pinger.common.http.HttpResponse;
 import net.pinger.common.http.request.HttpGetRequest;
 import net.pinger.disguise.SkinDatabase;
+import net.pinger.disguise.skin.Skin;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -45,6 +45,20 @@ public class SkinReader {
                 obj.get("name").getAsString(),
                 properties.get("value").getAsString(),
                 properties.get("signature").getAsString());
+    }
+
+    /**
+     * Returns a new {@link Skin} based on the returned data from the mineskin request.
+     *
+     * @param object the json object
+     * @return a new skin
+     */
+
+    public static Skin getSkinFromMineskin(JsonObject object) {
+        return new Skin(null, null,
+                object.get("value").getAsString(),
+                object.get("signature").getAsString()
+        );
     }
 
 }

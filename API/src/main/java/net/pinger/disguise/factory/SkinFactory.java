@@ -1,6 +1,11 @@
 package net.pinger.disguise.factory;
 
 import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.skin.SkinPack;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public interface SkinFactory {
 
@@ -12,8 +17,16 @@ public interface SkinFactory {
      * @return all skins that this plugin has loaded
      */
 
+    @Nonnull
     Skin[] getSkins();
 
+    @Nonnull
     Skin getRandomSkin();
 
+    @Nullable
+    SkinPack getSkinPackByName(String name);
+
+    List<? extends SkinPack> getSkinPacks(String category);
+
+    List<? extends SkinPack> getSkinPacks();
 }

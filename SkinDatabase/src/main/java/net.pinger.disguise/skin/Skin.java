@@ -1,4 +1,4 @@
-package net.disguise.database.skin;
+package net.pinger.disguise.skin;
 
 import com.google.gson.JsonObject;
 
@@ -70,8 +70,11 @@ public class Skin {
 
     public JsonObject toJsonObject() {
         JsonObject object = new JsonObject();
-        object.addProperty("uuid", this.id.toString());
-        object.addProperty("name", this.name);
+        if (this.id != null )
+            object.addProperty("uuid", this.id.toString());
+
+        if (this.name != null)
+            object.addProperty("name", this.name);
 
         JsonObject properties = new JsonObject();
         properties.addProperty("value", this.value);
