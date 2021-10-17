@@ -1,7 +1,7 @@
 package net.pinger.disguise;
 
 import com.google.gson.*;
-import net.disguise.database.file.Reader;
+import net.pinger.disguise.file.Reader;
 import net.pinger.disguise.pack.SkinPackLoader;
 import net.pinger.disguise.skin.Skin;
 import net.pinger.disguise.skin.reader.SkinReader;
@@ -21,7 +21,9 @@ public class SkinDatabase {
      * The {@link Gson} object used for manipulating over .json files
      */
 
-    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().enableComplexMapKeySerialization().create();
+    public static final Gson GSON = new GsonBuilder()
+            .serializeNulls()
+            .setPrettyPrinting().enableComplexMapKeySerialization().create();
 
     /**
      * The base path of the file where we're writing to
@@ -135,11 +137,20 @@ public class SkinDatabase {
                 reader.write(json);
             }
         } else if (args[0].equalsIgnoreCase("cp")) {
-            if (args.length != 3)
+            if (args.length != 4)
                 throw new RuntimeException("You need to specify a name and give a url for checkout");
 
-            String name = args[1], url = args[2];
-            SkinPackLoader.createNewSkinPack(name, url);
+            SkinPackLoader.createNewSkinPack(args[1], args[2], args[3]);
+        } else if (args[0].equalsIgnoreCase("chk")) {
+            for (File file : new File(BASE_PATH).listFiles()) {
+                // The file name is essentially the category
+                if (!file.isDirectory())
+                    continue;
+
+                for (File ls : file.listFiles()) {
+                    SkinPackLoader.saveCategory(file.getName(), ls.getName());
+                }
+            }
         }
     }
 }

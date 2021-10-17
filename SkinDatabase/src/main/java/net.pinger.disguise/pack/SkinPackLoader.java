@@ -7,6 +7,7 @@ import net.pinger.common.http.HttpResponse;
 import net.pinger.common.http.request.HttpPostRequest;
 import net.pinger.common.lang.Lists;
 import net.pinger.disguise.SkinDatabase;
+import net.pinger.disguise.file.Reader;
 import net.pinger.disguise.skin.Skin;
 import net.pinger.disguise.skin.reader.SkinReader;
 import org.jsoup.Jsoup;
@@ -16,10 +17,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
@@ -35,7 +33,10 @@ public class SkinPackLoader {
 
     private static final ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
 
-    public static void createNewSkinPack(String pack, String fileName) {
+    public static void createNewSkinPack(String pack, String category, String fileName) {
+        pack = pack.replace("_", " ");
+        category = category.replace("_", " ");
+
         // Create the new pack name
         logger.info("Reading from " + fileName);
 
@@ -49,6 +50,9 @@ public class SkinPackLoader {
             skins.addAll(SkinPackLoader.retrieveSkinUrls(file));
         }
 
+        String finalCategory = category;
+        String finalPack = pack;
+
         service.scheduleAtFixedRate(() -> {
             SkinPackLoader.retrieveSkin(skins.get(0), skin -> {
                 try {
@@ -61,8 +65,16 @@ public class SkinPackLoader {
 
                     if (skins.isEmpty()) {
                         logger.info("Saving the skins into the end file.");
-                        new File(SkinDatabase.BASE_PATH, pack).mkdirs();
-                        File file = new File(new File(SkinDatabase.BASE_PATH, pack), "data.json");
+
+                        // Create the category file
+                        File f = new File(SkinDatabase.BASE_PATH, finalCategory);
+                        f.mkdirs();
+
+                        // Create the pack file
+                        File pf = new File(f, finalPack);
+                        pf.mkdirs();
+
+                        File file = new File(pf, "data.json");
 
                         if (!file.exists()) {
                             file.createNewFile();
@@ -71,6 +83,8 @@ public class SkinPackLoader {
                         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
                             writer.write(SkinDatabase.GSON.toJson(array));
                         }
+
+                        SkinPackLoader.saveCategory(finalCategory, finalPack);
 
                         logger.info(String.format("Successfully saved %s skins!", array.size()));
                     }
@@ -131,6 +145,32 @@ public class SkinPackLoader {
                 logger.error(e.getMessage());
             }
         });
+    }
+
+    public static void saveCategory(String category, String pack) throws IOException {
+        File f = new File(SkinDatabase.BASE_PATH, "categories.json");
+
+        f.mkdirs();
+        JsonObject object;
+
+        // Check if exists
+        if (!f.exists())
+            object = new JsonObject();
+        else
+            object = SkinDatabase.GSON.fromJson(Reader.read(f), JsonObject.class);
+
+        if (object.has(category)) {
+            object.get(category).getAsJsonArray().add(pack);
+        } else {
+            JsonArray arr = new JsonArray();
+            arr.add(pack);
+
+            object.add(category, arr);
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(f))) {
+            writer.write(SkinDatabase.GSON.toJson(object));
+        }
     }
 
 

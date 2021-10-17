@@ -15,7 +15,7 @@
  *
  */
 
-package net.disguise.database.file;
+package net.pinger.disguise.file;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

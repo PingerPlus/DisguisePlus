@@ -2,6 +2,9 @@ package net.pinger.disguise;
 
 import net.pinger.disguise.factory.SkinFactory;
 import net.pinger.disguise.packet.PacketProvider;
+import net.pinger.disguise.skin.SkinPack;
+
+import java.util.List;
 
 public class DisguisePlusAPI {
 
@@ -46,6 +49,14 @@ public class DisguisePlusAPI {
 
     public static SkinFactory getSkinFactory() {
         return disguise.getSkinFactory();
+    }
+
+    public static List<? extends SkinPack> getSkinPacks(String category) {
+        return getSkinFactory().getSkinPacks(category);
+    }
+
+    public static List<? extends SkinPack> getSkinPacks() {
+        return getSkinFactory().getSkinPacks();
     }
 
 }
