@@ -1,5 +1,7 @@
 package net.pinger.disguise.skin;
 
+import org.bukkit.inventory.ItemStack;
+
 public interface Skin {
 
     /**
@@ -26,6 +28,16 @@ public interface Skin {
 
     Object toProperty();
 
+    /**
+     * Transforms this skin to a skull.
+     * <p>
+     * This instance is created once the skin has been initialized,
+     * and it will never change unless the server has been restarted.
+     *
+     * @return the skull from this item
+     */
+
+    ItemStack toSkull();
 
 
 }

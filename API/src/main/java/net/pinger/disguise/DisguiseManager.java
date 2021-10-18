@@ -1,7 +1,10 @@
 package net.pinger.disguise;
 
 import net.pinger.disguise.exceptions.InvalidUserException;
+import net.pinger.disguise.skin.Skin;
 import org.bukkit.entity.Player;
+
+import javax.annotation.Nonnull;
 
 public interface DisguiseManager {
 
@@ -42,11 +45,11 @@ public interface DisguiseManager {
 
     void applySkinFromUrl(Player player, String url);
 
-
+    void applySkin(Player player, @Nonnull Skin skin);
 
     void applyNickname(Player player, String name);
 
-    void resetNickname(Player player, String name);
+    void resetNickname(Player player);
 
 
 }
