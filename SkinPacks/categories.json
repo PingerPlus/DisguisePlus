@@ -1,6 +1,10 @@
 {
   "Anime": [
-    "Naruto"
+    "Naruto",
+    "Death Note",
+    "Fullmetal Alchemist",
+    "One Piece",
+    "Dragon Ball Z"
   ],
   "Series": [
     "Squid Game",
@@ -19,5 +23,8 @@
   "Brands": [
     "Gucci",
     "Supreme"
+  ],
+  "Movies": [
+    "Shrek"
   ]
 }
