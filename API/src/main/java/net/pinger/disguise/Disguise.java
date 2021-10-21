@@ -10,4 +10,8 @@ public interface Disguise {
     //
 
     SkinFactory getSkinFactory();
+
+    //
+
+    DisguiseManager getManager();
 }
