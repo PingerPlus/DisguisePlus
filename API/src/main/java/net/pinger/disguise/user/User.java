@@ -2,6 +2,8 @@ package net.pinger.disguise.user;
 
 import net.pinger.disguise.skin.Skin;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public interface User {
@@ -12,6 +14,7 @@ public interface User {
      * @return the uuid
      */
 
+    @Nonnull
     UUID getId();
 
     /**
@@ -22,7 +25,18 @@ public interface User {
      * @return the current skin
      */
 
+    @Nonnull
     Skin getCurrentSkin();
+
+    /**
+     * This method returns the name of the user.
+     * It is equal to
+     *
+     * @return the name
+     */
+
+    @Nonnull
+    String getName();
 
     /**
      * Returns the default name of this user which is defined by the id of this player.
@@ -30,6 +44,7 @@ public interface User {
      * @return the default name
      */
 
+    @Nonnull
     String getDefaultName();
 
     /**
@@ -39,6 +54,7 @@ public interface User {
      * @return the changed name
      */
 
+    @Nullable
     String getChangedName();
 
     /**
@@ -48,6 +64,7 @@ public interface User {
      * @return whether this user has a cooldown
      */
 
+    
     boolean hasCooldown();
 
 }

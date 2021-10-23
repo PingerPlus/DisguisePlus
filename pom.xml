@@ -12,7 +12,6 @@
     <modules>
         <module>API</module>
         <module>Spigot</module>
-        <module>v1_7</module>
         <module>SkinDatabase</module>
     </modules>
 
