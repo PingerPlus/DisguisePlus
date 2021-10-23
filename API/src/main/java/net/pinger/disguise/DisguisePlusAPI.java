@@ -51,6 +51,18 @@ public class DisguisePlusAPI {
         return disguise.getSkinFactory();
     }
 
+    /**
+     * Returns the {@link DisguiseManager} instance.
+     *
+     * @return the disguise manager
+     */
+
+    public static DisguiseManager getDisguiseManager() {
+        return disguise.getManager();
+    }
+
+
+
     public static List<? extends SkinPack> getSkinPacks(String category) {
         return getSkinFactory().getSkinPacks(category);
     }
