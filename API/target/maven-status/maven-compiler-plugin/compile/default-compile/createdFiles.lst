@@ -1,0 +1,11 @@
+net\pinger\disguise\Disguise.class
+net\pinger\disguise\packet\PacketProvider.class
+net\pinger\disguise\exceptions\InvalidUrlException.class
+net\pinger\disguise\skin\SkinPack.class
+net\pinger\disguise\user\User.class
+net\pinger\disguise\DisguiseManager.class
+net\pinger\disguise\skin\Skin.class
+net\pinger\disguise\exceptions\InvalidUserException.class
+net\pinger\disguise\DisguisePlusAPI.class
+net\pinger\disguise\factory\SkinFactory.class
+net\pinger\disguise\utils\PropertyUtil.class
