@@ -9,6 +9,7 @@ import net.pinger.disguise.skin.SimpleSkinPack;
 import net.pinger.disguise.skin.Skin;
 import net.pinger.disguise.skin.SkinPack;
 import net.pinger.disguise.utils.HttpUtil;
+import net.pinger.disguise.utils.ReferenceUtil;
 import net.pinger.disguise.utils.SkinUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,13 +22,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class SkinPackLoader {
 
-    private static final Logger logger = LoggerFactory.getLogger("SkinPackLoader");
-
-    private static final Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .enableComplexMapKeySerialization()
-            .create();
-
     public static SkinPack getSkinPack(String category, String name) throws IOException {
         List<Skin> skins = Lists.newArrayList();
 
@@ -35,7 +29,7 @@ public class SkinPackLoader {
         HttpResponse response = request.connect();
 
         // Getting the skins
-        JsonArray array = gson.fromJson(response.getResponse(), JsonArray.class);
+        JsonArray array = ReferenceUtil.GSON.fromJson(response.getResponse(), JsonArray.class);
 
         // Looping through each skin
         for (JsonElement object : array) {

@@ -2,6 +2,7 @@ package net.pinger.disguise;
 
 import net.pinger.disguise.factory.SkinFactory;
 import net.pinger.disguise.packet.PacketProvider;
+import net.pinger.disguise.user.UserManager;
 
 public interface Disguise {
 
@@ -14,4 +15,8 @@ public interface Disguise {
     //
 
     DisguiseManager getManager();
+
+    //
+
+    UserManager getUserManager();
 }

@@ -20,6 +20,7 @@ import net.pinger.disguise.packet.PacketManager;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.settings.DisguiseSettings;
 import net.pinger.disguise.skin.SkullManager;
+import net.pinger.disguise.user.UserManager;
 import net.pinger.disguise.utils.ConversationUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -110,6 +111,11 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     @Override
     public DisguiseManager getManager() {
+        return null;
+    }
+
+    @Override
+    public UserManager getUserManager() {
         return null;
     }
 

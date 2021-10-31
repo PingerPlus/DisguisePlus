@@ -74,15 +74,24 @@ public class Database {
             return;
 
         try (Connection c = this.getConnection()) {
-            try (PreparedStatement s = c.prepareStatement("CREATE TABLE IF NOT EXISTS users(`id` VARCHAR(36) PRIMARY KEY NOT NULL)")) {
+            try (PreparedStatement s = c.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS users(`id` VARCHAR(36) PRIMARY KEY NOT NULL)")) {
+                s.executeUpdate();
+            }
+
+            try (PreparedStatement s = c.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS skins(`skin_id` INT(8) PRIMARY KEY AUTO_INCREMENT, `texture` TEXT NOT NULL, 'signature' TEXT NOT NULL);")) {
                 s.executeUpdate();
             }
 
             try (PreparedStatement s = c.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS disguised(`active` BOOLEAN DEFAULT FALSE, `genName` VARCHAR(16) NOT NULL, " +
-                    "`id` VARCHAR(36) NOT NULL, FOREIGN KEY (`id`) REFERENCES users(`id`));")) {
+                    "`id` VARCHAR(36) NOT NULL, `skin_id` INT(8), " +
+                            "FOREIGN KEY (`id`) REFERENCES users(`id`), FOREIGN KEY (`skin_id`) REFERENCES skins(`skin_id`));")) {
                 s.executeUpdate();
             }
+
+
         } catch (SQLException e) {
             logger.error("Failed to create MYSQL tables -> ");
             logger.error(e.getMessage());
