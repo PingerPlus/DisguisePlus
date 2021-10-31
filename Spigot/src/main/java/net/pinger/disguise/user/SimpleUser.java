@@ -7,7 +7,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public interface User {
+public class SimpleUser implements User {
+
+    // The default name of this player when joining the server
+    private String defaultName;
 
     /**
      * Returns the uuid of this player.
@@ -16,7 +19,10 @@ public interface User {
      */
 
     @Nonnull
-    UUID getId();
+    @Override
+    public UUID getId() {
+        return null;
+    }
 
     /**
      * Returns the current skin this player is wearing.
@@ -27,7 +33,10 @@ public interface User {
      */
 
     @Nonnull
-    Skin getCurrentSkin();
+    @Override
+    public Skin getCurrentSkin() {
+        return null;
+    }
 
     /**
      * This method returns the name of the user.
@@ -37,7 +46,10 @@ public interface User {
      */
 
     @Nonnull
-    String getName();
+    @Override
+    public String getName() {
+        return null;
+    }
 
     /**
      * Returns the default name of this user which is defined by the id of this player.
@@ -46,7 +58,10 @@ public interface User {
      */
 
     @Nonnull
-    String getDefaultName();
+    @Override
+    public String getDefaultName() {
+        return this.defaultName;
+    }
 
     /**
      * Returns the current display name of this player.
@@ -56,28 +71,23 @@ public interface User {
      */
 
     @Nullable
-    String getChangedName();
+    @Override
+    public String getChangedName() {
+        return null;
+    }
 
     /**
      * Returns the cooldown of this user.
      *
      * @return the cooldown
      */
-
     @Nullable
-    Cooldown getCooldown();
-
-    /**
-     * Returns whether this user currently has a cooldown.
-     * If this value returns true, the user may not be using any skinning commands until this returns false.
-     *
-     * @return whether this user has a cooldown
-     */
-
-    default boolean hasCooldown() {
-        return getCooldown() != null
-                & getCooldown().isActive();
+    @Override
+    public Cooldown getCooldown() {
+        return null;
     }
 
+    public void setCooldown(Cooldown cooldown) {
 
+    }
 }
