@@ -18,6 +18,7 @@ public class SimpleCooldown implements Cooldown {
      *
      * @return the user
      */
+
     @Override
     public User getUser() {
         return this.user;

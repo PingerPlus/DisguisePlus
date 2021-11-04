@@ -9,8 +9,16 @@ import java.util.UUID;
 
 public class SimpleUser implements User {
 
+    private final UUID id;
+
     // The default name of this player when joining the server
-    private String defaultName;
+    private final String defaultName;
+
+    public SimpleUser(UUID id, String defaultName) {
+        this.id = id;
+        this.defaultName = defaultName;
+    }
+
 
     /**
      * Returns the uuid of this player.
@@ -21,7 +29,7 @@ public class SimpleUser implements User {
     @Nonnull
     @Override
     public UUID getId() {
-        return null;
+        return this.id;
     }
 
     /**
@@ -37,13 +45,6 @@ public class SimpleUser implements User {
     public Skin getCurrentSkin() {
         return null;
     }
-
-    /**
-     * This method returns the name of the user.
-     * It is equal to
-     *
-     * @return the name
-     */
 
     @Nonnull
     @Override
@@ -81,6 +82,7 @@ public class SimpleUser implements User {
      *
      * @return the cooldown
      */
+
     @Nullable
     @Override
     public Cooldown getCooldown() {

@@ -15,7 +15,6 @@ import java.sql.SQLException;
 
 public class Database {
 
-    private final DisguisePlus disguisePlus;
     private HikariDataSource hikariDataSource;
 
     // The basic data
@@ -25,7 +24,6 @@ public class Database {
     private static final Logger logger = LoggerFactory.getLogger("Database");
 
     public Database(DisguisePlus dp, DatabaseSettings settings) {
-        this.disguisePlus = dp;
         this.settings = settings;
 
         if (dp.getConfig().getBoolean("mysql.enabled")) {
@@ -80,17 +78,30 @@ public class Database {
             }
 
             try (PreparedStatement s = c.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS skins(`skin_id` INT(8) PRIMARY KEY AUTO_INCREMENT, `texture` TEXT NOT NULL, 'signature' TEXT NOT NULL);")) {
+                    "CREATE TABLE IF NOT EXISTS skins(`skin_id` INT(8) PRIMARY KEY AUTO_INCREMENT, `texture` TEXT NOT NULL, `signature` TEXT NOT NULL);")) {
                 s.executeUpdate();
             }
 
             try (PreparedStatement s = c.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS disguised(`active` BOOLEAN DEFAULT FALSE, `genName` VARCHAR(16) NOT NULL, " +
-                    "`id` VARCHAR(36) NOT NULL, `skin_id` INT(8), " +
-                            "FOREIGN KEY (`id`) REFERENCES users(`id`), FOREIGN KEY (`skin_id`) REFERENCES skins(`skin_id`));")) {
+                    "`user_id` VARCHAR(36) NOT NULL, `skin_id` INT(8) NOT NULL, " +
+                            "FOREIGN KEY (`user_id`) REFERENCES users(`id`), FOREIGN KEY (`skin_id`) REFERENCES skins(`skin_id`));")) {
                 s.executeUpdate();
             }
 
+            try (PreparedStatement s = c.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS nicked(`nick_id` INT PRIMARY KEY AUTO_INCREMENT, `active` BOOLEAN DEFAULT FALSE, `nick` VARCHAR(32) NOT NULL, " +
+                            "`user_id` VARCHAR(36) NOT NULL, " +
+                            "FOREIGN KEY (`user_id`) REFERENCES users(`id`));")) {
+                s.executeUpdate();
+            }
+
+            try (PreparedStatement s = c.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS skined(`id` INT PRIMARY KEY AUTO_INCREMENT, `active` BOOLEAN DEFAULT FALSE," +
+                            "`user_id` VARCHAR(36) NOT NULL, `skin_id` INT(8) NOT NULL," +
+                            "FOREIGN KEY (`user_id`) REFERENCES users(`id`), FOREIGN KEY(`skin_id`) REFERENCES skins(`skin_id`));")) {
+                s.executeUpdate();
+            }
 
         } catch (SQLException e) {
             logger.error("Failed to create MYSQL tables -> ");
