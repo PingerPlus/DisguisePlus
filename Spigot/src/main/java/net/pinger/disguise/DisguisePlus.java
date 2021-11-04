@@ -100,6 +100,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     public void onDisable() {
         // Leave all of the conversations
         this.conversationUtil.cancelAllConversations();
+        this.getSettings().saveConfig();
     }
 
     @Override

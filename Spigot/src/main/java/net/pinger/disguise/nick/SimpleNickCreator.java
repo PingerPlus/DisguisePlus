@@ -1,9 +1,14 @@
 package net.pinger.disguise.nick;
 
+import joptsimple.internal.Strings;
+import net.pinger.disguise.nick.flag.NickFlag;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 public class SimpleNickCreator {
 
@@ -15,11 +20,16 @@ public class SimpleNickCreator {
         if (pattern.length() > 16)
             pattern = pattern.substring(0, 16);
 
-        char[] optionals = StringUtils.substringBetween(pattern, "|")
-                .toCharArray();
+        String xs = StringUtils.substringBetween(pattern, "|");
 
-        char[] chars = pattern.substring(0, pattern.indexOf("|"))
-                .toCharArray();
+        char[] optionals = xs == null ?
+                new char[0] :
+                xs.toCharArray();
+
+        char[] chars = xs != null ?
+                pattern.substring(0, pattern.indexOf("|"))
+                    .toCharArray() :
+                pattern.toCharArray();
 
         for (char s : chars) {
             if (s != 'A' && s != 'a' && s != 'R')
@@ -41,18 +51,73 @@ public class SimpleNickCreator {
     public String createNick() {
         StringBuilder builder = new StringBuilder();
 
-        for (int i = 0; i < this.flags.size(); i++) {
-            if (i == 0)
-                builder.append(this.flags.get(i)
-                        .generate().toString().toUpperCase());
-            else
-                builder.append(this.flags.get(i));
+        List<NickCharacter> optionals =
+                this.flags.stream().filter(NickCharacter::isOptional)
+                .collect(Collectors.toList());
+
+        List<NickCharacter> required =
+                this.flags.stream().filter(n -> !n.isOptional())
+                .collect(Collectors.toList());
+
+        for (int i = 0; i < required.size(); i++) {
+            builder.append(
+                    i == 0 ?
+                            required.get(i).generate().toString().toUpperCase() :
+                            required.get(i).generate()
+            );
         }
 
-        if (builder.length() > 16)
-            return builder.toString().substring(0, 16);
+        if (optionals.size() == 0)
+            return builder.toString();
+
+        int random = new Random().nextInt(optionals.size());
+
+        // Account for the optional characters aswell
+        for (int i = 0; i < random; i++) {
+            builder.append(optionals.get(i).generate());
+        }
 
         return builder.toString();
+    }
+
+    /**
+     * This method creates a default flag which then gets added to the flag list.
+     * <p>
+     * Ensures that the pattern is configured correctly, instead of letting the
+     * player figuring out the pattern.
+     *
+     * @since 2.0
+     */
+
+    public void createDefaultFlag() {
+        if (this.flags.size() == 16)
+            return;
+
+        boolean optional = this.flags.get(this.flags.size() - 1)
+                .isOptional();
+
+        NickCharacter character = new NickCharacter(NickFlag.CONSONANT, optional);
+        this.flags.add(character);
+    }
+
+    public void saveToConfig(FileConfiguration cfg) {
+        StringBuilder builder = new StringBuilder();
+
+        boolean optional = false;
+
+        for (NickCharacter character : this.flags) {
+            if (character.isOptional() && !optional) {
+                builder.append("|");
+                optional = true;
+            }
+
+            builder.append(character.getFlag().getKey());
+        }
+
+        if (optional)
+            builder.append("|");
+
+        cfg.set("nick.pattern", builder.toString());
     }
 
     public List<NickCharacter> getFlags() {

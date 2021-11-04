@@ -7,11 +7,20 @@ import java.util.Random;
 
 public class NickCharacter {
 
-    private final String target;
+    private String target;
     private boolean optional = true;
-    private final NickFlag flag;
+    private NickFlag flag;
 
-    public NickCharacter(NickFlag flag, boolean optional) {
+    NickCharacter(NickFlag flag, boolean optional) {
+        this.setFlag(flag);
+        this.optional = optional;
+    }
+
+    NickCharacter(char c, boolean optional) {
+        this(NickFlag.getByKey(c), optional);
+    }
+
+    private void setFlag(NickFlag flag) {
         this.flag = flag;
 
         if (flag == NickFlag.VOWEL)
@@ -22,12 +31,10 @@ public class NickCharacter {
             target = new Random().nextInt(2) == 0 ?
                     Strings.VOWELS_LOWERCASE :
                     Strings.CONSONANTS_LOWERCASE;
-
-        this.optional = optional;
     }
 
-    public NickCharacter(char c, boolean optional) {
-        this(NickFlag.getByKey(c), optional);
+    public void nextFlag() {
+        this.setFlag(NickFlag.values()[(this.flag.ordinal() + 1) % NickFlag.values().length]);
     }
 
     public NickFlag getFlag() {

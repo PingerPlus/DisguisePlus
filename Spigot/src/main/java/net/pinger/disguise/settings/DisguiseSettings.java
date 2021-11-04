@@ -221,5 +221,8 @@ public class DisguiseSettings {
         cfg.set("bstats", this.metrics);
         cfg.set("update", this.update);
 
+        // Update nick creator
+        this.creator.saveToConfig(cfg);
+        this.dp.saveConfig();
     }
 }

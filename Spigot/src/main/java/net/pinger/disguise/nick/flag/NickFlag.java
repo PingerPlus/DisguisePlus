@@ -16,6 +16,10 @@ public enum NickFlag {
         return description;
     }
 
+    public char getKey() {
+        return key;
+    }
+
     public static NickFlag getByKey(char key) {
         for (NickFlag flag : values()) {
             if (flag.key == key)

@@ -13,9 +13,11 @@ import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.inventory.SimpleInventoryManager;
 import net.pinger.disguise.nick.NickCharacter;
 import net.pinger.disguise.nick.SimpleNickCreator;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -55,8 +57,24 @@ public class CreatorProvider implements InventoryProvider {
         for (int i = 0; i < flags.size(); i++) {
             NickCharacter character = flags.get(i);
 
-            items[i] = ClickableItem.of(this.getFromCharacter(character, i + 1), e -> {
+            final int f = i;
 
+            items[i] = ClickableItem.of(this.getFromCharacter(character, i + 1), e -> {
+                if (e.isRightClick()) {
+                    character.nextFlag();
+                }
+
+                if (e.getClick() == ClickType.MIDDLE) {
+                    creator.getFlags().remove(character);
+                }
+
+                if (e.isLeftClick()) {
+                    if (!character.isOptional() && (f + 1 == items.length || flags.get(f + 1).isOptional())) {
+                        character.setOptional(true);
+                    } else if (character.isOptional() && !flags.get(f - 1).isOptional()) {
+                        character.setOptional(false);
+                    }
+                }
             });
         }
 
@@ -70,7 +88,7 @@ public class CreatorProvider implements InventoryProvider {
                     .toItemStack();
 
             contents.set(5, 1, ClickableItem.of(cc, e -> {
-
+                this.dp.getSettings().getCreator().createDefaultFlag();
             }));
 
         } else {

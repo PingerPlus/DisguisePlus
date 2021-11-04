@@ -3,6 +3,7 @@ nick:
   # This is the pattern used to create random nicks when doing /disguise
   # a - vowel (a, e, i, o, u)
   # A - consonant
+  # R - Random (Either consonant or vowel)
   # Values that are between ||, for example |aAa| are optional and will be randomly generated.
   # For example, the pattern: "AaAaA|aA|" will always contain at least 5 characters and a maximum of 7, where the pattern is
   #   Consonant - Vowel - Consonant - Vowel - Consonant |Vowel - Consonant|
