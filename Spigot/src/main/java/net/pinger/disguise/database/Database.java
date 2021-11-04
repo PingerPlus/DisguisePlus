@@ -78,7 +78,7 @@ public class Database {
             }
 
             try (PreparedStatement s = c.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS skins(`skin_id` INT(8) PRIMARY KEY AUTO_INCREMENT, `texture` TEXT NOT NULL, `signature` TEXT NOT NULL);")) {
+                    "CREATE TABLE IF NOT EXISTS skins(`skin_id` INT(8) PRIMARY KEY AUTO_INCREMENT, `texture` TEXT NOT NULL, `signature` TEXT UNIQUE NOT NULL);")) {
                 s.executeUpdate();
             }
 

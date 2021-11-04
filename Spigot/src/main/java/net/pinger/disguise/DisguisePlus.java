@@ -20,6 +20,8 @@ import net.pinger.disguise.packet.PacketManager;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.settings.DisguiseSettings;
 import net.pinger.disguise.skin.SkullManager;
+import net.pinger.disguise.user.SimpleUser;
+import net.pinger.disguise.user.SimpleUserManager;
 import net.pinger.disguise.user.UserManager;
 import net.pinger.disguise.utils.ConversationUtil;
 import org.bukkit.Bukkit;
@@ -43,6 +45,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private DisguiseSettings settings = new DisguiseSettings(this);
     private final SkullManager skullManager = new SkullManager();
     private DataManager dataManager;
+    private final SimpleUserManager sum = new SimpleUserManager();
 
     private static PacketProvider<?> provider;
 
@@ -116,7 +119,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     @Override
     public UserManager getUserManager() {
-        return null;
+        return this.sum;
     }
 
     public ConversationUtil getConversationUtil() {

@@ -12,13 +12,25 @@ public class SimpleUser implements User {
     private final UUID id;
 
     // The default name of this player when joining the server
-    private final String defaultName;
+    private String defaultName;
 
-    public SimpleUser(UUID id, String defaultName) {
+    public SimpleUser(UUID id) {
         this.id = id;
-        this.defaultName = defaultName;
     }
 
+    /**
+     * This is a method which sets the default name of this user.
+     * We must ensure that this method can only get run once at the user join.
+     *
+     * @param defaultName the name
+     */
+
+    public void setDefaultName(String defaultName) {
+        if (this.defaultName != null)
+            return;
+
+        this.defaultName = defaultName;
+    }
 
     /**
      * Returns the uuid of this player.
