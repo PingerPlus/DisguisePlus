@@ -12,6 +12,9 @@ public class SimpleNickCreator {
     public static SimpleNickCreator createFrom(String pattern) {
         SimpleNickCreator creator = new SimpleNickCreator();
 
+        if (pattern.length() > 16)
+            pattern = pattern.substring(0, 16);
+
         char[] optionals = StringUtils.substringBetween(pattern, "|")
                 .toCharArray();
 
@@ -22,14 +25,14 @@ public class SimpleNickCreator {
             if (s != 'A' && s != 'a' && s != 'R')
                 continue;
 
-            creator.flags.add(new NickCharacter(s, true));
+            creator.flags.add(new NickCharacter(s, false));
         }
 
         for (char s : optionals) {
             if (s != 'A' && s != 'a' && s != 'R')
                 continue;
 
-            creator.flags.add(new NickCharacter(s, false));
+            creator.flags.add(new NickCharacter(s, true));
         }
 
         return creator;
@@ -51,7 +54,7 @@ public class SimpleNickCreator {
 
         return builder.toString();
     }
-    
+
     public List<NickCharacter> getFlags() {
         return flags;
     }

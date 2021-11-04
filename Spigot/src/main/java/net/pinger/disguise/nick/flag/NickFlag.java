@@ -2,12 +2,18 @@ package net.pinger.disguise.nick.flag;
 
 public enum NickFlag {
 
-    CONSONANT('A'), VOWEL('a'), RANDOM('R');
+    CONSONANT('A', "Consonant"), VOWEL('a', "Vowel"), RANDOM('R', "Either consonant or vowel");
 
     private final char key;
+    private final String description;
 
-    NickFlag(char key) {
+    NickFlag(char key, String description) {
         this.key = key;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public static NickFlag getByKey(char key) {
