@@ -48,7 +48,7 @@ public class SimpleInventoryManager {
     public SmartInventory getSettingsProvider() {
         return SmartInventory.builder()
                 .provider(new SettingsProvider(this.disguise))
-                .title(ChatColor.DARK_GRAY + "DisguisePlus 2.0.0 > Settings")
+                .title(ChatColor.DARK_GRAY + String.format("Disguise Plus %s", this.disguise.getDescription().getVersion()))
                 .parent(this.getDisguisePlusProvider())
                 .manager(this.inventoryManager)
                 .size(6, 9)
@@ -127,6 +127,15 @@ public class SimpleInventoryManager {
                 .manager(this.inventoryManager)
                 .title(ChatColor.DARK_GRAY + "Settings > Disguise")
                 .parent(this.getSettingsProvider())
+                .build();
+    }
+
+    public SmartInventory getCreatorProvider() {
+        return SmartInventory.builder()
+                .provider(new CreatorProvider(this.disguise))
+                .manager(this.inventoryManager)
+                .title(ChatColor.DARK_GRAY + "Disguise > Nick Creator")
+                .parent(this.getDisguiseSettings())
                 .build();
     }
 

@@ -105,7 +105,7 @@ public class DSProvider implements InventoryProvider {
                 .toItemStack();
 
         contents.set(2, 6, ClickableItem.of(nc, e -> {
-
+            this.dp.getInventoryManager().getCreatorProvider().open((Player) e.getWhoClicked());
         }));
 
         SimpleInventoryManager.addReturnButton(5, 4, contents);

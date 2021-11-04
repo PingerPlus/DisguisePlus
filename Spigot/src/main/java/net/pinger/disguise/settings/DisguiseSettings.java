@@ -14,7 +14,7 @@ public class DisguiseSettings {
 
     private Set<String> disabledWorlds = Sets.newHashSet();
     private boolean online = true;
-    private SimpleNickCreator creator = new SimpleNickCreator("AaAaA|aA|");
+    private SimpleNickCreator creator;
     private boolean update = true;
     private boolean metrics = true;
 
@@ -23,6 +23,7 @@ public class DisguiseSettings {
 
     public DisguiseSettings(DisguisePlus dp) {
         this.dp = dp;
+        this.creator = SimpleNickCreator.createFrom(this.dp.getConfig().getString("nick.pattern"));
     }
 
     /**
@@ -98,7 +99,7 @@ public class DisguiseSettings {
      */
 
     public boolean isPatternValid(String pattern) {
-        return SimpleNickCreator.isValid(pattern);
+        return false;
     }
 
     /**
