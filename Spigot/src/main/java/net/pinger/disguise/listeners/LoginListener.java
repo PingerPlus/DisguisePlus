@@ -24,8 +24,11 @@ public class LoginListener implements Listener {
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent event) {
         // Player of the event
-        Player p = event.getPlayer();
+        SimpleUser s = (SimpleUser) this.dp.getUserManager()
+                .getUser(event.getPlayer().getUniqueId());
 
+        // Set the name
+        s.setDefaultName(event.getPlayer().getName());
     }
 
     @EventHandler

@@ -47,7 +47,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private DataManager dataManager;
     private final SimpleUserManager sum = new SimpleUserManager();
 
-    private static PacketProvider<?> provider;
+    private PacketProvider<?> provider;
 
     @Override
     public void onEnable() {

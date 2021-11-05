@@ -68,6 +68,14 @@ public interface User {
     Cooldown getCooldown();
 
     /**
+     * Checks if this player is disguised.
+     *
+     * @return whether this player is disguised
+     */
+
+    boolean isDisguised();
+
+    /**
      * Returns whether this user currently has a cooldown.
      * If this value returns true, the user may not be using any skinning commands until this returns false.
      *

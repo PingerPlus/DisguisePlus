@@ -3,6 +3,7 @@ package net.pinger.disguise.settings;
 import com.google.common.collect.Sets;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.nick.SimpleNickCreator;
+import net.pinger.disguise.settings.display.DisplaySettings;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -15,15 +16,18 @@ public class DisguiseSettings {
     private Set<String> disabledWorlds = Sets.newHashSet();
     private boolean online = true;
     private SimpleNickCreator creator;
+    private final DisplaySettings ds;
     private boolean update = true;
     private boolean metrics = true;
+    private final int min = 5, max = 16;
 
-    private boolean override;
-    private String format = "%player_name% %message%";
+//    private boolean override;
+//    private String format = "%player_name% %message%";
 
     public DisguiseSettings(DisguisePlus dp) {
         this.dp = dp;
         this.creator = SimpleNickCreator.createFrom(this.dp.getConfig().getString("nick.pattern"));
+        this.ds = new DisplaySettings(this.dp.getConfig());
     }
 
     /**
@@ -92,14 +96,15 @@ public class DisguiseSettings {
     }
 
     /**
-     * This method checks if a pattern is valid for the custom nick creation.
+     * Checks if a nick is valid for use.
      *
-     * @param pattern the pattern
-     * @return if the pattern is valid
+     * @param s the nick
+     * @return if it's valid
      */
 
-    public boolean isPatternValid(String pattern) {
-        return false;
+    public boolean isNickValid(String s) {
+        return s.length() >= this.min
+                && s.length() <= this.max;
     }
 
     /**
@@ -173,7 +178,7 @@ public class DisguiseSettings {
      */
 
     public boolean isOverride() {
-        return override;
+        return this.ds.isOverride();
     }
 
     /**
@@ -181,7 +186,7 @@ public class DisguiseSettings {
      */
 
     public void reverseOverride() {
-        this.override = !this.override;
+        this.ds.reverseOverride();
     }
 
     /**
@@ -191,7 +196,7 @@ public class DisguiseSettings {
      */
 
     public void setFormat(String format) {
-        this.format = format;
+        this.ds.setFormat(format);
     }
 
     /**
@@ -201,8 +206,14 @@ public class DisguiseSettings {
      */
 
     public String getFormat() {
-        return format;
+        return this.ds.getFormat();
     }
+
+    /**
+     * Returns the nick creator.
+     *
+     * @return the nick creator
+     */
 
     public SimpleNickCreator getCreator() {
         return creator;

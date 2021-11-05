@@ -134,7 +134,7 @@ public class SimpleSkinFactory implements SkinFactory {
         }
 
         logger.info(String.format("Successfully retrieved %s skins within %s skin packs.", atom.get(), skinPacks.size()));
-        logger.info(String.format("Time: %s", System.currentTimeMillis() - time));
+        logger.info(String.format("Time: %sms", System.currentTimeMillis() - time));
 
         // Get the skins sorted throughout this category
         skinPacks.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));

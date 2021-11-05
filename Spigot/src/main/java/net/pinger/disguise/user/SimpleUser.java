@@ -101,6 +101,16 @@ public class SimpleUser implements User {
         return null;
     }
 
+    /**
+     * Checks if this player is disguised.
+     *
+     * @return whether this player is disguised
+     */
+    @Override
+    public boolean isDisguised() {
+        return false;
+    }
+
     public void setCooldown(Cooldown cooldown) {
 
     }

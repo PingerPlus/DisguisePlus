@@ -41,7 +41,7 @@ public class NickCharacter {
         return flag;
     }
 
-    public Character generate() {
+    Character generate() {
         return this.target.charAt(new Random().nextInt(this.target.length()));
     }
 

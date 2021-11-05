@@ -1,6 +1,5 @@
 package net.pinger.disguise.nick;
 
-import joptsimple.internal.Strings;
 import net.pinger.disguise.nick.flag.NickFlag;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -96,8 +95,7 @@ public class SimpleNickCreator {
         boolean optional = this.flags.get(this.flags.size() - 1)
                 .isOptional();
 
-        NickCharacter character = new NickCharacter(NickFlag.CONSONANT, optional);
-        this.flags.add(character);
+        this.flags.add(new NickCharacter(NickFlag.CONSONANT, optional));
     }
 
     public void saveToConfig(FileConfiguration cfg) {
