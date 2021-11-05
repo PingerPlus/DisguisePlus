@@ -1,6 +1,7 @@
 package net.pinger.disguise.utils;
 
 import net.pinger.common.lang.Strings;
+import org.bukkit.ChatColor;
 
 import java.util.Random;
 
@@ -40,6 +41,17 @@ public class StringUtil {
 
         // Build the string at the end
         return builder.toString();
+    }
+
+    /**
+     * Checks if a this string contains chat colors.
+     *
+     * @param s the colors
+     * @return if it contains colors
+     */
+
+    public static boolean containsColor(String s) {
+        return !ChatColor.stripColor(s).equalsIgnoreCase(s);
     }
 
     public static String value(String x) {

@@ -220,6 +220,16 @@ public class DisguiseSettings {
     }
 
     /**
+     * Returns the display settings of this settings.
+     *
+     * @return the display settings
+     */
+
+    public DisplaySettings getDisplaySettings() {
+        return ds;
+    }
+
+    /**
      * This method saves the current config configuration
      */
 

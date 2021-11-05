@@ -2,6 +2,8 @@ package net.pinger.disguise.user;
 
 import net.pinger.disguise.cooldown.Cooldown;
 import net.pinger.disguise.skin.Skin;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -109,6 +111,17 @@ public class SimpleUser implements User {
     @Override
     public boolean isDisguised() {
         return false;
+    }
+
+    /**
+     * Transforms the current user to a player.
+     *
+     * @return the player
+     */
+
+    @Override
+    public Player transform() {
+        return Bukkit.getPlayer(this.id);
     }
 
     public void setCooldown(Cooldown cooldown) {

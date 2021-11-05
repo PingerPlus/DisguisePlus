@@ -2,6 +2,7 @@ package net.pinger.disguise.user;
 
 import net.pinger.disguise.cooldown.Cooldown;
 import net.pinger.disguise.skin.Skin;
+import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -87,5 +88,12 @@ public interface User {
                 & getCooldown().isActive();
     }
 
+    /**
+     * Transforms the current user to a player.
+     *
+     * @return the player
+     */
+
+    Player transform();
 
 }

@@ -1,12 +1,10 @@
 package net.pinger.disguise.settings.display;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import net.pinger.disguise.utils.SimplePair;
+import net.pinger.disguise.user.User;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-
-import java.util.Map;
 
 public class DisplaySettings {
 
@@ -14,10 +12,8 @@ public class DisplaySettings {
     private boolean override;
     private String format;
 
-    private final SimplePair<String, String> prefix = new SimplePair<>(),
-            suffix = new SimplePair<>();
+    private final Entry prefix, suffix;
 
-    @SuppressWarnings("unchecked")
     public DisplaySettings(FileConfiguration cfg) {
         ConfigurationSection map = cfg.getConfigurationSection("display");
 
@@ -26,12 +22,12 @@ public class DisplaySettings {
         this.format = this.formatObject(map.getString("chat.format"));
 
         // Prefix
-        this.prefix.setFirst(this.formatObject(map.getString("prefix.default")));
-        this.prefix.setSecond(this.formatObject(map.getString("prefix.disguised")));
+        this.prefix = new Entry(this.formatObject(map.getString("prefix.default")),
+                this.formatObject(map.getString("prefix.disguised")));
 
         // Suffix
-        this.suffix.setFirst(this.formatObject(map.getString("suffix.default")));
-        this.suffix.setSecond(this.formatObject(map.getString("suffix.disguised")));
+        this.suffix = new Entry(this.formatObject(map.getString("suffix.default")),
+                this.formatObject(map.getString("suffix.disguised")));
     }
 
     private String formatObject(String s) {
@@ -50,11 +46,11 @@ public class DisplaySettings {
         return format;
     }
 
-    public SimplePair<String, String> getPrefix() {
+    public Entry getPrefix() {
         return prefix;
     }
 
-    public SimplePair<String, String> getSuffix() {
+    public Entry getSuffix() {
         return suffix;
     }
 
@@ -70,11 +66,42 @@ public class DisplaySettings {
         map.set("chat.format", this.format);
 
         // Prefix
-        map.set("prefix.default", this.prefix.getFirst());
-        map.set("prefix.disguised", this.prefix.getSecond());
+        map.set("prefix.default", this.prefix.getDef());
+        map.set("prefix.disguised", this.prefix.getDisguised());
 
         // Suffix
-        map.set("suffix.default", this.suffix.getFirst());
-        map.set("suffix.disguised", this.suffix.getSecond());
+        map.set("suffix.default", this.suffix.getDef());
+        map.set("suffix.disguised", this.suffix.getDisguised());
+    }
+
+    public static class Entry {
+
+        private String def, disguised;
+
+        private Entry(String def, String disguised) {
+            this.def = def;
+            this.disguised = disguised;
+        }
+
+        public String toEntry(User user) {
+            return PlaceholderAPI.setPlaceholders(user.transform(),
+                    user.isDisguised() ? this.def : this.disguised);
+        }
+
+        public void setDef(String def) {
+            this.def = ChatColor.translateAlternateColorCodes('&', def);
+        }
+
+        public void setDisguised(String disguised) {
+            this.disguised = ChatColor.translateAlternateColorCodes('&', disguised);
+        }
+
+        public String getDef() {
+            return def;
+        }
+
+        public String getDisguised() {
+            return disguised;
+        }
     }
 }
