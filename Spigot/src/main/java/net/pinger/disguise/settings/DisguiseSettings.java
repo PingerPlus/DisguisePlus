@@ -1,6 +1,7 @@
 package net.pinger.disguise.settings;
 
 import com.google.common.collect.Sets;
+import net.pinger.common.lang.Lists;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.nick.SimpleNickCreator;
 import net.pinger.disguise.settings.display.DisplaySettings;
@@ -14,18 +15,25 @@ public class DisguiseSettings {
     private final DisguisePlus dp;
 
     private Set<String> disabledWorlds = Sets.newHashSet();
-    private boolean online = true;
+    private boolean online;
     private SimpleNickCreator creator;
     private final DisplaySettings ds;
-    private boolean update = true;
-    private boolean metrics = true;
+    private boolean update;
+    private boolean metrics;
     private final int min = 5, max = 16;
-
-//    private boolean override;
-//    private String format = "%player_name% %message%";
 
     public DisguiseSettings(DisguisePlus dp) {
         this.dp = dp;
+
+        // Get the configuration
+        FileConfiguration cfg = dp.getConfig();
+
+        // Update the other values
+        this.online = cfg.getBoolean("online-mode");
+        this.update = cfg.getBoolean("update");
+        this.metrics = cfg.getBoolean("bstats");
+        this.disabledWorlds = Sets.newHashSet(cfg.getStringList("disabled-worlds"));
+
         this.creator = SimpleNickCreator.createFrom(this.dp.getConfig().getString("nick.pattern"));
         this.ds = new DisplaySettings(this.dp.getConfig());
     }
@@ -242,8 +250,12 @@ public class DisguiseSettings {
         cfg.set("bstats", this.metrics);
         cfg.set("update", this.update);
 
+        cfg.set("disabled-worlds", Lists.newArrayList(this.disabledWorlds.toArray()));
+
         // Update nick creator
         this.creator.saveToConfig(cfg);
+        this.ds.saveToConfig(cfg);
+
         this.dp.saveConfig();
     }
 }

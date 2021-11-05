@@ -101,3 +101,5 @@ mysql:
 #   - /d, /rd, /und
 #   - /nick, /skin
 disabled-worlds:
+  - nether
+
