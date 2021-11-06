@@ -96,7 +96,9 @@ public class DSProvider implements InventoryProvider {
                 .setLore(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to add a cooldown.")
                 .toItemStack();
 
-        contents.set(2, 2, ClickableItem.of(cm, e -> {}));
+        contents.set(2, 2, ClickableItem.of(cm, e -> {
+            this.dp.getInventoryManager().getCooldownProvider().open((Player) e.getWhoClicked());
+        }));
 
         // Nick Creator
         ItemStack nc = new ItemBuilder(Material.STICK)

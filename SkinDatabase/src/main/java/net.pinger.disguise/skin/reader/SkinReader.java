@@ -1,11 +1,11 @@
 package net.pinger.disguise.skin.reader;
 
 import com.google.gson.JsonObject;
-import net.disguise.database.util.HttpUtil;
 import net.pinger.common.http.HttpResponse;
 import net.pinger.common.http.request.HttpGetRequest;
 import net.pinger.disguise.SkinDatabase;
 import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.util.HttpUtil;
 
 import java.io.IOException;
 import java.util.UUID;

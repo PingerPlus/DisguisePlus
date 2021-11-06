@@ -1,5 +1,6 @@
 package net.pinger.disguise.cooldown;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class CooldownManager {
@@ -8,9 +9,16 @@ public class CooldownManager {
     private String permission;
     private int interval;
 
+    public CooldownManager(FileConfiguration cfg) {
+        ConfigurationSection section = cfg.getConfigurationSection("cooldowns");
 
+        // Update the values
+        this.enabled = section.getBoolean("enabled");
+        this.permission = section.getString("bypass");
+        this.interval = section.getInt("interval");
+    }
 
-    public void save(FileConfiguration cfg) {
+    public void saveToConfig(FileConfiguration cfg) {
         cfg.set("cooldowns.enabled", this.enabled);
         cfg.set("cooldowns.interval", this.interval);
         cfg.set("cooldowns.bypass", this.permission);
@@ -33,7 +41,8 @@ public class CooldownManager {
     }
 
     public int getInterval() {
-        return interval;
+        return this.enabled ?
+                -1 : this.interval;
     }
 
     public String getPermission() {

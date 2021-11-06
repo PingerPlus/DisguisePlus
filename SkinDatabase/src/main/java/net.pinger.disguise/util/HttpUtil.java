@@ -1,4 +1,4 @@
-package net.disguise.database.util;
+package net.pinger.disguise.util;
 
 import java.util.UUID;
 
