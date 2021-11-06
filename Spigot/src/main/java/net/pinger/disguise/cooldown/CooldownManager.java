@@ -3,11 +3,13 @@ package net.pinger.disguise.cooldown;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.concurrent.TimeUnit;
+
 public class CooldownManager {
 
     private boolean enabled;
     private String permission;
-    private int interval;
+    private long interval;
 
     public CooldownManager(FileConfiguration cfg) {
         ConfigurationSection section = cfg.getConfigurationSection("cooldowns");
@@ -22,6 +24,17 @@ public class CooldownManager {
         cfg.set("cooldowns.enabled", this.enabled);
         cfg.set("cooldowns.interval", this.interval);
         cfg.set("cooldowns.bypass", this.permission);
+    }
+
+    public void decreaseIfPossible(TimeUnit unit, long interval) {
+        if (this.interval < unit.toSeconds(interval))
+            return;
+
+        this.interval -= unit.toSeconds(interval);
+    }
+
+    public void increaseInterval(long interval) {
+        this.interval += interval;
     }
 
     public void setEnabled(boolean enabled) {
@@ -40,9 +53,8 @@ public class CooldownManager {
         return enabled;
     }
 
-    public int getInterval() {
-        return this.enabled ?
-                -1 : this.interval;
+    public long getInterval() {
+        return this.interval;
     }
 
     public String getPermission() {

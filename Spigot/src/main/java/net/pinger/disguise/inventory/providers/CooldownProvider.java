@@ -10,6 +10,7 @@ import net.pinger.bukkit.item.mask.impl.TwoWayLoadingMask;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.cooldown.CooldownManager;
 import net.pinger.disguise.inventory.SimpleInventoryManager;
+import net.pinger.disguise.prompts.cooldown.SetCooldownPermission;
 import net.pinger.disguise.utils.DateUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -53,6 +54,7 @@ public class CooldownProvider implements InventoryProvider {
 
         contents.set(1, 2, ClickableItem.of(bp, e -> {
             // The conversation util
+            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new SetCooldownPermission(this.dp), 25);
         }));
 
         // Interval
@@ -60,13 +62,24 @@ public class CooldownProvider implements InventoryProvider {
                 .setName(new TwoWayLoadingMask(ChatColor.AQUA, ChatColor.DARK_AQUA).getMaskedString("Set Interval", state))
                 .setLore(ChatColor.GRAY + "Sets the duration of the " + ChatColor.GOLD + "cooldowns.", Strings.EMPTY,
                         ChatColor.GRAY + "Current Interval:", ChatColor.YELLOW +
-                                DateUtil.getFormattedTime(DateTime.now(), DateTime.now().plusSeconds(cld.getInterval())))
+                                DateUtil.getFormattedTime(DateTime.now(), DateTime.now().plus(cld.getInterval() * 1000)))
                 .toItemStack();
 
         contents.set(1, 6, ClickableItem.of(it, e -> {
-
+            this.dp.getInventoryManager().getIntervalProvider().open((Player) e.getWhoClicked());
         }));
 
+        String eb = cld.isEnabled() ? "disable." : "enable.";
+
+        // Enable
+        ItemStack enable = new ItemBuilder(FreshMaterial.REDSTONE.toMaterial())
+                .setName(new TwoWayLoadingMask(ChatColor.DARK_AQUA, ChatColor.AQUA).getMaskedString("Configure Cooldowns", state))
+                .setLore(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to " + ChatColor.GOLD + eb)
+                .toItemStack();
+
+        contents.set(2, 4, ClickableItem.of(enable, e -> {
+            cld.setEnabled(!cld.isEnabled());
+        }));
 
         SimpleInventoryManager.addReturnButton(4, 4, contents);
     }

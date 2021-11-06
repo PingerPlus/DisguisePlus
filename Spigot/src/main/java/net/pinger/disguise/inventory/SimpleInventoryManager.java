@@ -149,6 +149,15 @@ public class SimpleInventoryManager {
                 .build();
     }
 
+    public SmartInventory getIntervalProvider() {
+        return SmartInventory.builder()
+                .provider(new IntervalProvider(this.disguise))
+                .manager(this.inventoryManager)
+                .title(ChatColor.DARK_GRAY + "Cooldown Manager > Interval")
+                .parent(this.getCooldownProvider())
+                .build();
+    }
+
     public static void addReturnButton(int row, int col, InventoryContents contents) {
         ItemStack stack = new ItemBuilder(FreshMaterial.OAK_SIGN.toMaterial())
                     .setName(new TwoWayLoadingMask(ChatColor.AQUA, ChatColor.DARK_AQUA).getMaskedString("Back", contents.property("state", 1)))
