@@ -272,6 +272,7 @@ public class DisguiseSettings {
         // Update nick creator
         this.creator.saveToConfig(cfg);
         this.ds.saveToConfig(cfg);
+        this.cooldownManager.saveToConfig(cfg);
 
         this.dp.saveConfig();
     }
