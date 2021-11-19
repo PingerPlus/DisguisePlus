@@ -9,6 +9,7 @@ import net.pinger.disguise.manager.nick.SimpleNickSetter;
 import net.pinger.disguise.manager.skin.SkinFetcher;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.user.User;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.omg.CORBA.DynAnyPackage.Invalid;
@@ -103,6 +104,10 @@ public class SimpleDisguiseManager implements DisguiseManager {
 
     @Override
     public void resetNickname(Player player) {
+        // Apply the players original nickname
+        User s = this.dp.getUserManager().getUser(player);
 
+        // Apply the nick
+        this.applyNickname(player, s.getDefaultName());
     }
 }

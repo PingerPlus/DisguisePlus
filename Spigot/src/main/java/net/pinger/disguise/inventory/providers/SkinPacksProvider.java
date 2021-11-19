@@ -10,8 +10,11 @@ import net.pinger.bukkit.item.FreshMaterial;
 import net.pinger.bukkit.item.ItemBuilder;
 import net.pinger.bukkit.item.mask.impl.TwoWayLoadingMask;
 import net.pinger.disguise.DisguisePlus;
+import net.pinger.disguise.DisguisePlusAPI;
 import net.pinger.disguise.factory.SimpleSkinFactory;
 import net.pinger.disguise.inventory.SimpleInventoryManager;
+import net.pinger.disguise.prompts.packs.CreateCategoryPrompt;
+import net.pinger.disguise.skin.Skin;
 import net.pinger.disguise.skin.SkinPack;
 import net.pinger.disguise.utils.DateUtil;
 import org.bukkit.ChatColor;
@@ -54,16 +57,37 @@ public class SkinPacksProvider implements InventoryProvider {
 
         int i = 0;
         for (String category : simpleSkinFactory.getSkinCategories()) {
-            SkinPack pack = simpleSkinFactory.getSkinPacks(category).get(0);
-
-            items[i++] = ClickableItem.of(this.getItemFromPack(pack, state), e -> {
-                this.dp.getInventoryManager().getCategoryProvider(category).open((Player) e.getWhoClicked());
-            });
+            if (simpleSkinFactory.getSkinPacks(category).isEmpty())
+                items[i++] = ClickableItem.of(this.getItemFromSkin(this.dp.getSkullManager().getDefaultPlayerSkull(), category, state), e -> {
+                    this.dp.getInventoryManager().getCategoryProvider(category).open((Player) e.getWhoClicked());
+                });
+            else
+                items[i++] = ClickableItem.of(this.getItemFromPack(simpleSkinFactory.getSkinPacks(category).get(0), state), e -> {
+                    this.dp.getInventoryManager().getCategoryProvider(category).open((Player) e.getWhoClicked());
+                });
         }
 
-        page.setItemsPerPage(36);
+        page.setItemsPerPage(21);
         page.setItems(items);
-        page.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 1));
+
+        SlotIterator iterator = contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 1);
+        for (int n = 1; n < 4; n++) {
+            for (int m = 0; m < 9; m++) {
+                if (m == 0 || m == 8)
+                    iterator.blacklist(n, m);
+            }
+        }
+
+        page.addToIterator(iterator);
+
+        ItemStack cat = new ItemBuilder(FreshMaterial.COMPASS.toMaterial())
+                .setName(new TwoWayLoadingMask(ChatColor.DARK_AQUA, ChatColor.AQUA).getMaskedString("Create a new Category", state))
+                .setLore(ChatColor.GRAY + "Click to create a new category")
+                .toItemStack();
+
+        contents.set(5, 1, ClickableItem.of(cat, e -> {
+            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateCategoryPrompt(this.dp));
+        }));
 
         SimpleInventoryManager.addReturnButton(5, 4, contents);
         SimpleInventoryManager.addPageButtons(5, contents);
@@ -78,6 +102,18 @@ public class SkinPacksProvider implements InventoryProvider {
         // Set lore
         stack.setLore(String.format(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to view %s skin packs",
                 this.dp.getSkinFactory().getSkinPacks(pack.getCategory()).size()));
+
+        return stack.toItemStack();
+    }
+
+    private ItemStack getItemFromSkin(ItemStack s, String category, int state) {
+        ItemBuilder stack = new ItemBuilder(s.clone());
+
+        // Set stack
+        stack.setName(new TwoWayLoadingMask(ChatColor.YELLOW, ChatColor.GOLD).getMaskedString(category, state));
+
+        // Set lore
+        stack.setLore(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to view the skin packs.");
 
         return stack.toItemStack();
     }

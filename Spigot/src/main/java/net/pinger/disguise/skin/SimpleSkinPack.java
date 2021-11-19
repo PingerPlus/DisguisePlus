@@ -1,5 +1,6 @@
 package net.pinger.disguise.skin;
 
+import javax.annotation.Nonnull;
 import java.util.Iterator;
 import java.util.List;
 
@@ -58,5 +59,15 @@ public class SimpleSkinPack implements SkinPack {
     @Override
     public Iterator<Skin> iterator() {
         return this.skins.iterator();
+    }
+
+    /**
+     * This method adds a skin to this pack.
+     *
+     * @param skin the skin
+     */
+
+    public void addSkin(@Nonnull Skin skin) {
+        this.skins.add(skin);
     }
 }

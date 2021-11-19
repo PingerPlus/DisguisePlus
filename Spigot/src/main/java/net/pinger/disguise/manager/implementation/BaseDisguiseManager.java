@@ -6,6 +6,7 @@ import net.pinger.disguise.exceptions.InvalidUserException;
 import net.pinger.disguise.manager.SimpleDisguiseManager;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.skin.Skin;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
@@ -18,7 +19,11 @@ public class BaseDisguiseManager extends SimpleDisguiseManager {
 
     @Override
     public void applySkinFromPlayer(Player player, String playerName) throws InvalidUserException {
-        super.applySkinFromPlayer(player, playerName);
+        try {
+            super.applySkinFromPlayer(player, playerName);
+        } catch (InvalidUserException e) {
+            player.sendMessage(ChatColor.RED + "Couldn't find a skin with the name " + playerName);
+        }
     }
 
     @Override
@@ -33,7 +38,13 @@ public class BaseDisguiseManager extends SimpleDisguiseManager {
 
     @Override
     public void applySkinFromUrl(Player player, String url) throws InvalidUrlException {
-        super.applySkinFromUrl(player, url);
+        try {
+            super.applySkinFromUrl(player, url);
+        } catch (InvalidUrlException e) {
+            player.sendMessage("The url of this skin seems to be invalid.");
+        }
+
+
     }
 
     @Override

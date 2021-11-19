@@ -11,6 +11,7 @@ import net.pinger.common.lang.Lists;
 import net.pinger.common.lang.Maps;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.exceptions.SkinCloudDownloadException;
+import net.pinger.disguise.skin.SimpleSkinPack;
 import net.pinger.disguise.skin.Skin;
 import net.pinger.disguise.skin.SkinPack;
 import net.pinger.disguise.skin.loader.SkinPackLoader;
@@ -166,6 +167,24 @@ public class SimpleSkinFactory implements SkinFactory {
         logger.info("Successfully loaded " + skins.size() + " from the backup file!");
     }
 
+    public void createCategory(String category) {
+        this.categorySkins.putIfAbsent(category, Lists.newArrayList());
+    }
+
+    public void createSkinPack(String category, SkinPack pack) {
+        this.skinPacks.add(pack);
+
+        // Add to category
+        this.categorySkins.get(category).add(pack);
+    }
+
+    public void addSkinToPack(SkinPack pack, Skin skin) {
+        if (!(pack instanceof SimpleSkinPack))
+            return;
+
+        ((SimpleSkinPack) pack).addSkin(skin);
+    }
+
     @Override
     public Skin[] getSkins() {
         return this.skins.toArray(new Skin[0]);
@@ -179,6 +198,11 @@ public class SimpleSkinFactory implements SkinFactory {
     @Nullable
     @Override
     public SkinPack getSkinPackByName(String name) {
+        for (SkinPack pack : this.getSkinPacks()) {
+            if (pack.getName().equalsIgnoreCase(name))
+                return pack;
+        }
+
         return null;
     }
 
