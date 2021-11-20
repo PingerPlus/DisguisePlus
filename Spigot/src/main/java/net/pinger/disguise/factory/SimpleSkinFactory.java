@@ -110,6 +110,16 @@ public class SimpleSkinFactory implements SkinFactory {
 
         AtomicInteger atom = new AtomicInteger(0);
 
+        // Parent file
+        File parent = new File(new File(this.dp.getDataFolder(), "data"), "categories");
+
+        // Retrieve first from the categories.json
+        File categories = new File(parent, "categories.json");
+
+        if (categories.exists() && categories.length() >= 1) {
+            this.retrievePacksLocally(parent, categories, atom);
+        }
+
         try {
             // Establish the connection
             HttpRequest request = new HttpGetRequest(HttpUtil.CATEGORY_URL);
@@ -121,8 +131,11 @@ public class SimpleSkinFactory implements SkinFactory {
             for (Map.Entry<String, JsonElement> element : object.entrySet()) {
                 for (JsonElement packName : element.getValue().getAsJsonArray()) {
                     // Add the pack tot he list
+                    if (this.getSkinPackByName(element.getKey(), packName.getAsString()) != null)
+                        continue;
+
                     SkinPack pack = SkinPackLoader.getSkinPack(element.getKey(), packName.getAsString());
-                    skinPacks.add(pack);
+                    this.skinPacks.add(pack);
 
                     atom.addAndGet(pack.getSkins().size());
                 }
@@ -138,6 +151,37 @@ public class SimpleSkinFactory implements SkinFactory {
 
         // Get the skins sorted throughout this category
         skinPacks.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
+
+        for (SkinPack skins : skinPacks) {
+            if (this.categorySkins.containsKey(skins.getCategory())) {
+                if (this.getSkinPackByName(skins.getCategory(), skins.getName()) != null) {
+                    continue;
+                }
+
+                this.categorySkins.get(skins.getCategory()).add(skins);
+            } else {
+                this.categorySkins.put(skins.getCategory(), Lists.newArrayList(skins));
+            }
+        }
+    }
+
+    private void retrievePacksLocally(File parent, File f, AtomicInteger atom) {
+        // Load from the categories.json
+        JsonObject categories = ReferenceUtil.GSON.fromJson(Reader.read(f), JsonObject.class);
+
+        for (Map.Entry<String, JsonElement> category : categories.entrySet()) {
+            for (JsonElement element : category.getValue().getAsJsonArray()) {
+                // The file
+                File result = new File(new File(new File(parent, category.getKey()), element.getAsString()), "data.json");
+                SkinPack pack = SkinPackLoader.getSkinPack(result, category.getKey(), element.getAsString());
+
+                if (pack == null)
+                    continue;
+
+                this.skinPacks.add(pack);
+                atom.addAndGet(pack.getSkins().size());
+            }
+        }
 
         for (SkinPack skins : skinPacks) {
             if (this.categorySkins.containsKey(skins.getCategory()))
@@ -198,6 +242,18 @@ public class SimpleSkinFactory implements SkinFactory {
         return null;
     }
 
+    @Nullable
+    @Override
+    public SkinPack getSkinPackByName(String category, String name) {
+        for (SkinPack pack : this.getSkinPacks(category)) {
+            if (pack.getName().equalsIgnoreCase(name))
+                return pack;
+        }
+
+        return null;
+    }
+
+
     @Override
     public List<? extends SkinPack> getSkinPacks(String category) {
         return this.categorySkins.getOrDefault(category, Lists.newArrayList());
@@ -223,7 +279,12 @@ public class SimpleSkinFactory implements SkinFactory {
         File base = new File(new File(this.dp.getDataFolder(), "data"), "categories");
         base.mkdirs();
 
+        JsonObject obj = new JsonObject();
+
         for (Map.Entry<String, List<SkinPack>> pack : this.categorySkins.entrySet()) {
+            // Add for each category
+            JsonArray array = new JsonArray();
+
             // Create a new file for this category
             File dir = new File(base, pack.getKey());
             dir.mkdirs();
@@ -238,9 +299,21 @@ public class SimpleSkinFactory implements SkinFactory {
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(data))) {
                     writer.write(ReferenceUtil.GSON.toJson(((SimpleSkinPack) sp).toJsonArray()));
                 } catch (IOException e) {
-                    logger.error("Failed to save data within the pack -> " + sp.getName());
+                    logger.error("Failed to save data within the pack -> ", e);
+                    logger.error(e.getMessage());
                 }
+
+                array.add(sp.getName());
             }
+
+            obj.add(pack.getKey(), array);
+        }
+
+        File categories = new File(base, "categories.json");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(categories))) {
+            writer.write(ReferenceUtil.GSON.toJson(obj));
+        } catch (IOException e) {
+            logger.error("Failed to save the categories.json file", e);
         }
     }
 }

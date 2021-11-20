@@ -26,6 +26,9 @@ public interface SkinFactory {
     @Nullable
     SkinPack getSkinPackByName(String name);
 
+    @Nullable
+    SkinPack getSkinPackByName(String category, String name);
+
     List<? extends SkinPack> getSkinPacks(String category);
 
     List<? extends SkinPack> getSkinPacks();
