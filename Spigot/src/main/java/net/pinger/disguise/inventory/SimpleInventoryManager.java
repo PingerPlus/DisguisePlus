@@ -158,6 +158,16 @@ public class SimpleInventoryManager {
                 .build();
     }
 
+    public SmartInventory getAddSkinProvider(SkinPack pack) {
+        return SmartInventory.builder()
+                .provider(new AddSkinProvider(this.disguise, pack))
+                .manager(this.inventoryManager)
+                .title(String.format(ChatColor.DARK_GRAY + "%s > Add Skin", pack.getName()))
+                .size(4, 9)
+                .parent(this.getExactPackProvider(pack))
+                .build();
+    }
+
     public static void addReturnButton(int row, int col, InventoryContents contents) {
         ItemStack stack = new ItemBuilder(FreshMaterial.OAK_SIGN.toMaterial())
                     .setName(new TwoWayLoadingMask(ChatColor.AQUA, ChatColor.DARK_AQUA).getMaskedString("Back", contents.property("state", 1)))

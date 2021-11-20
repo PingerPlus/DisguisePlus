@@ -81,7 +81,7 @@ public class SkinPacksProvider implements InventoryProvider {
         page.addToIterator(iterator);
 
         ItemStack cat = new ItemBuilder(FreshMaterial.COMPASS.toMaterial())
-                .setName(new TwoWayLoadingMask(ChatColor.DARK_AQUA, ChatColor.AQUA).getMaskedString("Create a new Category", state))
+                .setName(new TwoWayLoadingMask(ChatColor.DARK_AQUA, ChatColor.AQUA).getMaskedString("Create Category", state))
                 .setLore(ChatColor.GRAY + "Click to create a new category")
                 .toItemStack();
 

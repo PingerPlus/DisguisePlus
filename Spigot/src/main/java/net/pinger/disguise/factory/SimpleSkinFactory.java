@@ -27,10 +27,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -43,7 +40,7 @@ public class SimpleSkinFactory implements SkinFactory {
     private final List<SkinPack> skinPacks = Lists.newArrayList();
 
     // Categorized skins
-    private final Map<String, List<SkinPack>> categorySkins = Maps.newConcurrentHashMap();
+    private final Map<String, List<SkinPack>> categorySkins = new TreeMap<>();
 
     // The disguise instance
     private final DisguisePlus dp;

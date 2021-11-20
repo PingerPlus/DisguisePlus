@@ -49,11 +49,6 @@ public class ExactPackProvider implements InventoryProvider {
         page.setItemsPerPage(36);
         page.setItems(items);
         page.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 0, 0));
-
-        // Get the item
-        ItemStack next = new ItemBuilder(FreshMaterial.ARROW.toMaterial())
-                .setName(new TwoWayLoadingMask(ChatColor.AQUA, ChatColor.DARK_AQUA).getMaskedString("Next", contents.property("state", 1)))
-                .toItemStack();
     }
 
     @Override
@@ -66,6 +61,15 @@ public class ExactPackProvider implements InventoryProvider {
 
         int state = contents.property("state", 0);
         contents.setProperty("state", state + 1);
+
+        ItemStack cre = new ItemBuilder(FreshMaterial.COMPASS.toMaterial())
+                .setName(new TwoWayLoadingMask(ChatColor.DARK_AQUA, ChatColor.AQUA).getMaskedString("Add Skin", state))
+                .setLore(ChatColor.GRAY + "Click to add a new skin")
+                .toItemStack();
+
+        contents.set(5, 1, ClickableItem.of(cre, e -> {
+            this.dp.getInventoryManager().getAddSkinProvider(this.pack).open((Player) e.getWhoClicked());
+        }));
 
         SimpleInventoryManager.addReturnButton(5, 4, contents);
         SimpleInventoryManager.addPageButtons(5, contents);
