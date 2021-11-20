@@ -1,5 +1,8 @@
 package net.pinger.disguise.skin;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import javax.annotation.Nonnull;
 import java.util.Iterator;
 import java.util.List;
@@ -69,5 +72,24 @@ public class SimpleSkinPack implements SkinPack {
 
     public void addSkin(@Nonnull Skin skin) {
         this.skins.add(skin);
+    }
+
+    public JsonArray toJsonArray() {
+        JsonArray array = new JsonArray();
+
+        for (Skin s : this.skins) {
+            JsonObject obj = new JsonObject();
+
+            JsonObject properties = new JsonObject();
+            properties.addProperty("value", s.getValue());
+            properties.addProperty("signature", s.getSignature());
+
+            obj.add("properties", properties);
+
+            // Add to the array
+            array.add(obj);
+        }
+
+        return array;
     }
 }

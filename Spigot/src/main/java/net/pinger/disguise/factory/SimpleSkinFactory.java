@@ -11,11 +11,13 @@ import net.pinger.common.lang.Lists;
 import net.pinger.common.lang.Maps;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.exceptions.SkinCloudDownloadException;
+import net.pinger.disguise.skin.SimpleSkin;
 import net.pinger.disguise.skin.SimpleSkinPack;
 import net.pinger.disguise.skin.Skin;
 import net.pinger.disguise.skin.SkinPack;
 import net.pinger.disguise.skin.loader.SkinPackLoader;
 import net.pinger.disguise.utils.HttpUtil;
+import net.pinger.disguise.utils.ReferenceUtil;
 import net.pinger.disguise.utils.SkinUtil;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.joda.time.DateTime;
@@ -175,13 +177,6 @@ public class SimpleSkinFactory implements SkinFactory {
         this.categorySkins.get(category).add(pack);
     }
 
-    public void addSkinToPack(SkinPack pack, Skin skin) {
-        if (!(pack instanceof SimpleSkinPack))
-            return;
-
-        ((SimpleSkinPack) pack).addSkin(skin);
-    }
-
     @Override
     public Skin[] getSkins() {
         return this.skins.toArray(new Skin[0]);
@@ -215,5 +210,37 @@ public class SimpleSkinFactory implements SkinFactory {
 
     public Set<String> getSkinCategories() {
         return this.categorySkins.keySet();
+    }
+
+    /**
+     * This method saves the entire skin factory to the local server for faster retrieval.
+     *
+     * @author Pinger
+     * @since 2.0.0
+     */
+
+    public void saveLocally() {
+        File base = new File(new File(this.dp.getDataFolder(), "data"), "categories");
+        base.mkdirs();
+
+        for (Map.Entry<String, List<SkinPack>> pack : this.categorySkins.entrySet()) {
+            // Create a new file for this category
+            File dir = new File(base, pack.getKey());
+            dir.mkdirs();
+
+            // Now create a folder for each pack
+            for (SkinPack sp : pack.getValue()) {
+                File pf = new File(dir, sp.getName());
+                pf.mkdirs();
+
+                // Also create the data file and store it
+                File data = new File(pf, "data.json");
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(data))) {
+                    writer.write(ReferenceUtil.GSON.toJson(((SimpleSkinPack) sp).toJsonArray()));
+                } catch (IOException e) {
+                    logger.error("Failed to save data within the pack -> " + sp.getName());
+                }
+            }
+        }
     }
 }

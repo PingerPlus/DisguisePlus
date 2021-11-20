@@ -19,6 +19,7 @@ import net.pinger.disguise.listeners.LoginListener;
 import net.pinger.disguise.packet.PacketManager;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.settings.DisguiseSettings;
+import net.pinger.disguise.skin.SimpleSkin;
 import net.pinger.disguise.skin.SkullManager;
 import net.pinger.disguise.user.SimpleUser;
 import net.pinger.disguise.user.SimpleUserManager;
@@ -38,7 +39,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             .setPrettyPrinting()
             .create();
 
-    private SkinFactory skinFactory;
+    private SimpleSkinFactory skinFactory;
     private ConversationUtil conversationUtil;
     private Database database;
     private SimpleInventoryManager inventoryManager;
@@ -101,6 +102,9 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         // Leave all of the conversations
         this.conversationUtil.cancelAllConversations();
         this.getSettings().saveConfig();
+
+        // Save the skins
+        this.skinFactory.saveLocally();
     }
 
     @Override

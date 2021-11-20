@@ -8,6 +8,8 @@ import net.pinger.bukkit.item.ItemBuilder;
 import net.pinger.bukkit.item.mask.impl.TwoWayLoadingMask;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.inventory.SimpleInventoryManager;
+import net.pinger.disguise.prompts.packs.CreateSkinImagePrompt;
+import net.pinger.disguise.prompts.packs.CreateSkinNamePrompt;
 import net.pinger.disguise.skin.SkinPack;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -46,7 +48,7 @@ public class AddSkinProvider implements InventoryProvider {
                 .toItemStack();
 
         contents.set(1, 3, ClickableItem.of(name, e -> {
-
+            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateSkinNamePrompt(this.dp, this.pack));
         }));
 
 
@@ -57,7 +59,7 @@ public class AddSkinProvider implements InventoryProvider {
                 .toItemStack();
 
         contents.set(1, 5, ClickableItem.of(url, e -> {
-
+            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateSkinImagePrompt(this.dp, this.pack));
         }));
 
         SimpleInventoryManager.addReturnButton(3, 4, contents);

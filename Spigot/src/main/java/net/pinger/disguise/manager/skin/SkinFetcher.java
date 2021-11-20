@@ -9,6 +9,8 @@ import com.google.gson.JsonObject;
 import net.pinger.common.http.HttpRequest;
 import net.pinger.common.http.HttpResponse;
 import net.pinger.common.http.request.HttpGetRequest;
+import net.pinger.common.http.request.HttpPostRequest;
+import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.exceptions.InvalidUrlException;
 import net.pinger.disguise.exceptions.InvalidUserException;
 import net.pinger.disguise.manager.nick.NickFetcher;
@@ -17,6 +19,7 @@ import net.pinger.disguise.skin.SkinQueue;
 import net.pinger.disguise.utils.HttpUtil;
 import net.pinger.disguise.utils.ReferenceUtil;
 import net.pinger.disguise.utils.SkinUtil;
+import org.bukkit.Bukkit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +46,7 @@ public class SkinFetcher {
 
     private static final Logger logger = LoggerFactory.getLogger("SkinFetcher");
 
-    public static void catchSkin(String url, Consumer<Skin> skin) throws InvalidUrlException {
+    public static void catchSkin(String url, Consumer<Skin> skin, DisguisePlus dp) throws InvalidUrlException {
         Skin queued = SkinQueue.getSkinFromUrl(url);
 
         if (queued != null) {
@@ -54,7 +57,7 @@ public class SkinFetcher {
         // Retrieve the skin otherwise
         CompletableFuture.runAsync(() -> {
             try {
-                HttpRequest request = new HttpGetRequest(HttpUtil.toMineskin(url));
+                HttpRequest request = new HttpPostRequest(HttpUtil.toMineskin(url));
                 HttpResponse response = request.connect();
 
                 if (response.getCode() == 404)
@@ -62,14 +65,18 @@ public class SkinFetcher {
 
                 JsonObject property = ReferenceUtil.GSON.fromJson(response.getResponse(), JsonObject.class)
                         .getAsJsonObject("data")
-                        .getAsJsonObject("property");
+                        .getAsJsonObject("texture");
 
-                skin.accept(SkinQueue.storeUrl(url,
-                        SkinUtil.getSkinFromMineskin(property)));
+                Skin fs = SkinUtil.getSkinFromMineskin(property);
+                SkinQueue.storeUrl(url, fs);
+
+                Bukkit.getScheduler().runTask(dp, () -> {
+                    skin.accept(fs);
+                });
 
             } catch (IOException e) {
                 logger.error("Failed to load a skin for the url -> " + url);
-                logger.error(e.getMessage());
+                e.printStackTrace();
             }
         });
     }
