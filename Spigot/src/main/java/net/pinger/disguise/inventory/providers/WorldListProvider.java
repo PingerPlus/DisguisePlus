@@ -83,7 +83,7 @@ public class WorldListProvider implements InventoryProvider {
         ItemBuilder builder = new ItemBuilder(FreshMaterial.GRAY_STAINED_GLASS_PANE.toMaterial());
 
         // Name
-        builder.setName(new TwoWayLoadingMask(ChatColor.GREEN, ChatColor.GRAY).getMaskedString(name, state));
+        builder.setName(new TwoWayLoadingMask(ChatColor.GREEN, ChatColor.DARK_GREEN).getMaskedString(name, state));
 
         // Lore
         builder.setLore(ChatColor.AQUA + "Middle-Click" + ChatColor.GRAY + " to " + ChatColor.GOLD + "revoke" + ChatColor.GRAY + " the ban.");

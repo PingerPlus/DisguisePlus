@@ -6,6 +6,7 @@ import net.pinger.disguise.skin.Skin;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 
 public interface DisguiseManager {
 
@@ -35,16 +36,17 @@ public interface DisguiseManager {
      * @param playerName the name of the player that the skin is referring to
      */
 
-    void applySkinFromPlayer(Player player, String playerName) throws InvalidUserException;
+    void applySkinFromPlayer(Player player, String playerName) throws IOException;
 
     /**
+     * This method applies a skin from the specified url
      *
-     *
-     * @param player
-     * @param url
+     * @throws IOException if an error was caught while catching the skin
+     * @param player the player that the skin is being applied to
+     * @param url the url of the image
      */
 
-    void applySkinFromUrl(Player player, String url) throws InvalidUrlException;
+    void applySkinFromUrl(Player player, String url) throws IOException;
 
     void applySkin(Player player, @Nonnull Skin skin);
 

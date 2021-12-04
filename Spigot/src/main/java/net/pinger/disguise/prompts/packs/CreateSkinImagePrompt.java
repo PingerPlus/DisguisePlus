@@ -1,7 +1,6 @@
 package net.pinger.disguise.prompts.packs;
 
 import net.pinger.disguise.DisguisePlus;
-import net.pinger.disguise.factory.SimpleSkinFactory;
 import net.pinger.disguise.manager.skin.SkinFetcher;
 import net.pinger.disguise.skin.SimpleSkinPack;
 import net.pinger.disguise.skin.SkinPack;
@@ -36,9 +35,15 @@ public class CreateSkinImagePrompt extends StringPrompt {
             return this;
 
         // Add the skin
-        SkinFetcher.catchSkin(s, ((SimpleSkinPack) this.pack)::addSkin, this.dp);
+        SkinFetcher.catchSkin(s, skin -> {
+                    ((SimpleSkinPack) this.pack).addSkin(skin);
+                    this.dp.getInventoryManager().getExactPackProvider(this.pack).open(p);
+                },
+                throwable -> {
+                    p.sendMessage(ChatColor.RED + "Image URL is either invalid or you have been rate-limited.");
+                    this.dp.getInventoryManager().getExactPackProvider(this.pack).open(p);
+            }, this.dp);
 
-        this.dp.getInventoryManager().getExactPackProvider(this.pack).open(p);
         return Prompt.END_OF_CONVERSATION;
     }
 }

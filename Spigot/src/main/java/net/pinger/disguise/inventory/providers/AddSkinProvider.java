@@ -48,7 +48,7 @@ public class AddSkinProvider implements InventoryProvider {
                 .toItemStack();
 
         contents.set(1, 3, ClickableItem.of(name, e -> {
-            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateSkinNamePrompt(this.dp, this.pack));
+            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateSkinNamePrompt(this.dp, this.pack), 25);
         }));
 
 
@@ -59,7 +59,7 @@ public class AddSkinProvider implements InventoryProvider {
                 .toItemStack();
 
         contents.set(1, 5, ClickableItem.of(url, e -> {
-            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateSkinImagePrompt(this.dp, this.pack));
+            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateSkinImagePrompt(this.dp, this.pack), 25);
         }));
 
         SimpleInventoryManager.addReturnButton(3, 4, contents);

@@ -22,7 +22,7 @@ public class PacketManager {
     private static Map<String, List<String>> providerCompatibility = Maps.newHashMap();
 
     static {
-        providers.add(PacketProvider_v1_7.class);
+        providers.add(PacketProvider_v1_17_1.class);
 
         // The compatibilities
         providerCompatibility.put("1.16.4", Lists.newArrayList("1.16.5"));
@@ -42,6 +42,7 @@ public class PacketManager {
 
                 // If we found the class with the corresponding version
                 if (NMS.isVersion(version)) {
+                    logger.info("Found the applicable provider -> " + name);
                     return provider = clazz.getConstructor().newInstance();
                 }
 
@@ -49,6 +50,7 @@ public class PacketManager {
                     for (String serverVersion : providerCompatibility.get(version)) {
                         if (NMS.isVersion(serverVersion)) {
                             // Then the current class is also compatible with the current version
+                            logger.info("Found the applicable provider -> " + name);
                             return provider = clazz.getConstructor().newInstance();
                         }
                     }

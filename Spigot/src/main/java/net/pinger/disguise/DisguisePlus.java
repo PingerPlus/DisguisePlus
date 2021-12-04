@@ -16,6 +16,7 @@ import net.pinger.disguise.factory.SimpleSkinFactory;
 import net.pinger.disguise.factory.SkinFactory;
 import net.pinger.disguise.inventory.SimpleInventoryManager;
 import net.pinger.disguise.listeners.LoginListener;
+import net.pinger.disguise.manager.implementation.BaseDisguiseManager;
 import net.pinger.disguise.packet.PacketManager;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.settings.DisguiseSettings;
@@ -47,6 +48,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private final SkullManager skullManager = new SkullManager();
     private DataManager dataManager;
     private final SimpleUserManager sum = new SimpleUserManager();
+    private BaseDisguiseManager customManager;
 
     private PacketProvider<?> provider;
 
@@ -72,12 +74,14 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
         Bukkit.getPluginManager().registerEvents(new LoginListener(this), this);
 
-        // Adding the provider
         try {
             provider = PacketManager.getApplicableProvider();
         } catch (ProviderNotFoundException e) {
             e.printStackTrace();
         }
+
+        this.customManager = new BaseDisguiseManager(this, null);
+        this.customManager.applySkinFromUrl(Bukkit.getPlayer("ITSPINGER"), "https://imgur.com/X6FRhrW.png");
 
         // Make sure that we created all instances
         // Of the api, before we connect to the api

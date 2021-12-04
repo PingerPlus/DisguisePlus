@@ -3,8 +3,6 @@ package net.pinger.disguise.manager.skin;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import net.pinger.common.http.HttpRequest;
 import net.pinger.common.http.HttpResponse;
@@ -24,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.sql.Ref;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -46,7 +43,7 @@ public class SkinFetcher {
 
     private static final Logger logger = LoggerFactory.getLogger("SkinFetcher");
 
-    public static void catchSkin(String url, Consumer<Skin> skin, DisguisePlus dp) throws InvalidUrlException {
+    public static void catchSkin(String url, Consumer<Skin> skin, Consumer<Throwable> error, DisguisePlus dp) {
         Skin queued = SkinQueue.getSkinFromUrl(url);
 
         if (queued != null) {
@@ -60,23 +57,24 @@ public class SkinFetcher {
                 HttpRequest request = new HttpPostRequest(HttpUtil.toMineskin(url));
                 HttpResponse response = request.connect();
 
-                if (response.getCode() == 404)
-                    throw new InvalidUrlException("The url of this request was invalid.");
-
-                JsonObject property = ReferenceUtil.GSON.fromJson(response.getResponse(), JsonObject.class)
-                        .getAsJsonObject("data")
-                        .getAsJsonObject("texture");
-
-                Skin fs = SkinUtil.getSkinFromMineskin(property);
-                SkinQueue.storeUrl(url, fs);
+                JsonObject property = ReferenceUtil.GSON.fromJson(response.getResponse(), JsonObject.class);
 
                 Bukkit.getScheduler().runTask(dp, () -> {
+                    if (property.has("error")) {
+                        error.accept(new InvalidUrlException(property.get("error").getAsString()));
+                        return;
+                    }
+
+                    JsonObject textured = property.getAsJsonObject("data").getAsJsonObject("texture");
+
+                    Skin fs = SkinUtil.getSkinFromMineskin(textured);
+                    SkinQueue.storeUrl(url, fs);
+
                     skin.accept(fs);
                 });
 
-            } catch (IOException e) {
-                logger.error("Failed to load a skin for the url -> " + url);
-                e.printStackTrace();
+            } catch (Exception e) {
+                error.accept(e);
             }
         });
     }
@@ -98,11 +96,8 @@ public class SkinFetcher {
             JsonObject object = ReferenceUtil.GSON.fromJson(response.getResponse(), JsonObject.class);
             return SkinUtil.getFromMojang(object);
         } catch (IOException e) {
-            logger.error("Failed to load a skin for name -> " + playerName);
-            logger.error(e.getMessage());
+            return null;
         }
-
-        return null;
     }
 
     public static Skin getSkin(String playerName) {

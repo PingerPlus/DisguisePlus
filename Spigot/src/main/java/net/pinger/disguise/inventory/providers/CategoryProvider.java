@@ -72,7 +72,7 @@ public class CategoryProvider implements InventoryProvider {
                 .toItemStack();
 
         contents.set(5, 1, ClickableItem.of(cp, e -> {
-            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreatePackPrompt(this.dp, this.category));
+            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreatePackPrompt(this.dp, this.category), 25);
         }));
 
         SimpleInventoryManager.addReturnButton(5, 4, contents);

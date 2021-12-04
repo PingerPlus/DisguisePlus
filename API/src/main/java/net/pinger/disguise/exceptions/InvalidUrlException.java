@@ -6,4 +6,8 @@ public class InvalidUrlException extends RuntimeException {
         super(message);
     }
 
+    public InvalidUrlException(String message, Throwable throwable) {
+        super(message, throwable);
+    }
+
 }

@@ -1,6 +1,7 @@
 package net.pinger.disguise.user;
 
 import net.pinger.disguise.cooldown.Cooldown;
+import net.pinger.disguise.cooldown.SimpleCooldown;
 import net.pinger.disguise.skin.Skin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -15,8 +16,9 @@ public class SimpleUser implements User {
 
     // The default name of this player when joining the server
     private String defaultName;
+    private Cooldown cooldown = null;
 
-    public SimpleUser(UUID id) {
+    SimpleUser(UUID id) {
         this.id = id;
     }
 
@@ -60,6 +62,13 @@ public class SimpleUser implements User {
         return null;
     }
 
+    /**
+     * This method returns the default name of the player is the user is not disguised,
+     * otherwise it returns the {@link #getChangedName()}
+     *
+     * @return the changed name
+     */
+
     @Nonnull
     @Override
     public String getName() {
@@ -100,7 +109,7 @@ public class SimpleUser implements User {
     @Nullable
     @Override
     public Cooldown getCooldown() {
-        return null;
+        return this.cooldown;
     }
 
     /**
@@ -124,7 +133,13 @@ public class SimpleUser implements User {
         return Bukkit.getPlayer(this.id);
     }
 
-    public void setCooldown(Cooldown cooldown) {
+    /**
+     * This method sets the cooldown of this player.
+     *
+     * @param cooldown the cooldown
+     */
 
+    public void setCooldown(Cooldown cooldown) {
+        this.cooldown = cooldown;
     }
 }

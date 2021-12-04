@@ -3,18 +3,18 @@ package net.pinger.disguise.manager;
 import net.pinger.disguise.DisguiseManager;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.DisguisePlusAPI;
-import net.pinger.disguise.exceptions.InvalidUrlException;
 import net.pinger.disguise.exceptions.InvalidUserException;
 import net.pinger.disguise.manager.nick.SimpleNickSetter;
 import net.pinger.disguise.manager.skin.SkinFetcher;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.skin.Skin;
 import net.pinger.disguise.user.User;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.omg.CORBA.DynAnyPackage.Invalid;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 
 public class SimpleDisguiseManager implements DisguiseManager {
 
@@ -55,6 +55,7 @@ public class SimpleDisguiseManager implements DisguiseManager {
 
         if (this.dp.getSettings().isOnlineMode()) {
             // Check if the UUID matches to the player name
+
         }
 
         this.provider.sendServerPackets(player);
@@ -69,7 +70,7 @@ public class SimpleDisguiseManager implements DisguiseManager {
      */
 
     @Override
-    public void applySkinFromPlayer(Player player, String playerName) throws InvalidUserException {
+    public void applySkinFromPlayer(Player player, String playerName) throws IOException {
         Skin s = SkinFetcher.getSkin(playerName);
 
         if (s == null)
@@ -78,11 +79,13 @@ public class SimpleDisguiseManager implements DisguiseManager {
         this.applySkin(player, s);
     }
 
-
     @Override
-    public void applySkinFromUrl(Player player, String url) throws InvalidUrlException {
+    public void applySkinFromUrl(Player player, String url) throws IOException {
         // Check if this user is under cooldown
-        SkinFetcher.catchSkin(url, skin -> this.applySkin(player, skin), this.dp);
+        SkinFetcher.catchSkin(url, skin -> this.applySkin(player, skin),
+                error -> {
+                    Bukkit.broadcastMessage("fatshit3");
+            }, this.dp);
     }
 
     @Override

@@ -86,7 +86,7 @@ public class SkinPacksProvider implements InventoryProvider {
                 .toItemStack();
 
         contents.set(5, 1, ClickableItem.of(cat, e -> {
-            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateCategoryPrompt(this.dp));
+            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateCategoryPrompt(this.dp), 25);
         }));
 
         SimpleInventoryManager.addReturnButton(5, 4, contents);

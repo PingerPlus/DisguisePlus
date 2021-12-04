@@ -13,15 +13,10 @@
         <module>API</module>
         <module>Spigot</module>
         <module>SkinDatabase</module>
+        <module>v1_17_1</module>
     </modules>
 
     <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.16.4-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>net.pinger</groupId>
             <artifactId>Bukkit</artifactId>
