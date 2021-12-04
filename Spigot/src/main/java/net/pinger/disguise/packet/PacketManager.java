@@ -23,11 +23,11 @@ public class PacketManager {
 
     static {
         providers.add(PacketProvider_v1_17_1.class);
+        providers.add(PacketProvider_v1_17.class);
 
         // The compatibilities
         providerCompatibility.put("1.16.4", Lists.newArrayList("1.16.5"));
         providerCompatibility.put("1.16.2", Lists.newArrayList("1.16.3"));
-        providerCompatibility.put("1.17", Lists.newArrayList("1.17.1"));
     }
 
     public static PacketProvider<?> getApplicableProvider() throws ProviderNotFoundException {

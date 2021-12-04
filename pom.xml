@@ -14,6 +14,7 @@
         <module>Spigot</module>
         <module>SkinDatabase</module>
         <module>v1_17_1</module>
+        <module>v1_17</module>
     </modules>
 
     <dependencies>
