@@ -39,7 +39,7 @@ public class CreatePackPrompt extends StringPrompt {
         if (factory.getSkinPackByName(s) != null && factory.getSkinPackByName(s).getCategory().equalsIgnoreCase(this.category))
             return this;
 
-        factory.createSkinPack(this.category, new SimpleSkinPack(this.category, s, Lists.newArrayList()));
+        factory.createSkinPack(this.category, new SimpleSkinPack(null, this.category, s, Lists.newArrayList()));
         this.dm.getInventoryManager().getCategoryProvider(this.category).open(p);
         return Prompt.END_OF_CONVERSATION;
     }

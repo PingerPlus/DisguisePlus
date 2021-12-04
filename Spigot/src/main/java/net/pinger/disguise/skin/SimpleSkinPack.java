@@ -2,17 +2,22 @@ package net.pinger.disguise.skin;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.pinger.disguise.DisguisePlus;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
 public class SimpleSkinPack implements SkinPack {
 
+    private final File base;
+
     private final String category, name;
     private final List<Skin> skins;
 
-    public SimpleSkinPack(String category, String name, List<Skin> skins) {
+    public SimpleSkinPack(File base, String category, String name, List<Skin> skins) {
+        this.base = base;
         this.category = category;
         this.name = name;
         this.skins = skins;
@@ -91,5 +96,13 @@ public class SimpleSkinPack implements SkinPack {
         }
 
         return array;
+    }
+
+    public boolean delete() {
+        return this.base.delete();
+    }
+
+    public File getBase() {
+        return base;
     }
 }

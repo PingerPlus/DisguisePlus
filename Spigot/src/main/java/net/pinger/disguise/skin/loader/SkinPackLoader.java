@@ -34,7 +34,7 @@ public class SkinPackLoader {
             skins.add(SkinUtil.getFromJson(object.getAsJsonObject()));
         }
 
-        return new SimpleSkinPack(category, name, skins);
+        return new SimpleSkinPack(null, category, name, skins);
     }
 
     public static SkinPack getSkinPack(File f, String category, String name) {
@@ -51,7 +51,7 @@ public class SkinPackLoader {
             skins.add(SkinUtil.getFromJson(el.getAsJsonObject()));
         }
 
-        return new SimpleSkinPack(category, name, skins);
+        return new SimpleSkinPack(f.getParentFile(), category, name, skins);
     }
 
 

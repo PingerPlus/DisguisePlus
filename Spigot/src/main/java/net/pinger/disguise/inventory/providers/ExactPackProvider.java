@@ -10,6 +10,7 @@ import net.pinger.bukkit.item.ItemBuilder;
 import net.pinger.bukkit.item.mask.impl.TwoWayLoadingMask;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.inventory.SimpleInventoryManager;
+import net.pinger.disguise.prompts.packs.ConfirmDeletePackPrompt;
 import net.pinger.disguise.skin.Skin;
 import net.pinger.disguise.skin.SkinPack;
 import org.bukkit.ChatColor;
@@ -69,6 +70,15 @@ public class ExactPackProvider implements InventoryProvider {
 
         contents.set(5, 1, ClickableItem.of(cre, e -> {
             this.dp.getInventoryManager().getAddSkinProvider(this.pack).open((Player) e.getWhoClicked());
+        }));
+
+        ItemStack dl = new ItemBuilder(FreshMaterial.TRIPWIRE_HOOK.toMaterial())
+                .setName(new TwoWayLoadingMask(ChatColor.DARK_AQUA, ChatColor.AQUA).getMaskedString("Delete Skin Pack", state))
+                .setLore(ChatColor.GRAY + "Click to delete this pack")
+                .toItemStack();
+
+        contents.set(5, 7, ClickableItem.of(dl, e -> {
+            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new ConfirmDeletePackPrompt(this.dp, this.pack));
         }));
 
         SimpleInventoryManager.addReturnButton(5, 4, contents);

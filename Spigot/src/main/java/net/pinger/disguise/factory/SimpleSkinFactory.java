@@ -316,4 +316,18 @@ public class SimpleSkinFactory implements SkinFactory {
             logger.error("Failed to save the categories.json file", e);
         }
     }
+
+    public boolean deleteSkinPack(SkinPack pack) {
+        SimpleSkinPack converted = (SimpleSkinPack) pack;
+
+        // Remove from the target files
+        this.categorySkins.get(pack.getCategory()).remove(pack);
+        this.skinPacks.remove(pack);
+
+        if (converted.getBase() == null) {
+            return true;
+        }
+
+        return converted.delete();
+    }
 }
