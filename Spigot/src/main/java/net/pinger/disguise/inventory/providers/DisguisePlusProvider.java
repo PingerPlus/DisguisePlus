@@ -43,7 +43,7 @@ public class DisguisePlusProvider implements InventoryProvider {
                 .toItemStack();
 
         contents.set(1, 2, ClickableItem.of(skull, e -> {
-
+            this.dp.getInventoryManager().getUserListProvider().open((Player) e.getWhoClicked());
         }));
 
         ItemStack skinPack = new ItemBuilder(FreshMaterial.GOLD_NUGGET.toMaterial())

@@ -134,6 +134,28 @@ public class SimpleUser implements User {
     }
 
     /**
+     * This method sends a message within the messages.yml file of the plugin.
+     *
+     * @param key the key of the message
+     */
+
+    @Override
+    public void sendMessage(String key) {
+
+    }
+
+    /**
+     * This method sends a formatted message within the messages.yml file of the plugin
+     *
+     * @param key     they key of the message
+     * @param objects the objects to format
+     */
+    @Override
+    public void sendFormattedMessage(String key, Object... objects) {
+
+    }
+
+    /**
      * This method sets the cooldown of this player.
      *
      * @param cooldown the cooldown

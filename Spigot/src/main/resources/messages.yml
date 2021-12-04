@@ -1,0 +1,5 @@
+cooldown:
+  active: "&4You are currently on cooldown."
+
+world:
+  disabled: "&4This command is currently disabled for this world."

@@ -30,10 +30,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.joda.time.DateTimeZone;
 import org.joda.time.tz.UTCProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
 public class DisguisePlus extends JavaPlugin implements Disguise {
+
+    private static final Logger logger = LoggerFactory.getLogger("DisguisePlus");
 
     private final Gson gson = new GsonBuilder()
             .enableComplexMapKeySerialization()
@@ -75,13 +79,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         Bukkit.getPluginManager().registerEvents(new LoginListener(this), this);
 
         try {
-            provider = PacketManager.getApplicableProvider();
+            this.provider = PacketManager.getApplicableProvider();
         } catch (ProviderNotFoundException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
-
-        this.customManager = new BaseDisguiseManager(this, null);
-        this.customManager.applySkinFromUrl(Bukkit.getPlayer("ITSPINGER"), "https://imgur.com/X6FRhrW.png");
 
         // Make sure that we created all instances
         // Of the api, before we connect to the api

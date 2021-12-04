@@ -88,7 +88,7 @@ public class SimpleInventoryManager {
     public SmartInventory getDisguisePlusProvider() {
         return SmartInventory.builder()
                 .provider(new DisguisePlusProvider(this.disguise))
-                .title(ChatColor.DARK_GRAY + "Disguise Plus 2.0.0")
+                .title(ChatColor.DARK_GRAY + "DisguisePlus 2.0.0")
                 .manager(this.inventoryManager)
                 .size(5, 9)
                 .build();
@@ -165,6 +165,15 @@ public class SimpleInventoryManager {
                 .title(String.format(ChatColor.DARK_GRAY + "%s > Add Skin", pack.getName()))
                 .size(4, 9)
                 .parent(this.getExactPackProvider(pack))
+                .build();
+    }
+
+    public SmartInventory getUserListProvider() {
+        return SmartInventory.builder()
+                .provider(new UserListProvider(this.disguise))
+                .manager(this.inventoryManager)
+                .title(ChatColor.DARK_GRAY +  "User List")
+                .parent(this.getDisguisePlusProvider())
                 .build();
     }
 

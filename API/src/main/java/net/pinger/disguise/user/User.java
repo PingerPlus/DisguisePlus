@@ -96,4 +96,20 @@ public interface User {
 
     Player transform();
 
+    /**
+     * This method sends a message within the messages.yml file of the plugin.
+     *
+     * @param key the key of the message
+     */
+
+    void sendMessage(String key);
+
+    /**
+     * This method sends a formatted message within the messages.yml file of the plugin
+     *
+     * @param key they key of the message
+     * @param objects the objects to format
+     */
+
+    void sendFormattedMessage(String key, Object... objects);
 }
