@@ -7,8 +7,6 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class SetCooldownPermission extends StringPrompt {
 
@@ -19,12 +17,12 @@ public class SetCooldownPermission extends StringPrompt {
     }
 
     @Override
-    public @NotNull String getPromptText(@NotNull ConversationContext conversationContext) {
+    public String getPromptText(ConversationContext conversationContext) {
         return ChatColor.GREEN + "Specify the cooldown bypass permission.";
     }
 
     @Override
-    public @Nullable Prompt acceptInput(@NotNull ConversationContext conversationContext, @Nullable String s) {
+    public Prompt acceptInput(ConversationContext conversationContext, String s) {
         Player p = (Player) conversationContext.getForWhom();
         CooldownManager cld = this.dp.getSettings().getCooldownManager();
 

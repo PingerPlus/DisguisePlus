@@ -7,6 +7,7 @@ import com.jonahseguin.drink.Drink;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import net.pinger.bukkit.plugin.BukkitPlugin;
 import net.pinger.common.lang.Lists;
+import net.pinger.disguise.configuration.BaseConfiguration;
 import net.pinger.disguise.data.DataManager;
 import net.pinger.disguise.database.Database;
 import net.pinger.disguise.database.settings.DatabaseSettings;
@@ -20,9 +21,7 @@ import net.pinger.disguise.manager.implementation.BaseDisguiseManager;
 import net.pinger.disguise.packet.PacketManager;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.settings.DisguiseSettings;
-import net.pinger.disguise.skin.SimpleSkin;
 import net.pinger.disguise.skin.SkullManager;
-import net.pinger.disguise.user.SimpleUser;
 import net.pinger.disguise.user.SimpleUserManager;
 import net.pinger.disguise.user.UserManager;
 import net.pinger.disguise.utils.ConversationUtil;
@@ -44,6 +43,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             .setPrettyPrinting()
             .create();
 
+    private BaseConfiguration configuration;
     private SimpleSkinFactory skinFactory;
     private ConversationUtil conversationUtil;
     private Database database;
@@ -51,7 +51,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private DisguiseSettings settings = new DisguiseSettings(this);
     private final SkullManager skullManager = new SkullManager();
     private DataManager dataManager;
-    private final SimpleUserManager sum = new SimpleUserManager();
+    private SimpleUserManager sum;
     private BaseDisguiseManager customManager;
 
     private PacketProvider<?> provider;
@@ -64,11 +64,13 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         // Load the config
         this.addDefaultConfig();
 
+        this.sum = new SimpleUserManager(this);
         this.conversationUtil = new ConversationUtil(this);
         this.database = new Database(this, DatabaseSettings.create(this.getConfig()));
         this.inventoryManager = new SimpleInventoryManager(this);
         this.skinFactory = new SimpleSkinFactory(this);
         this.dataManager = new DataManager(this);
+        this.configuration = new BaseConfiguration(this);
 
         CommandService service = Drink.get(this);
 
@@ -158,5 +160,9 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     public DataManager getDataManager() {
         return dataManager;
+    }
+
+    public BaseConfiguration getConfiguration() {
+        return configuration;
     }
 }

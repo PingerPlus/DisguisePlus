@@ -82,7 +82,6 @@ public class SkullManager {
                 }
 
                 metaProfileField.set(meta, PropertyUtil.createProfile(skin));
-
             } catch (NoSuchFieldException | IllegalAccessException ex2) {
                 logger.error("Failed to mutate the given meta object.");
                 logger.error(ex2.getMessage());

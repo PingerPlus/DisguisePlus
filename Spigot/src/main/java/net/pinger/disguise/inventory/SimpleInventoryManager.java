@@ -5,7 +5,6 @@ import fr.minuskube.inv.InventoryListener;
 import fr.minuskube.inv.InventoryManager;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
-import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import net.pinger.bukkit.item.FreshMaterial;
 import net.pinger.bukkit.item.ItemBuilder;
@@ -16,7 +15,7 @@ import net.pinger.disguise.skin.SkinPack;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class SimpleInventoryManager {
@@ -50,6 +49,9 @@ public class SimpleInventoryManager {
                 .provider(new SettingsProvider(this.disguise))
                 .title(ChatColor.DARK_GRAY + String.format("Disguise Plus %s", this.disguise.getDescription().getVersion()))
                 .parent(this.getDisguisePlusProvider())
+                .listener(new InventoryListener<>(InventoryDragEvent.class, inv -> {
+
+                }))
                 .manager(this.inventoryManager)
                 .size(6, 9)
                 .build();

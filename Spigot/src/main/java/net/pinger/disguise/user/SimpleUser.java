@@ -1,7 +1,7 @@
 package net.pinger.disguise.user;
 
+import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.cooldown.Cooldown;
-import net.pinger.disguise.cooldown.SimpleCooldown;
 import net.pinger.disguise.skin.Skin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,13 +12,15 @@ import java.util.UUID;
 
 public class SimpleUser implements User {
 
+    private final DisguisePlus dp;
     private final UUID id;
 
     // The default name of this player when joining the server
     private String defaultName;
     private Cooldown cooldown = null;
 
-    SimpleUser(UUID id) {
+    SimpleUser(DisguisePlus dp, UUID id) {
+        this.dp = dp;
         this.id = id;
     }
 
@@ -141,18 +143,85 @@ public class SimpleUser implements User {
 
     @Override
     public void sendMessage(String key) {
+        if (this.transform() == null)
+            return;
 
+        if (!this.dp.getConfiguration().has(key)) {
+            return;
+        }
+
+        // Get the message
+        String message = this.dp.getConfiguration().of(key);
+        this.transform().sendMessage(message);
     }
 
     /**
-     * This method sends a formatted message within the messages.yml file of the plugin
+     * This method sends a formatted message from the configuration file
+     * to this player.
+     * <p>
+     * Do not do this if you want to send a message that is not within the messages.yml file.
      *
-     * @param key     they key of the message
-     * @param objects the objects to format
+     * @param key    they key from the config
+     * @param format the objects to format
      */
-    @Override
-    public void sendFormattedMessage(String key, Object... objects) {
 
+    @Override
+    public void sendMessage(String key, Object... format) {
+        if (this.transform() == null)
+            return;
+
+        if (!this.dp.getConfiguration().has(key)) {
+            return;
+        }
+
+        // Get the message
+        String message = this.dp.getConfiguration().ofFormatted(key, format);
+        this.transform().sendMessage(message);
+    }
+
+    /**
+     * This messages sends a raw message to this player
+     * from the configuration.
+     *
+     * @param key the key from the config
+     */
+
+    @Override
+    public void sendRawMessage(String key) {
+        if (this.transform() == null)
+            return;
+
+        if (!this.dp.getConfiguration().has(key)) {
+            return;
+        }
+
+        // Get the message
+        String message = this.dp.getConfiguration().of(key);
+        this.transform().sendRawMessage(message);
+    }
+
+    /**
+     * This method sends a raw formatted message from the configuration file
+     * to this player.
+     * <p>
+     * Do not do this if you want to send a message that is not within the messages.yml file.
+     *
+     * @param key    they key from the config
+     * @param format the objects to format
+     */
+
+    @Override
+    public void sendRawMessage(String key, Object... format) {
+        if (this.transform() == null)
+            return;
+
+        if (!this.dp.getConfiguration().has(key)) {
+            return;
+        }
+
+        // Get the message
+        String message = this.dp.getConfiguration().ofFormatted(key, format);
+        this.transform().sendRawMessage(message);
     }
 
     /**

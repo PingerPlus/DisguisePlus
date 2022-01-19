@@ -3,13 +3,12 @@ package net.pinger.disguise.prompts.packs;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.factory.SimpleSkinFactory;
 import net.pinger.disguise.skin.SkinPack;
+import net.pinger.disguise.user.User;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ConfirmDeletePackPrompt extends StringPrompt {
 
@@ -22,22 +21,20 @@ public class ConfirmDeletePackPrompt extends StringPrompt {
     }
 
     @Override
-    public @NotNull String getPromptText(@NotNull ConversationContext conversationContext) {
-        return ChatColor.GREEN + "Type confirm to confirm the deletion of this skin pack.";
+    public String getPromptText(ConversationContext conversationContext) {
+        return this.dp.getConfiguration().of("skin-packs.confirm-delete");
     }
 
     @Override
-    public @Nullable Prompt acceptInput(@NotNull ConversationContext conversationContext, @Nullable String s) {
+    public Prompt acceptInput( ConversationContext conversationContext, String s) {
         Player p = (Player) conversationContext.getForWhom();
+        User user = this.dp.getUserManager().getUser(p.getUniqueId());
 
         if (!s.equalsIgnoreCase("confirm"))
             return this;
 
-        if (((SimpleSkinFactory) this.dp.getSkinFactory()).deleteSkinPack(this.pack)) {
-            p.sendRawMessage(ChatColor.GREEN + "Successfully deleted skin pack -> " + pack.getName());
-        } else {
-            p.sendRawMessage(ChatColor.RED + "Failed to delete the pack with the name -> " + pack.getName());
-        }
+        ((SimpleSkinFactory) this.dp.getSkinFactory()).deleteSkinPack(this.pack);
+        user.sendRawMessage("skin-packs.success-delete", this.pack.getName());
 
         this.dp.getInventoryManager().getCategoryProvider(this.pack.getCategory()).open(p);
         return Prompt.END_OF_CONVERSATION;

@@ -15,6 +15,7 @@
         <module>SkinDatabase</module>
         <module>v1_17_1</module>
         <module>v1_17</module>
+        <module>v1_16_4</module>
     </modules>
 
     <dependencies>

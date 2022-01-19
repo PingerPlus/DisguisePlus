@@ -22,7 +22,15 @@ public class DisguisePlusProvider implements InventoryProvider {
 
     @Override
     public void init(Player player, InventoryContents contents) {
+        // Get skull for this player
+        ItemStack skull = new ItemBuilder(this.dp.getSkullManager().getSkullFrom(player.getUniqueId()))
+                .setName(ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD + "Users")
+                .setLore(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to view users.")
+                .toItemStack();
 
+        contents.set(1, 2, ClickableItem.of(skull, e -> {
+            this.dp.getInventoryManager().getUserListProvider().open((Player) e.getWhoClicked());
+        }));
     }
 
     @Override
@@ -35,16 +43,6 @@ public class DisguisePlusProvider implements InventoryProvider {
 
         int state = contents.property("state", 0);
         contents.setProperty("state", state + 1);
-
-        // Get skull for this player
-        ItemStack skull = new ItemBuilder(this.dp.getSkullManager().getSkullFrom(player.getUniqueId()))
-                .setName(new TwoWayLoadingMask(ChatColor.LIGHT_PURPLE, ChatColor.DARK_PURPLE).getMaskedString("Users", state))
-                .setLore(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to view users.")
-                .toItemStack();
-
-        contents.set(1, 2, ClickableItem.of(skull, e -> {
-            this.dp.getInventoryManager().getUserListProvider().open((Player) e.getWhoClicked());
-        }));
 
         ItemStack skinPack = new ItemBuilder(FreshMaterial.GOLD_NUGGET.toMaterial())
                 .setName(new TwoWayLoadingMask(ChatColor.LIGHT_PURPLE, ChatColor.DARK_PURPLE).getMaskedString("Skin Packs", state))

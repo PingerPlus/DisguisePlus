@@ -3,3 +3,7 @@ cooldown:
 
 world:
   disabled: "&4This command is currently disabled for this world."
+
+skin-packs:
+  confirm-delete: "&aType &6confirm &ato confirm the deletion of this pack."
+  success-delete: "&aSuccessfully deleted the&e %s &askin pack."

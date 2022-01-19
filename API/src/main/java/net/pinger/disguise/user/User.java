@@ -97,19 +97,46 @@ public interface User {
     Player transform();
 
     /**
-     * This method sends a message within the messages.yml file of the plugin.
+     * This method sends a message from the configuration file
+     * to this player.
+     * <p>
+     * Do not do this if you want to send a message that is not within the messages.yml file.
      *
-     * @param key the key of the message
+     * @param key they key from the config
      */
 
     void sendMessage(String key);
 
     /**
-     * This method sends a formatted message within the messages.yml file of the plugin
+     * This method sends a formatted message from the configuration file
+     * to this player.
+     * <p>
+     * Do not do this if you want to send a message that is not within the messages.yml file.
      *
-     * @param key they key of the message
-     * @param objects the objects to format
+     * @param key they key from the config
+     * @param format the objects to format
      */
 
-    void sendFormattedMessage(String key, Object... objects);
+    void sendMessage(String key, Object... format);
+
+    /**
+     * This messages sends a raw message to this player
+     * from the configuration.
+     *
+     * @param key the key from the config
+     */
+
+    void sendRawMessage(String key);
+
+    /**
+     * This method sends a raw formatted message from the configuration file
+     * to this player.
+     * <p>
+     * Do not do this if you want to send a message that is not within the messages.yml file.
+     *
+     * @param key they key from the config
+     * @param format the objects to format
+     */
+
+    void sendRawMessage(String key, Object... format);
 }

@@ -324,7 +324,7 @@ public class SimpleSkinFactory implements SkinFactory {
         this.categorySkins.get(pack.getCategory()).remove(pack);
         this.skinPacks.remove(pack);
 
-        if (converted.getBase() == null) {
+        if (converted.getBase() == null || !converted.getBase().exists()) {
             return true;
         }
 
