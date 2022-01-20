@@ -24,7 +24,7 @@ public class CreateSkinImagePrompt extends StringPrompt {
 
     @Override
     public @NotNull String getPromptText(@NotNull ConversationContext conversationContext) {
-        return ChatColor.GREEN + "Specify the image url!";
+        return this.dp.getConfiguration().of("skins.image-url");
     }
 
     @Override

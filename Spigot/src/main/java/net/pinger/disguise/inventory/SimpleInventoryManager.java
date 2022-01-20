@@ -129,6 +129,7 @@ public class SimpleInventoryManager {
                 .manager(this.inventoryManager)
                 .title(ChatColor.DARK_GRAY + "Settings > Disguise")
                 .parent(this.getSettingsProvider())
+                .size(5, 9)
                 .build();
     }
 

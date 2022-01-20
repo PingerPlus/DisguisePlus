@@ -1,9 +1,3 @@
-cooldown:
-  active: "&4You are currently on cooldown."
-
-world:
-  disabled: "&4This command is currently disabled for this world."
-
 categories:
   create: "&aSpecify a new category name."
   success-create: "&aSuccessfully created the&e %s &askin pack."
@@ -13,3 +7,38 @@ skin-packs:
   success-create: "&aSuccessfully created the&e %s &askin pack."
   confirm-delete: "&aType &6confirm &ato confirm the deletion of this pack."
   success-delete: "&aSuccessfully deleted the&e %s &askin pack."
+
+skins:
+  player-name: "&aSpecify a player name in order to download the skin."
+  image-url: "&aSpecify an image url in order to download the skin."
+
+database:
+  specify-username: "&aSpecify the database username."
+  success-username: "&aSuccessfully changed the username to &e%s."
+  specify-port: "&aSpecify the database port."
+  success-port: "&aSuccessfully changed the port to &e%s."
+  specify-password: "&aSpecify the database password."
+  success-password: "&aSuccessfully changed the password."
+  specify-hostname: "&aSpecify the host."
+  success-hostname: "&aSuccessfully changed the host to &e%s."
+  specify-db: "&aSpecify the database."
+  success-db: "&aSuccessfully changed the database to &e%s."
+
+chat:
+  format:
+    specify: "&aSpecify the new format."
+    success: "&aSuccessfully updated the format."
+  suffix:
+    specify-disguised: "&aSpecify the disguised suffix."
+    specify-normal: "&aSpecify the standard suffix."
+    success-disguised: "&aSuccessfully changed the disguised suffix to &e%s."
+    success-normal: "&aSuccessfully changed the standard suffix to &e%s."
+  prefix:
+    specify-disguised: "&aSpecify the disguised prefix."
+    specify-normal: "&aSpecify the standard prefix."
+    success-disguised: "&aSuccessfully changed the disguised prefix to &e%s."
+    success-normal: "&aSuccessfully changed the standard prefix to &e%s."
+
+worlds:
+  specify-name: "&aSpecify the world you want to ban."
+  success: "&aSuccessfully banned the world with the name &e%s."

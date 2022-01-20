@@ -1,6 +1,7 @@
 package net.pinger.disguise.prompts.chat;
 
 import net.pinger.disguise.DisguisePlus;
+import net.pinger.disguise.user.User;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -17,12 +18,13 @@ public class SetFormatPrompt extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext conversationContext) {
-        return ChatColor.GREEN + "Specify the format.";
+        return this.dp.getConfiguration().of("chat.format.specify");
     }
 
     @Override
     public Prompt acceptInput(ConversationContext conversationContext, String s) {
         Player p = (Player) conversationContext.getForWhom();
+        User user = this.dp.getUserManager().getUser(p);
 
         if (!s.contains("%player_name%") || !s.contains("%message%")) {
             p.sendRawMessage(ChatColor.RED + "The message must contain %player_name% and %message%.");
@@ -31,6 +33,7 @@ public class SetFormatPrompt extends StringPrompt {
 
         this.dp.getSettings().setFormat(s);
         this.dp.getInventoryManager().getDisplayProvider().open(p);
+        user.sendRawMessage("chat.format.success");
         return Prompt.END_OF_CONVERSATION;
     }
 }

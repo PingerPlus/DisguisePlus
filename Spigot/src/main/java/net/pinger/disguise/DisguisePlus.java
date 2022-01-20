@@ -78,9 +78,12 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         Bukkit.getPluginManager().registerEvents(new LoginListener(this), this);
 
         try {
-            this.provider = PacketManager.getApplicableProvider();
+            this.provider = PacketManager.getCorrespondingProvider();
         } catch (ProviderNotFoundException e) {
             logger.error("", e);
+
+            // Disable this plugin
+            this.getPluginLoader().disablePlugin(this);
         }
 
         // Make sure that we created all instances

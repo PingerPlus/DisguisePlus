@@ -3,7 +3,6 @@ package net.pinger.disguise.settings;
 import com.google.common.collect.Sets;
 import net.pinger.common.lang.Lists;
 import net.pinger.disguise.DisguisePlus;
-import net.pinger.disguise.cooldown.CooldownManager;
 import net.pinger.disguise.nick.SimpleNickCreator;
 import net.pinger.disguise.settings.display.DisplaySettings;
 import org.bukkit.World;
@@ -21,7 +20,6 @@ public class DisguiseSettings {
     private final DisplaySettings ds;
     private boolean update;
     private boolean metrics;
-    private final CooldownManager cooldownManager;
 
     private final int min, max;
 
@@ -42,7 +40,6 @@ public class DisguiseSettings {
         // Update classes
         this.creator = SimpleNickCreator.createFrom(cfg.getString("nick.pattern"));
         this.ds = new DisplaySettings(cfg);
-        this.cooldownManager = new CooldownManager(cfg);
     }
 
     /**
@@ -245,16 +242,6 @@ public class DisguiseSettings {
     }
 
     /**
-     * Returns the cooldown manager.
-     *
-     * @return the cooldown manager
-     */
-
-    public CooldownManager getCooldownManager() {
-        return cooldownManager;
-    }
-
-    /**
      * This method saves the current config configuration
      */
 
@@ -272,8 +259,6 @@ public class DisguiseSettings {
         // Update nick creator
         this.creator.saveToConfig(cfg);
         this.ds.saveToConfig(cfg);
-        this.cooldownManager.saveToConfig(cfg);
-
         this.dp.saveConfig();
     }
 }

@@ -67,9 +67,9 @@ public class DMProvider implements InventoryProvider {
         // The prefix
         ItemStack pf = new ItemBuilder(FreshMaterial.DIAMOND_HELMET.toMaterial())
                 .setName(new TwoWayLoadingMask(ChatColor.DARK_GREEN, ChatColor.GREEN).getMaskedString("Prefix", state))
-                .setLore(ChatColor.AQUA + "Left Click" + ChatColor.GRAY + " to" + ChatColor.GOLD + " edit normal " + ChatColor.GRAY + "prefix.",
-                        ChatColor.AQUA + "Right Click" + ChatColor.GRAY + " to" + ChatColor.GOLD + " edit disguised " + ChatColor.GRAY + "prefix.", Strings.EMPTY,
-                        ChatColor.GRAY + "This option controls the value of the " + ChatColor.GOLD + "%dp_prefix%" + ChatColor.GRAY + " placeholder.", Strings.EMPTY,
+                .setLore(ChatColor.AQUA + "Left Click" + ChatColor.GRAY + " to edit " + ChatColor.GOLD + "normal " + ChatColor.GRAY + "prefix.",
+                        ChatColor.AQUA + "Right Click" + ChatColor.GRAY + " to edit " + ChatColor.GOLD + "disguised " + ChatColor.GRAY + "prefix.", Strings.EMPTY,
+                        ChatColor.GRAY + "This option controls the value", ChatColor.GRAY + "of the " + ChatColor.GOLD + "%dp_prefix%" + ChatColor.GRAY + " placeholder.", Strings.EMPTY,
                         ChatColor.GRAY + "While Normal:", this.fallbackString(ds.getPrefix().getDef()), Strings.EMPTY,
                         ChatColor.GRAY + "While Disguised:", this.fallbackString(ds.getPrefix().getDisguised()))
                 .hideAllAttributes()
@@ -87,9 +87,9 @@ public class DMProvider implements InventoryProvider {
 
         ItemStack sf = new ItemBuilder(FreshMaterial.CHAINMAIL_HELMET.toMaterial())
                 .setName(new TwoWayLoadingMask(ChatColor.DARK_GREEN, ChatColor.GREEN).getMaskedString("Suffix", state))
-                .setLore(ChatColor.AQUA + "Left Click" + ChatColor.GRAY + " to" + ChatColor.GOLD + " edit normal " + ChatColor.GRAY + "suffix.",
-                        ChatColor.AQUA + "Right Click" + ChatColor.GRAY + " to" + ChatColor.GOLD + " edit disguised " + ChatColor.GRAY + "suffix.", Strings.EMPTY,
-                        ChatColor.GRAY + "This option controls the value of the " + ChatColor.GOLD + "%dp_suffix%" + ChatColor.GRAY + " placeholder.", Strings.EMPTY,
+                .setLore(ChatColor.AQUA + "Left Click" + ChatColor.GRAY + " to edit " + ChatColor.GOLD + "normal " + ChatColor.GRAY + "suffix.",
+                        ChatColor.AQUA + "Right Click" + ChatColor.GRAY + " to edit " + ChatColor.GOLD + "disguised " + ChatColor.GRAY + "suffix.", Strings.EMPTY,
+                        ChatColor.GRAY + "This option controls the value", ChatColor.GRAY + "of the " + ChatColor.GOLD + "%dp_suffix%" + ChatColor.GRAY + " placeholder.", Strings.EMPTY,
                         ChatColor.GRAY + "While Normal:", this.fallbackString(ds.getSuffix().getDef()), Strings.EMPTY,
                         ChatColor.GRAY + "While Disguised:", this.fallbackString(ds.getSuffix().getDisguised()))
                 .hideAllAttributes()

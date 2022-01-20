@@ -30,7 +30,7 @@ public class PacketManager {
         providerCompatibility.put("1.16.2", Lists.newArrayList("1.16.3"));
     }
 
-    public static PacketProvider<?> getApplicableProvider() throws ProviderNotFoundException {
+    public static PacketProvider<?> getCorrespondingProvider() throws ProviderNotFoundException {
         if (provider != null)
             throw new IllegalArgumentException("PacketProvider has already been found");
 
@@ -42,7 +42,7 @@ public class PacketManager {
 
                 // If we found the class with the corresponding version
                 if (NMS.isVersion(version)) {
-                    logger.info("Found the applicable provider -> " + name);
+                    logger.info("Found the appropriate provider for version " + name.replace("_", "."));
                     return provider = clazz.getConstructor().newInstance();
                 }
 
@@ -50,7 +50,7 @@ public class PacketManager {
                     for (String serverVersion : providerCompatibility.get(version)) {
                         if (NMS.isVersion(serverVersion)) {
                             // Then the current class is also compatible with the current version
-                            logger.info("Found the applicable provider -> " + name);
+                            logger.info("Found the appropriate provider for version " + name.replace("_", "."));
                             return provider = clazz.getConstructor().newInstance();
                         }
                     }

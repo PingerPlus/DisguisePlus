@@ -100,6 +100,6 @@ public class DSProvider implements InventoryProvider {
             this.dp.getInventoryManager().getCreatorProvider().open((Player) e.getWhoClicked());
         }));
 
-        SimpleInventoryManager.addReturnButton(5, 4, contents);
+        SimpleInventoryManager.addReturnButton(4, 4, contents);
     }
 }
