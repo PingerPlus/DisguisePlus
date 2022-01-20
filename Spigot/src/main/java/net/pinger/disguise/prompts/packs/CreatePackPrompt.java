@@ -4,7 +4,7 @@ import net.pinger.common.lang.Lists;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.factory.SimpleSkinFactory;
 import net.pinger.disguise.skin.SimpleSkinPack;
-import org.bukkit.ChatColor;
+import net.pinger.disguise.user.User;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -24,12 +24,13 @@ public class CreatePackPrompt extends StringPrompt {
 
     @Override
     public @NotNull String getPromptText(@NotNull ConversationContext conversationContext) {
-        return ChatColor.GREEN + "Specify the pack name";
+        return this.dm.getConfiguration().of("skin-packs.create");
     }
 
     @Override
     public @Nullable Prompt acceptInput(@NotNull ConversationContext conversationContext, @Nullable String s) {
         Player p = (Player) conversationContext.getForWhom();
+        User user = this.dm.getUserManager().getUser(p);
         SimpleSkinFactory factory = (SimpleSkinFactory) this.dm.getSkinFactory();
 
         if (s.isEmpty()) {
@@ -41,6 +42,7 @@ public class CreatePackPrompt extends StringPrompt {
 
         factory.createSkinPack(this.category, new SimpleSkinPack(null, this.category, s, Lists.newArrayList()));
         this.dm.getInventoryManager().getCategoryProvider(this.category).open(p);
+        user.sendRawMessage("skin-packs.success-create", s);
         return Prompt.END_OF_CONVERSATION;
     }
 }

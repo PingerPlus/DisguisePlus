@@ -90,23 +90,13 @@ public class DSProvider implements InventoryProvider {
 
         contents.set(0, 3, ClickableItem.empty(cs));
 
-        // Cooldown Manager
-        ItemStack cm = new ItemBuilder(FreshMaterial.CLOCK.toMaterial())
-                .setName(new TwoWayLoadingMask(ChatColor.AQUA, ChatColor.DARK_AQUA).getMaskedString("Cooldown Manager", state))
-                .setLore(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to add a cooldown.")
-                .toItemStack();
-
-        contents.set(2, 2, ClickableItem.of(cm, e -> {
-            this.dp.getInventoryManager().getCooldownProvider().open((Player) e.getWhoClicked());
-        }));
-
         // Nick Creator
         ItemStack nc = new ItemBuilder(Material.STICK)
                 .setName(new TwoWayLoadingMask(ChatColor.DARK_AQUA, ChatColor.AQUA).getMaskedString("Nick Creator", state))
                 .setLore(ChatColor.AQUA + "Click " + ChatColor.GRAY + "to" + ChatColor.GOLD + " choose " + ChatColor.GRAY + "a custom pattern for your skins.")
                 .toItemStack();
 
-        contents.set(2, 6, ClickableItem.of(nc, e -> {
+        contents.set(2, 4, ClickableItem.of(nc, e -> {
             this.dp.getInventoryManager().getCreatorProvider().open((Player) e.getWhoClicked());
         }));
 

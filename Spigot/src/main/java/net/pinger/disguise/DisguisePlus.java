@@ -8,7 +8,6 @@ import com.tchristofferson.configupdater.ConfigUpdater;
 import net.pinger.bukkit.plugin.BukkitPlugin;
 import net.pinger.common.lang.Lists;
 import net.pinger.disguise.configuration.BaseConfiguration;
-import net.pinger.disguise.data.DataManager;
 import net.pinger.disguise.database.Database;
 import net.pinger.disguise.database.settings.DatabaseSettings;
 import net.pinger.disguise.exceptions.ProviderNotFoundException;
@@ -50,7 +49,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private SimpleInventoryManager inventoryManager;
     private DisguiseSettings settings = new DisguiseSettings(this);
     private final SkullManager skullManager = new SkullManager();
-    private DataManager dataManager;
     private SimpleUserManager sum;
     private BaseDisguiseManager customManager;
 
@@ -69,7 +67,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.database = new Database(this, DatabaseSettings.create(this.getConfig()));
         this.inventoryManager = new SimpleInventoryManager(this);
         this.skinFactory = new SimpleSkinFactory(this);
-        this.dataManager = new DataManager(this);
         this.configuration = new BaseConfiguration(this);
 
         CommandService service = Drink.get(this);
@@ -156,10 +153,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     public SkullManager getSkullManager() {
         return skullManager;
-    }
-
-    public DataManager getDataManager() {
-        return dataManager;
     }
 
     public BaseConfiguration getConfiguration() {

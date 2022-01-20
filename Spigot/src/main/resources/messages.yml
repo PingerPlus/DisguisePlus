@@ -4,6 +4,12 @@ cooldown:
 world:
   disabled: "&4This command is currently disabled for this world."
 
+categories:
+  create: "&aSpecify a new category name."
+  success-create: "&aSuccessfully created the&e %s &askin pack."
+
 skin-packs:
+  create: "&aSpecify a new pack name."
+  success-create: "&aSuccessfully created the&e %s &askin pack."
   confirm-delete: "&aType &6confirm &ato confirm the deletion of this pack."
   success-delete: "&aSuccessfully deleted the&e %s &askin pack."

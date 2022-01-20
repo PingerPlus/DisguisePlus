@@ -140,26 +140,6 @@ public class SimpleInventoryManager {
                 .parent(this.getDisguiseSettings())
                 .build();
     }
-
-    public SmartInventory getCooldownProvider() {
-        return SmartInventory.builder()
-                .provider(new CooldownProvider(this.disguise))
-                .manager(this.inventoryManager)
-                .title(ChatColor.DARK_GRAY + "Disguise > Cooldown Manager")
-                .parent(this.getDisguiseSettings())
-                .size(5, 9)
-                .build();
-    }
-
-    public SmartInventory getIntervalProvider() {
-        return SmartInventory.builder()
-                .provider(new IntervalProvider(this.disguise))
-                .manager(this.inventoryManager)
-                .title(ChatColor.DARK_GRAY + "Cooldown Manager > Interval")
-                .parent(this.getCooldownProvider())
-                .build();
-    }
-
     public SmartInventory getAddSkinProvider(SkinPack pack) {
         return SmartInventory.builder()
                 .provider(new AddSkinProvider(this.disguise, pack))
