@@ -56,7 +56,7 @@ public class PacketManager {
                     }
                 }
             } catch (Exception e) {
-                logger.error("An error occurred while trying to find an applicable provider for version -> " + Bukkit.getVersion());
+                logger.error("An error occurred while trying to find an applicable provider for version " + Bukkit.getVersion());
                 logger.error(e.getMessage());
             }
         }

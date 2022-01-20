@@ -14,7 +14,7 @@ public class DisguiseSettings {
 
     private final DisguisePlus dp;
 
-    private Set<String> disabledWorlds = Sets.newHashSet();
+    private Set<String> disabledWorlds;
     private boolean online;
     private SimpleNickCreator creator;
     private final DisplaySettings ds;
