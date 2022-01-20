@@ -11,6 +11,10 @@ skin-packs:
 skins:
   player-name: "&aSpecify a player name in order to download the skin."
   image-url: "&aSpecify an image url in order to download the skin."
+  success-name: "&aSuccessfully fetched skin from name &e%s."
+  error-name: "&cFailed to fetch a skin from name &e%s."
+  success-url: "&aSuccessfully fetched a skin from the url you provided."
+  error-url: "&cFailed to fetch a skin within the url you provided. You also might be rate limited by the service."
 
 database:
   specify-username: "&aSpecify the database username."

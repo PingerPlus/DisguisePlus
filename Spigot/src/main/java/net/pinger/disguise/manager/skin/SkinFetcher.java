@@ -1,8 +1,5 @@
 package net.pinger.disguise.manager.skin;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.gson.JsonObject;
 import net.pinger.common.http.HttpRequest;
 import net.pinger.common.http.HttpResponse;
@@ -10,7 +7,6 @@ import net.pinger.common.http.request.HttpGetRequest;
 import net.pinger.common.http.request.HttpPostRequest;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.exceptions.InvalidUrlException;
-import net.pinger.disguise.exceptions.InvalidUserException;
 import net.pinger.disguise.manager.nick.NickFetcher;
 import net.pinger.disguise.skin.Skin;
 import net.pinger.disguise.skin.SkinQueue;
@@ -18,14 +14,13 @@ import net.pinger.disguise.utils.HttpUtil;
 import net.pinger.disguise.utils.ReferenceUtil;
 import net.pinger.disguise.utils.SkinUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -37,13 +32,9 @@ import java.util.function.Consumer;
 
 public class SkinFetcher {
 
-    private static final LoadingCache<String, Skin> skinCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(15, TimeUnit.MINUTES)
-            .build(CacheLoader.from(SkinFetcher::catchSkin));
-
     private static final Logger logger = LoggerFactory.getLogger("SkinFetcher");
 
-    public static void catchSkin(String url, Consumer<Skin> skin, Consumer<Throwable> error, DisguisePlus dp) {
+    public static void catchSkin(String url, Consumer<Skin> skin, Consumer<Throwable> error) {
         Skin queued = SkinQueue.getSkinFromUrl(url);
 
         if (queued != null) {
@@ -59,7 +50,7 @@ public class SkinFetcher {
 
                 JsonObject property = ReferenceUtil.GSON.fromJson(response.getResponse(), JsonObject.class);
 
-                Bukkit.getScheduler().runTask(dp, () -> {
+                Bukkit.getScheduler().runTask(JavaPlugin.getPlugin(DisguisePlus.class), () -> {
                     if (property.has("error")) {
                         error.accept(new InvalidUrlException(property.get("error").getAsString()));
                         return;
@@ -79,7 +70,7 @@ public class SkinFetcher {
         });
     }
 
-    private static Skin catchSkin(String playerName) {
+    public static Skin getSkin(String playerName) {
         try {
             // The uuid
             UUID id = NickFetcher.retrieveUUID(playerName);
@@ -91,24 +82,17 @@ public class SkinFetcher {
             HttpResponse response = request.connect();
 
             if (response.getCode() == 404)
-                throw new InvalidUserException();
+                return null;
 
             JsonObject object = ReferenceUtil.GSON.fromJson(response.getResponse(), JsonObject.class);
+
+            if (object == null || object.isJsonNull())
+                return null;
+
             return SkinUtil.getFromMojang(object);
         } catch (IOException e) {
             return null;
         }
-    }
-
-    public static Skin getSkin(String playerName) {
-        try {
-            return skinCache.get(playerName);
-        } catch (ExecutionException e) {
-            logger.error("Failed to retrieve a skin from the player name -> " + playerName);
-            logger.error(e.getMessage());
-        }
-
-        return null;
     }
 
 }

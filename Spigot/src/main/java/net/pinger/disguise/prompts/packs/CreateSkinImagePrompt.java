@@ -1,9 +1,11 @@
 package net.pinger.disguise.prompts.packs;
 
 import net.pinger.disguise.DisguisePlus;
+import net.pinger.disguise.factory.SimpleSkinFactory;
 import net.pinger.disguise.manager.skin.SkinFetcher;
 import net.pinger.disguise.skin.SimpleSkinPack;
 import net.pinger.disguise.skin.SkinPack;
+import net.pinger.disguise.user.User;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -30,19 +32,26 @@ public class CreateSkinImagePrompt extends StringPrompt {
     @Override
     public @Nullable Prompt acceptInput(@NotNull ConversationContext conversationContext, @Nullable String s) {
         Player p = (Player) conversationContext.getForWhom();
+        User user = this.dp.getUserManager().getUser(p.getUniqueId());
 
         if (s.isEmpty())
             return this;
 
+        SimpleSkinPack simple = (SimpleSkinPack) pack;
+
         // Add the skin
         SkinFetcher.catchSkin(s, skin -> {
-                    ((SimpleSkinPack) this.pack).addSkin(skin);
-                    this.dp.getInventoryManager().getExactPackProvider(this.pack).open(p);
-                },
-                throwable -> {
-                    p.sendMessage(ChatColor.RED + "Image URL is either invalid or you have been rate-limited.");
-                    this.dp.getInventoryManager().getExactPackProvider(this.pack).open(p);
-            }, this.dp);
+            simple.addSkin(skin);
+            user.sendRawMessage("skins.success-url", s);
+
+            // Reopen the inv
+            this.dp.getInventoryManager().getExactPackProvider(this.pack).open(p);
+        }, err -> {
+            user.sendRawMessage("skins.error-url", s);
+
+            // Reopen the inv
+            this.dp.getInventoryManager().getExactPackProvider(this.pack).open(p);
+        });
 
         return Prompt.END_OF_CONVERSATION;
     }

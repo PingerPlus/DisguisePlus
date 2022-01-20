@@ -89,10 +89,9 @@ public class SimpleDisguiseManager implements DisguiseManager {
     @Override
     public void applySkinFromUrl(Player player, String url) throws IOException {
         // Check if this user is under cooldown
-        SkinFetcher.catchSkin(url, skin -> this.applySkin(player, skin),
-                error -> {
-
-            }, this.dp);
+        SkinFetcher.catchSkin(url, s -> this.applySkin(player, s), e -> {
+            throw new RuntimeException(e);
+        });
     }
 
     @Override

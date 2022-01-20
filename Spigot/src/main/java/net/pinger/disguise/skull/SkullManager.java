@@ -65,7 +65,7 @@ public class SkullManager {
         return this.getSkullFrom(UUID.fromString("e5cb34a9-9f69-44ad-adeb-b81d5ce3d99e"));
     }
 
-    static void mutateItemMeta(SkullMeta meta, Skin skin) {
+    public static void mutateItemMeta(SkullMeta meta, Skin skin) {
         try {
             if (metaSetProfileMethod == null) {
                 metaSetProfileMethod = meta.getClass().getDeclaredMethod("setProfile", GameProfile.class);

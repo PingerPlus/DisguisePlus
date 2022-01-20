@@ -20,7 +20,7 @@ public class BaseDisguiseManager extends SimpleDisguiseManager {
     }
 
     @Override
-    public void applySkinFromPlayer(Player player, String playerName) throws IOException {
+    public void applySkinFromPlayer(Player player, String playerName) {
         try {
             super.applySkinFromPlayer(player, playerName);
         } catch (InvalidUserException e) {

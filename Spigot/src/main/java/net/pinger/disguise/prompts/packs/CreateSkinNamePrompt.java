@@ -4,6 +4,7 @@ import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.manager.skin.SkinFetcher;
 import net.pinger.disguise.skin.SimpleSkin;
 import net.pinger.disguise.skin.SimpleSkinPack;
+import net.pinger.disguise.skin.Skin;
 import net.pinger.disguise.skin.SkinPack;
 import net.pinger.disguise.user.User;
 import org.bukkit.ChatColor;
@@ -37,8 +38,16 @@ public class CreateSkinNamePrompt extends StringPrompt {
         if (s.isEmpty())
             return this;
 
-        // Add the skin
-        ((SimpleSkinPack) this.pack).addSkin(SkinFetcher.getSkin(s));
+        Skin skin = SkinFetcher.getSkin(s);
+
+        if (skin == null) {
+            user.sendRawMessage("skins.error-name", s);
+        } else {
+            user.sendRawMessage("skins.success-name", s);
+
+            // Add the skin
+            ((SimpleSkinPack) this.pack).addSkin(skin);
+        }
 
         // Check for error here
 
