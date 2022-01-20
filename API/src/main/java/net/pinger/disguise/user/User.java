@@ -60,33 +60,12 @@ public interface User {
     String getChangedName();
 
     /**
-     * Returns the cooldown of this user.
-     *
-     * @return the cooldown
-     */
-
-    @Nullable
-    Cooldown getCooldown();
-
-    /**
      * Checks if this player is disguised.
      *
      * @return whether this player is disguised
      */
 
     boolean isDisguised();
-
-    /**
-     * Returns whether this user currently has a cooldown.
-     * If this value returns true, the user may not be using any skinning commands until this returns false.
-     *
-     * @return whether this user has a cooldown
-     */
-
-    default boolean hasCooldown() {
-        return getCooldown() != null
-                & getCooldown().isActive();
-    }
 
     /**
      * Transforms the current user to a player.

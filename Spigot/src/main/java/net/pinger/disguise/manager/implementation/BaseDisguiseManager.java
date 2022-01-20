@@ -65,6 +65,10 @@ public class BaseDisguiseManager extends SimpleDisguiseManager {
 
         // Add to the nicks
         SimpleNickSetter.applyNick(player, ChatColor.translateAlternateColorCodes('&', name));
+        PacketProvider.refreshPlayer(this.dp, player);
+
+        // Send the packets
+        this.dp.getPacketProvider().sendServerPackets(player);
     }
 
 

@@ -62,4 +62,16 @@ public interface PacketProvider<T> {
 
     void sendServerPackets(Player player);
 
+    static void refreshPlayer(Plugin plugin, Player p) {
+        for (Player other : Bukkit.getOnlinePlayers()) {
+            if (NMS.atLeast("1.17")) {
+                other.hidePlayer(plugin, p);
+                other.showPlayer(plugin, p);
+            } else {
+                other.hidePlayer(p);
+                other.showPlayer(p);
+            }
+        }
+    }
+
 }

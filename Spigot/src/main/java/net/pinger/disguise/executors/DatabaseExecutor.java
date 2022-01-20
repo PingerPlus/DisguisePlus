@@ -1,6 +1,7 @@
 package net.pinger.disguise.executors;
 
 import com.jonahseguin.drink.annotation.Command;
+import com.jonahseguin.drink.annotation.Require;
 import com.jonahseguin.drink.annotation.Sender;
 import net.pinger.disguise.DisguisePlus;
 import org.bukkit.entity.Player;
@@ -13,11 +14,9 @@ public class DatabaseExecutor {
         this.disguisePlus = disguisePlus;
     }
 
-    @Command(name = "", desc = "Configure the DisguisePlus plugin.")
+    @Command(name = "", desc = "Configure the Disguise+ plugin.")
+    @Require(value = "permission.dp.modify")
     public void onCommand(@Sender Player sender) {
-        if (!sender.isOp())
-            return;
-
         this.disguisePlus.getInventoryManager().getDisguisePlusProvider().open(sender);
     }
 }

@@ -12,6 +12,7 @@ import net.pinger.disguise.database.Database;
 import net.pinger.disguise.database.settings.DatabaseSettings;
 import net.pinger.disguise.exceptions.ProviderNotFoundException;
 import net.pinger.disguise.executors.DatabaseExecutor;
+import net.pinger.disguise.executors.NickExecutor;
 import net.pinger.disguise.factory.SimpleSkinFactory;
 import net.pinger.disguise.factory.SkinFactory;
 import net.pinger.disguise.inventory.SimpleInventoryManager;
@@ -73,6 +74,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
         // Registering the commands
         service.register(new DatabaseExecutor(this), "dp");
+        service.register(new NickExecutor(this), "nick");
         service.registerCommands();
 
         Bukkit.getPluginManager().registerEvents(new LoginListener(this), this);
@@ -85,6 +87,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             // Disable this plugin
             this.getPluginLoader().disablePlugin(this);
         }
+
+        this.customManager = new BaseDisguiseManager(this, this.provider);
 
         // Make sure that we created all instances
         // Of the api, before we connect to the api
@@ -160,5 +164,9 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     public BaseConfiguration getConfiguration() {
         return configuration;
+    }
+
+    public BaseDisguiseManager getBaseManager() {
+        return customManager;
     }
 }
