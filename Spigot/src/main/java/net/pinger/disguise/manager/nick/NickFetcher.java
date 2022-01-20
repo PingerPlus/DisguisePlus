@@ -8,6 +8,7 @@ import net.pinger.disguise.exceptions.InvalidUserException;
 import net.pinger.disguise.utils.ConverterUtil;
 import net.pinger.disguise.utils.HttpUtil;
 import net.pinger.disguise.utils.ReferenceUtil;
+import org.bukkit.entity.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,10 +25,14 @@ public class NickFetcher {
             HttpResponse response = request.connect();
 
             if (response.getCode() == 404)
-                throw new InvalidUserException();
+                return null;
 
             // Response
             JsonObject object = ReferenceUtil.GSON.fromJson(response.getResponse(), JsonObject.class);
+
+            if (object == null || object.isJsonNull()) {
+                return null;
+            }
 
             if (object.has("id"))
                 return ConverterUtil.fromString(object.get("id").getAsString());
@@ -38,6 +43,23 @@ public class NickFetcher {
         }
 
         return null;
+    }
+
+    /**
+     * This method checks if the player's
+     * uuid matches the name of the player.
+     *
+     * @param p the player
+     * @return whether the uuid matches the name
+     */
+
+    public static boolean matches(Player p) {
+        UUID id = retrieveUUID(p.getName());
+
+        if (id == null)
+            return false;
+
+        return id.equals(p.getUniqueId());
     }
 
 }

@@ -20,7 +20,7 @@ import net.pinger.disguise.manager.implementation.BaseDisguiseManager;
 import net.pinger.disguise.packet.PacketManager;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.settings.DisguiseSettings;
-import net.pinger.disguise.skin.SkullManager;
+import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguise.user.SimpleUserManager;
 import net.pinger.disguise.user.UserManager;
 import net.pinger.disguise.utils.ConversationUtil;

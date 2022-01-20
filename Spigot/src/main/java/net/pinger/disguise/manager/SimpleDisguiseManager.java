@@ -4,6 +4,7 @@ import net.pinger.disguise.DisguiseManager;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.DisguisePlusAPI;
 import net.pinger.disguise.exceptions.InvalidUserException;
+import net.pinger.disguise.manager.nick.NickFetcher;
 import net.pinger.disguise.manager.nick.SimpleNickSetter;
 import net.pinger.disguise.manager.skin.SkinFetcher;
 import net.pinger.disguise.packet.PacketProvider;
@@ -53,12 +54,18 @@ public class SimpleDisguiseManager implements DisguiseManager {
     public void undisguise(Player player) {
         this.provider.clearProperties(player);
 
+        // Reset the player nickname
+        this.resetNickname(player);
+
         if (this.dp.getSettings().isOnlineMode()) {
             // Check if the UUID matches to the player name
+            if (!NickFetcher.matches(player)) {
+                this.provider.sendServerPackets(player);
+                return;
+            }
 
+            this.applySkinFromPlayer(player, player.getName());
         }
-
-        this.provider.sendServerPackets(player);
     }
 
     /**
@@ -70,7 +77,7 @@ public class SimpleDisguiseManager implements DisguiseManager {
      */
 
     @Override
-    public void applySkinFromPlayer(Player player, String playerName) throws IOException {
+    public void applySkinFromPlayer(Player player, String playerName) throws InvalidUserException {
         Skin s = SkinFetcher.getSkin(playerName);
 
         if (s == null)
@@ -84,7 +91,7 @@ public class SimpleDisguiseManager implements DisguiseManager {
         // Check if this user is under cooldown
         SkinFetcher.catchSkin(url, skin -> this.applySkin(player, skin),
                 error -> {
-                    Bukkit.broadcastMessage("fatshit3");
+
             }, this.dp);
     }
 
