@@ -58,6 +58,11 @@ public class SkinFetcher {
 
                     JsonObject textured = property.getAsJsonObject("data").getAsJsonObject("texture");
 
+                    if (textured == null) {
+                        error.accept(new InvalidUrlException("invalid"));
+                        return;
+                    }
+
                     Skin fs = SkinUtil.getSkinFromMineskin(textured);
                     SkinQueue.storeUrl(url, fs);
 

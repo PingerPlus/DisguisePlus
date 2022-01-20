@@ -16,6 +16,13 @@ skins:
   success-url: "&aSuccessfully fetched a skin from the url you provided."
   error-url: "&cFailed to fetch a skin within the url you provided. You also might be rate limited by the service."
 
+player:
+  success-skin-name: "&aSuccessfully applied the skin from name &e%s."
+  success-skin-url: "&aSuccessfully applied the skin from the url."
+  success-name: "&aSuccessfully changed your nickname to &e%s."
+  invalid-nick: "&cThis nickname is invalid. It must be at least %s to %s characters."
+  nickname-reset: "&aYour nickname has been reset successfully."
+
 database:
   specify-username: "&aSpecify the database username."
   success-username: "&aSuccessfully changed the username to &e%s."

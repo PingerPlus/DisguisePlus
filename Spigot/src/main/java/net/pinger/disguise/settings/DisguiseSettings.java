@@ -5,6 +5,7 @@ import net.pinger.common.lang.Lists;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.nick.SimpleNickCreator;
 import net.pinger.disguise.settings.display.DisplaySettings;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -21,7 +22,7 @@ public class DisguiseSettings {
     private boolean update;
     private boolean metrics;
 
-    private final int min, max;
+    private int min, max;
 
     public DisguiseSettings(DisguisePlus dp) {
         this.dp = dp;
@@ -36,6 +37,10 @@ public class DisguiseSettings {
         this.disabledWorlds = Sets.newHashSet(cfg.getStringList("disabled-worlds"));
         this.min = cfg.getInt("nick.min-length");
         this.max = cfg.getInt("nick.max-length");
+
+        // According to the rules it must be between 3 and 16
+        this.min = Math.max(3, Math.min(this.min, 16));
+        this.max = Math.max(3, Math.max(this.max, 16));
 
         // Update classes
         this.creator = SimpleNickCreator.createFrom(cfg.getString("nick.pattern"));
@@ -115,6 +120,8 @@ public class DisguiseSettings {
      */
 
     public boolean isNickValid(String s) {
+        s = ChatColor.translateAlternateColorCodes('&', s);
+
         return s.length() >= this.min
                 && s.length() <= this.max;
     }
@@ -239,6 +246,14 @@ public class DisguiseSettings {
 
     public DisplaySettings getDisplaySettings() {
         return ds;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public int getMin() {
+        return min;
     }
 
     /**

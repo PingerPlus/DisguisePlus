@@ -19,7 +19,7 @@ import java.io.IOException;
 
 public class SimpleDisguiseManager implements DisguiseManager {
 
-    private final DisguisePlus dp;
+    protected final DisguisePlus dp;
     private final PacketProvider<?> provider;
 
     public SimpleDisguiseManager(DisguisePlus dp, PacketProvider<?> provider) {
@@ -103,12 +103,10 @@ public class SimpleDisguiseManager implements DisguiseManager {
     @Override
     public void applyNickname(Player player, String name) {
         // Check the nick conditions
-        if (name.isEmpty() ||
-                ChatColor.translateAlternateColorCodes('&', name).length() >= 16)
+        if (name.isEmpty() || name.length() >= 16)
             throw new IllegalArgumentException("Length cannot be more or equal to 16");
 
-        SimpleNickSetter.applyNick(player,
-                ChatColor.translateAlternateColorCodes('&', name));
+        SimpleNickSetter.applyNick(player, ChatColor.translateAlternateColorCodes('&', name));
     }
 
     @Override
@@ -119,4 +117,5 @@ public class SimpleDisguiseManager implements DisguiseManager {
         // Apply the nick
         this.applyNickname(player, s.getDefaultName());
     }
+
 }
