@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -38,6 +39,19 @@ public class LoginListener implements Listener {
                 .createPlayer(event.getUniqueId());
 
         // Here we will load the user data
+        s.retrieveInformation();
+    }
+
+    @EventHandler
+    public void onLeave(PlayerQuitEvent event) {
+        SimpleUser s = (SimpleUser) this.dp.getUserManager()
+                .getUser(event.getPlayer().getUniqueId());
+
+        // Save the data
+        s.saveInformation();
+
+        // Remove the player from the users
+        ((SimpleUserManager) this.dp.getUserManager()).removePlayer(event.getPlayer());
     }
 
 }

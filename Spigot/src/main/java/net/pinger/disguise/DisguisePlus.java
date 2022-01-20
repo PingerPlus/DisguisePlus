@@ -22,7 +22,9 @@ import net.pinger.disguise.packet.PacketManager;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.settings.DisguiseSettings;
 import net.pinger.disguise.skull.SkullManager;
+import net.pinger.disguise.user.SimpleUser;
 import net.pinger.disguise.user.SimpleUserManager;
+import net.pinger.disguise.user.User;
 import net.pinger.disguise.user.UserManager;
 import net.pinger.disguise.utils.ConversationUtil;
 import org.bukkit.Bukkit;
@@ -116,6 +118,11 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
         // Save the skins
         this.skinFactory.saveLocally();
+
+        // Save the information
+        for (User user : this.sum.getUsers()) {
+            ((SimpleUser) user).saveInformation();
+        }
     }
 
     @Override

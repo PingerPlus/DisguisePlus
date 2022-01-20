@@ -5,10 +5,7 @@ import net.pinger.disguise.DisguisePlus;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class SimpleUserManager implements UserManager {
 
@@ -37,6 +34,10 @@ public class SimpleUserManager implements UserManager {
         return this.users.get(player.getUniqueId());
     }
 
+    public void removePlayer(Player player) {
+        this.users.remove(player.getUniqueId());
+    }
+
     @Override
     public List<? extends User> getOnlinePlayers() {
         List<User> users = new LinkedList<>();
@@ -50,5 +51,9 @@ public class SimpleUserManager implements UserManager {
         }
 
         return users;
+    }
+
+    public Collection<SimpleUser> getUsers() {
+        return this.users.values();
     }
 }

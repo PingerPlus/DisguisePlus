@@ -73,37 +73,32 @@ public class Database {
 
         try (Connection c = this.getConnection()) {
             try (PreparedStatement s = c.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS users(`id` VARCHAR(36) PRIMARY KEY NOT NULL)")) {
-                s.executeUpdate();
-            }
-
-            try (PreparedStatement s = c.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS skins(`skin_id` INT(8) PRIMARY KEY AUTO_INCREMENT, `texture` TEXT NOT NULL, `signature` TEXT UNIQUE NOT NULL);")) {
                 s.executeUpdate();
             }
 
             try (PreparedStatement s = c.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS disguised(`active` BOOLEAN DEFAULT FALSE, `genName` VARCHAR(16) NOT NULL, " +
-                    "`user_id` VARCHAR(36) NOT NULL, `skin_id` INT(8) NOT NULL, " +
-                            "FOREIGN KEY (`user_id`) REFERENCES users(`id`), FOREIGN KEY (`skin_id`) REFERENCES skins(`skin_id`));")) {
+                    "CREATE TABLE IF NOT EXISTS disguised(`user_id` VARCHAR(36) PRIMARY KEY, `active` BOOLEAN DEFAULT FALSE, `nick` VARCHAR(16) NOT NULL, " +
+                    "`skin_id` INT(8) NOT NULL, " +
+                            "FOREIGN KEY (`skin_id`) REFERENCES skins(`skin_id`));")) {
                 s.executeUpdate();
             }
 
             try (PreparedStatement s = c.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS nicked(`nick_id` INT PRIMARY KEY AUTO_INCREMENT, `active` BOOLEAN DEFAULT FALSE, `nick` VARCHAR(32) NOT NULL, " +
-                            "`user_id` VARCHAR(36) NOT NULL, " +
-                            "FOREIGN KEY (`user_id`) REFERENCES users(`id`));")) {
+                    "CREATE TABLE IF NOT EXISTS nicked(`user_id` VARCHAR(36) PRIMARY KEY, `active` BOOLEAN DEFAULT FALSE, `nick` VARCHAR(32) NOT NULL);")) {
                 s.executeUpdate();
             }
 
             try (PreparedStatement s = c.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS skined(`id` INT PRIMARY KEY AUTO_INCREMENT, `active` BOOLEAN DEFAULT FALSE," +
-                            "`user_id` VARCHAR(36) NOT NULL, `skin_id` INT(8) NOT NULL," +
-                            "FOREIGN KEY (`user_id`) REFERENCES users(`id`), FOREIGN KEY(`skin_id`) REFERENCES skins(`skin_id`));")) {
+                    "CREATE TABLE IF NOT EXISTS skined(`user_id` VARCHAR(36) PRIMARY KEY, `active` BOOLEAN DEFAULT FALSE, " +
+                             "`skin_id` INT(8) NOT NULL, " +
+                            "FOREIGN KEY(`skin_id`) REFERENCES skins(`skin_id`));")) {
                 s.executeUpdate();
             }
 
         } catch (SQLException e) {
+            this.setup = false;
+
             logger.error("Failed to create MYSQL tables -> ");
             logger.error(e.getMessage());
         }

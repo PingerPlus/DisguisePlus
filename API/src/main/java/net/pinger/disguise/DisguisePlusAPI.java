@@ -62,12 +62,4 @@ public class DisguisePlusAPI {
     }
 
 
-    public static List<? extends SkinPack> getSkinPacks(String category) {
-        return getSkinFactory().getSkinPacks(category);
-    }
-
-    public static List<? extends SkinPack> getSkinPacks() {
-        return getSkinFactory().getSkinPacks();
-    }
-
 }

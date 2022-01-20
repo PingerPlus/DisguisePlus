@@ -1,6 +1,5 @@
 package net.pinger.disguise.user;
 
-import net.pinger.disguise.cooldown.Cooldown;
 import net.pinger.disguise.skin.Skin;
 import org.bukkit.entity.Player;
 
@@ -22,17 +21,17 @@ public interface User {
     /**
      * Returns the current skin this player is wearing.
      * <p>
-     * This method will never be null, regardless if the player is using a default skin or not.
+     * This method may be nullable, since we don't cache the default skin of the player.
      *
      * @return the current skin
      */
 
-    @Nonnull
+    @Nullable
     Skin getCurrentSkin();
 
     /**
      * This method returns the name of the user.
-     * It is equal to
+     * It is equal to the current name of the player.
      *
      * @return the name
      */
@@ -66,6 +65,26 @@ public interface User {
      */
 
     boolean isDisguised();
+
+    /**
+     * Returns whether this player is nicked.
+     * <p>
+     * If the player is disguised,
+     * this method will return false.
+     *
+     * @return whether nicked
+     */
+
+    boolean hasNickname();
+
+    /**
+     * Returns whether this user
+     * has a skin applied to their
+     *
+     * @return whether a skin is applied
+     */
+
+    boolean hasSkinApplied();
 
     /**
      * Transforms the current user to a player.

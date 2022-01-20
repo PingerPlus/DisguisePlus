@@ -1,21 +1,43 @@
 package net.pinger.disguise.user;
 
 import net.pinger.disguise.DisguisePlus;
+import net.pinger.disguise.database.Database;
+import net.pinger.disguise.skin.SimpleSkin;
 import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.statistic.DisguiseStatistic;
+import net.pinger.disguise.statistic.NickStatistic;
+import net.pinger.disguise.statistic.SkinStatistic;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class SimpleUser implements User {
+
+    private static final Logger logger = LoggerFactory.getLogger("UserConnection");
 
     private final DisguisePlus dp;
     private final UUID id;
 
     // The default name of this player when joining the server
     private String defaultName;
+
+    // The skin statistic
+    private SkinStatistic skinStatistic = null;
+
+    // The nick statistic
+    private NickStatistic nickStatistic = null;
+
+    // The disguise statistic
+    private DisguiseStatistic disguiseStatistic = null;
 
     SimpleUser(DisguisePlus dp, UUID id) {
         this.dp = dp;
@@ -59,6 +81,14 @@ public class SimpleUser implements User {
     @Nonnull
     @Override
     public Skin getCurrentSkin() {
+        if (this.isDisguised())
+            return this.disguiseStatistic.getSkin();
+
+        // Maybe they used the /skin command
+        if (this.hasSkinApplied())
+            return this.skinStatistic.getSkin();
+
+        // Just return null then
         return null;
     }
 
@@ -72,7 +102,11 @@ public class SimpleUser implements User {
     @Nonnull
     @Override
     public String getName() {
-        return null;
+        if (this.isDisguised() || this.hasNickname()) {
+            return this.getChangedName();
+        }
+
+        return this.getDefaultName();
     }
 
     /**
@@ -97,6 +131,14 @@ public class SimpleUser implements User {
     @Nullable
     @Override
     public String getChangedName() {
+        if (this.isDisguised())
+            return this.disguiseStatistic.getNick();
+
+        // They may be nicked
+        if (this.hasNickname())
+            return this.nickStatistic.getNick();
+
+        // Just return null
         return null;
     }
 
@@ -107,7 +149,33 @@ public class SimpleUser implements User {
      */
     @Override
     public boolean isDisguised() {
-        return false;
+        return this.disguiseStatistic != null;
+    }
+
+    /**
+     * Returns whether this player is nicked.
+     * <p>
+     * If the player is disguised,
+     * this method will return false.
+     *
+     * @return whether nicked
+     */
+
+    @Override
+    public boolean hasNickname() {
+        return this.nickStatistic != null;
+    }
+
+    /**
+     * Returns whether this user
+     * has a skin applied to their
+     *
+     * @return whether a skin is applied
+     */
+
+    @Override
+    public boolean hasSkinApplied() {
+        return this.skinStatistic != null;
     }
 
     /**
@@ -208,5 +276,134 @@ public class SimpleUser implements User {
         // Get the message
         String message = this.dp.getConfiguration().ofFormatted(key, format);
         this.transform().sendRawMessage(message);
+    }
+
+    /**
+     * This method is used to retrieve data
+     * when this user joins the server.
+     * <p>
+     * Note that you shouldn't try to access
+     * this method with reflection.
+     */
+
+    public void retrieveInformation() {
+        if (!this.dp.getSQLDatabase().isDatabaseSetup()) {
+            return;
+        }
+
+        Database db = this.dp.getSQLDatabase();
+
+        try (Connection connection = db.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM disguised WHERE `uuid` = ? AND `active` = TRUE;")) {
+                // Set the uuid
+                statement.setString(1, this.id.toString());
+                statement.executeQuery();
+
+                try (ResultSet set = statement.getResultSet()) {
+                    // If it's found
+                    if (set.next()) {
+                        // First retrieve the skin
+                        Skin skin = SimpleSkin.retrieveSkin(set.getLong("skin_id"), connection);
+                        this.disguiseStatistic = new DisguiseStatistic(this, true, skin, set.getString("nick"));
+                    }
+                }
+            }
+
+            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM nicked WHERE `uuid` = ? AND `active` = TRUE;")) {
+                // Set the uuid
+                statement.setString(1, this.id.toString());
+                statement.executeQuery();
+
+                try (ResultSet set = statement.getResultSet()) {
+                    // If it's found
+                    if (set.next()) {
+                        this.nickStatistic = new NickStatistic(this, true, set.getString("nick"));
+                    }
+                }
+            }
+
+            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM skined WHERE `uuid` = ? AND `active` = TRUE;")) {
+                // Set the uuid
+                statement.setString(1, this.id.toString());
+                statement.executeQuery();
+
+                try (ResultSet set = statement.getResultSet()) {
+                    // If it's found
+                    if (set.next()) {
+                        // Retrieve the skin first
+                        Skin skin = SimpleSkin.retrieveSkin(set.getLong("skin_id"), connection);
+                        this.skinStatistic = new SkinStatistic(this, true, skin);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            logger.error(" ", e);
+        }
+    }
+
+    /**
+     * This method saves the information
+     * for this used, which can be used for syncing the data between servers.
+     * <p>
+     * Note that you shouldn't try to access
+     * this method with reflection.
+     */
+
+    public void saveInformation() {
+        if (!this.dp.getSQLDatabase().isDatabaseSetup()) {
+            return;
+        }
+
+        Database db = this.dp.getSQLDatabase();
+
+        try (Connection connection = db.getConnection()) {
+            if (this.disguiseStatistic == null) {
+                try (PreparedStatement statement = connection.prepareStatement("UPDATE disguised SET `active` = FALSE WHERE `uuid` = ?;")) {
+                    // Set the uuid
+                    statement.setString(1, this.id.toString());
+                    statement.executeUpdate();
+                }
+            } else {
+                try (PreparedStatement statement = connection.prepareStatement("REPLACE INTO disguised VALUES (?, ?, ?, ?);")) {
+                    statement.setString(1, this.id.toString());
+                    statement.setBoolean(2, true);
+                    statement.setString(3, this.disguiseStatistic.getNick());
+                    statement.setLong(4,  ((SimpleSkin) this.disguiseStatistic.getSkin()).getId(connection));
+                    statement.executeUpdate();
+                }
+            }
+
+            if (this.nickStatistic == null) {
+                try (PreparedStatement statement = connection.prepareStatement("UPDATE nicked SET `active` = FALSE WHERE `uuid` = ?;")) {
+                    // Set the uuid
+                    statement.setString(1, this.id.toString());
+                    statement.executeUpdate();
+                }
+            } else {
+                try (PreparedStatement statement = connection.prepareStatement("REPLACE INTO nicked VALUES(?, ?, ?);")) {
+                    statement.setString(1, this.id.toString());
+                    statement.setBoolean(2, true);
+                    statement.setString(3, this.nickStatistic.getNick());
+                    statement.executeUpdate();
+                }
+            }
+
+            if (this.skinStatistic == null) {
+                try (PreparedStatement statement = connection.prepareStatement("UPDATE skined SET `active` = FALSE WHERE `uuid` = ?;")) {
+                    // Set the uuid
+                    statement.setString(1, this.id.toString());
+                    statement.executeUpdate();
+                }
+            } else {
+                try (PreparedStatement statement = connection.prepareStatement("REPLACE INTO skined VALUES(?, ?, ?);")) {
+                    statement.setString(1, this.id.toString());
+                    statement.setBoolean(2, true);
+                    statement.setLong(3, ((SimpleSkin) this.skinStatistic.getSkin()).getId(connection));
+                    statement.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            logger.error(" ", e);
+        }
     }
 }
