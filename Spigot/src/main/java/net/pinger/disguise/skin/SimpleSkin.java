@@ -83,7 +83,7 @@ public class SimpleSkin implements Skin {
         if (this.id != 0)
             return this.id;
 
-        try (PreparedStatement statement = connection.prepareStatement("INSERT IGNORE INTO skins VALUES (?, ?)")) {
+        try (PreparedStatement statement = connection.prepareStatement("INSERT IGNORE INTO skins VALUES (?, ?);")) {
             statement.setString(1, this.value);
             statement.setString(2, this.signature);
             statement.executeUpdate();

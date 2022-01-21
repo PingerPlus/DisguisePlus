@@ -65,6 +65,15 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         // Load the config
         this.addDefaultConfig();
 
+        try {
+            this.provider = PacketManager.getCorrespondingProvider();
+        } catch (Exception e) {
+            logger.error(" ", e);
+
+            // Disable this plugin
+            this.getPluginLoader().disablePlugin(this);
+        }
+
         this.sum = new SimpleUserManager(this);
         this.conversationUtil = new ConversationUtil(this);
         this.database = new Database(this, DatabaseSettings.create(this.getConfig()));
@@ -80,16 +89,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         service.registerCommands();
 
         Bukkit.getPluginManager().registerEvents(new LoginListener(this), this);
-
-        try {
-            this.provider = PacketManager.getCorrespondingProvider();
-        } catch (ProviderNotFoundException e) {
-            logger.error("", e);
-
-            // Disable this plugin
-            this.getPluginLoader().disablePlugin(this);
-        }
-
         this.customManager = new BaseDisguiseManager(this, this.provider);
 
         // Make sure that we created all instances

@@ -18,7 +18,7 @@ public class PacketManager {
     private static final Logger logger = LoggerFactory.getLogger("PacketManager");
 
     private static PacketProvider<?> provider = null;
-    private static final Set<Class<? extends PacketProvider<?>>> providers = Sets.newHashSet();
+    private static final Set<Class<? extends PacketProvider<?>>> providers = Sets.newLinkedHashSet();
     private static Map<String, List<String>> providerCompatibility = Maps.newHashMap();
 
     static {
@@ -42,7 +42,7 @@ public class PacketManager {
 
                 // If we found the class with the corresponding version
                 if (NMS.isVersion(version)) {
-                    logger.info("Found the appropriate provider for version " + name.replace("_", "."));
+                    logger.info("Found the appropriate provider for version " + NMS.STRIPPED_VERSION);
                     return provider = clazz.getConstructor().newInstance();
                 }
 

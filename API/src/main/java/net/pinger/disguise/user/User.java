@@ -1,6 +1,7 @@
 package net.pinger.disguise.user;
 
 import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.statistic.Statistic;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
@@ -87,10 +88,20 @@ public interface User {
     boolean hasSkinApplied();
 
     /**
+     * This method attaches a certain statistic
+     * to this user.
+     *
+     * @param statistic the statistic
+     */
+
+    void setStatistic(Statistic statistic);
+
+    /**
      * Transforms the current user to a player.
      *
      * @return the player
      */
+
 
     Player transform();
 

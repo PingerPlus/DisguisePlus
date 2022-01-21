@@ -22,6 +22,7 @@ player:
   success-name: "&aSuccessfully changed your nickname to &e%s."
   invalid-nick: "&cThis nickname is invalid. It must be at least %s to %s characters."
   nickname-reset: "&aYour nickname has been reset successfully."
+  currently-disguised: "&cYou may not use this command while disguised."
 
 database:
   specify-username: "&aSpecify the database username."

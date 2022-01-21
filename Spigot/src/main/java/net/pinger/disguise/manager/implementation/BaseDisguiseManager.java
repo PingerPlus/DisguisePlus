@@ -11,6 +11,8 @@ import net.pinger.disguise.manager.skin.SkinFetcher;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.settings.DisguiseSettings;
 import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.statistic.NickStatistic;
+import net.pinger.disguise.statistic.SkinStatistic;
 import net.pinger.disguise.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,14 +29,23 @@ public class BaseDisguiseManager extends SimpleDisguiseManager {
 
     @Override
     public void applySkinFromPlayer(Player player, String playerName) {
-        Skin fetched = SkinFetcher.getSkin(playerName);
         User user = this.dp.getUserManager().getUser(player);
 
+        if (user.isDisguised()) {
+            // Send the message to the user
+            user.sendMessage("player.currently-disguised");
+            return;
+        }
+
+        Skin fetched = SkinFetcher.getSkin(playerName);
         if (fetched == null) {
             // Not found
             user.sendMessage("skins.error-name");
             return;
         }
+
+        // Add the statistic
+        user.setStatistic(new SkinStatistic(user, true, fetched));
 
         user.sendMessage("player.success-skin-name", playerName);
         this.applySkin(player, fetched);
@@ -43,6 +54,20 @@ public class BaseDisguiseManager extends SimpleDisguiseManager {
     @Override
     public void applyNickname(Player player, String name) {
         User user = this.dp.getUserManager().getUser(player);
+        DisguiseSettings set = this.dp.getSettings();
+
+        if (user.isDisguised()) {
+            // Send the message to the user
+            user.sendMessage("player.currently-disguised");
+            return;
+        }
+
+        if (!set.isNickValid(name)) {
+            user.sendMessage("player.invalid-nick", set.getMin(), set.getMax());
+            return;
+        }
+
+        user.setStatistic(new NickStatistic(user, true, name));
         this.applyNickname(player, name, false);
 
         // Send the success message
@@ -50,16 +75,8 @@ public class BaseDisguiseManager extends SimpleDisguiseManager {
     }
 
     private void applyNickname(Player player, String name, boolean gen) {
-        User user = this.dp.getUserManager().getUser(player);
-        DisguiseSettings set = this.dp.getSettings();
-
         if (gen) {
             SimpleNickSetter.applyNick(player, ChatColor.translateAlternateColorCodes('&', name));
-            return;
-        }
-
-        if (!set.isNickValid(name)) {
-            user.sendMessage("player.invalid-nick", set.getMin(), set.getMax());
             return;
         }
 
@@ -81,7 +98,16 @@ public class BaseDisguiseManager extends SimpleDisguiseManager {
     public void applySkinFromUrl(Player player, String url) {
         User user = this.dp.getUserManager().getUser(player);
 
+        if (user.isDisguised()) {
+            // Send the message to the user
+            user.sendMessage("player.currently-disguised");
+            return;
+        }
+
         SkinFetcher.catchSkin(url, s -> {
+            // Add the statistic
+            user.setStatistic(new SkinStatistic(user, true, s));
+
             this.applySkin(player, s);
 
             // Send the success message

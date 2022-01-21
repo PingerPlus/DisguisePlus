@@ -78,19 +78,19 @@ public class Database {
             }
 
             try (PreparedStatement s = c.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS disguised(`user_id` VARCHAR(36) PRIMARY KEY, `active` BOOLEAN DEFAULT FALSE, `nick` VARCHAR(16) NOT NULL, " +
+                    "CREATE TABLE IF NOT EXISTS disguised(`uuid` VARCHAR(36) PRIMARY KEY, `active` BOOLEAN DEFAULT FALSE, `nick` VARCHAR(16) NOT NULL, " +
                     "`skin_id` INT(8) NOT NULL, " +
                             "FOREIGN KEY (`skin_id`) REFERENCES skins(`skin_id`));")) {
                 s.executeUpdate();
             }
 
             try (PreparedStatement s = c.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS nicked(`user_id` VARCHAR(36) PRIMARY KEY, `active` BOOLEAN DEFAULT FALSE, `nick` VARCHAR(32) NOT NULL);")) {
+                    "CREATE TABLE IF NOT EXISTS nicked(`uuid` VARCHAR(36) PRIMARY KEY, `active` BOOLEAN DEFAULT FALSE, `nick` VARCHAR(32) NOT NULL);")) {
                 s.executeUpdate();
             }
 
             try (PreparedStatement s = c.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS skined(`user_id` VARCHAR(36) PRIMARY KEY, `active` BOOLEAN DEFAULT FALSE, " +
+                    "CREATE TABLE IF NOT EXISTS skined(`uuid` VARCHAR(36) PRIMARY KEY, `active` BOOLEAN DEFAULT FALSE, " +
                              "`skin_id` INT(8) NOT NULL, " +
                             "FOREIGN KEY(`skin_id`) REFERENCES skins(`skin_id`));")) {
                 s.executeUpdate();

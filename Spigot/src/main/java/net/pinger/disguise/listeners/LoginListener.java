@@ -35,8 +35,11 @@ public class LoginListener implements Listener {
 
     @EventHandler
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
-        SimpleUser s = ((SimpleUserManager) this.dp.getUserManager())
-                .createPlayer(event.getUniqueId());
+        SimpleUserManager manager = ((SimpleUserManager) this.dp.getUserManager());
+        manager.createPlayer(event.getUniqueId());
+
+        // Get the user again
+        SimpleUser s = (SimpleUser) manager.getUser(event.getUniqueId());
 
         // Here we will load the user data
         s.retrieveInformation();

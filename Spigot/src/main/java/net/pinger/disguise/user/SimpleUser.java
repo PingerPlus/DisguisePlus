@@ -7,6 +7,7 @@ import net.pinger.disguise.skin.Skin;
 import net.pinger.disguise.statistic.DisguiseStatistic;
 import net.pinger.disguise.statistic.NickStatistic;
 import net.pinger.disguise.statistic.SkinStatistic;
+import net.pinger.disguise.statistic.Statistic;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.slf4j.Logger;
@@ -176,6 +177,42 @@ public class SimpleUser implements User {
     @Override
     public boolean hasSkinApplied() {
         return this.skinStatistic != null;
+    }
+
+    /**
+     * This method attaches a certain statistic
+     * to this user.
+     *
+     * @param statistic the statistic
+     */
+
+    @Override
+    public void setStatistic(Statistic statistic) {
+        if (statistic instanceof DisguiseStatistic) {
+            // Check if it is possible
+            if (this.hasNickname() || this.hasSkinApplied())
+                return;
+
+            this.disguiseStatistic = (DisguiseStatistic) statistic;
+            return;
+        }
+
+        if (statistic instanceof NickStatistic) {
+            // Check if possible
+            if (this.isDisguised())
+                return;
+
+            this.nickStatistic = (NickStatistic) statistic;
+            return;
+        }
+
+        if (statistic instanceof SkinStatistic) {
+            // Check if possible
+            if (this.isDisguised())
+                return;
+
+            this.skinStatistic = (SkinStatistic) statistic;
+        }
     }
 
     /**
@@ -382,7 +419,7 @@ public class SimpleUser implements User {
             } else {
                 try (PreparedStatement statement = connection.prepareStatement("REPLACE INTO nicked VALUES(?, ?, ?);")) {
                     statement.setString(1, this.id.toString());
-                    statement.setBoolean(2, true);
+                    statement.setInt(2, 1);
                     statement.setString(3, this.nickStatistic.getNick());
                     statement.executeUpdate();
                 }
