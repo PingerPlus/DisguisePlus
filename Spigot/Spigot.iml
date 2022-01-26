@@ -12,9 +12,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: me.clip:placeholderapi:2.9.2" level="project" />
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:5.0.1" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.30" level="project" />
     <orderEntry type="module" module-name="API" />
-    <orderEntry type="library" name="Maven: joda-time:joda-time:2.10.6" level="project" />
     <orderEntry type="library" name="Maven: net.pinger.disguise:v1_7:1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.jonahseguin:drink:1.0.2" level="project" />
     <orderEntry type="library" name="Maven: fr.minuskube.inv:smart-invs:1.2.7" level="project" />
@@ -23,8 +21,10 @@
     <orderEntry type="module" module-name="v1_17_1" />
     <orderEntry type="module" module-name="v1_17" />
     <orderEntry type="library" name="Maven: net.pinger:Bukkit:1.1.9" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains:annotations:16.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.0-alpha1" level="project" />
+    <orderEntry type="library" name="Maven: joda-time:joda-time:2.10.6" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.28" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.6" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains:annotations:16.0.2" level="project" />
   </component>
 </module>

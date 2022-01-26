@@ -74,12 +74,12 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             this.getPluginLoader().disablePlugin(this);
         }
 
-        this.sum = new SimpleUserManager(this);
-        this.conversationUtil = new ConversationUtil(this);
         this.database = new Database(this, DatabaseSettings.create(this.getConfig()));
+        this.conversationUtil = new ConversationUtil(this);
         this.inventoryManager = new SimpleInventoryManager(this);
         this.skinFactory = new SimpleSkinFactory(this);
         this.configuration = new BaseConfiguration(this);
+        this.sum = new SimpleUserManager(this);
 
         CommandService service = Drink.get(this);
 
@@ -111,17 +111,30 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     @Override
     public void onDisable() {
-        // Leave all of the conversations
-        this.conversationUtil.cancelAllConversations();
-        this.getSettings().saveConfig();
-
-        // Save the skins
-        this.skinFactory.saveLocally();
-
-        // Save the information
-        for (User user : this.sum.getUsers()) {
-            ((SimpleUser) user).saveInformation();
-        }
+//        if (this.conversationUtil != null) {
+//            this.conversationUtil.cancelAllConversations();
+//        }
+//
+//        if (this.settings != null) {
+//            this.getSettings().saveConfig();
+//        }
+//
+//        logger.info("Successfully saved all local settings.");
+//
+//        if (this.skinFactory != null) {
+//            this.skinFactory.saveLocally();
+//        }
+//
+//        logger.info("Successfully saved the skin factory.");
+//
+//        if (this.sum != null) {
+//            // Save the information
+//            for (User user : this.sum.getUsers()) {
+//                ((SimpleUser) user).saveInformation();
+//            }
+//        }
+//
+//        logger.info("Successfully saved all user data.");
     }
 
     @Override

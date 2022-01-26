@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.database.settings.DatabaseSettings;
 import net.pinger.disguise.settings.DisguiseSettings;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +19,14 @@ public class Database {
     private HikariDataSource hikariDataSource;
 
     // The basic data
+    private final DisguisePlus dp;
     private final DatabaseSettings settings;
 
     private boolean setup = false;
     private static final Logger logger = LoggerFactory.getLogger("Database");
 
     public Database(DisguisePlus dp, DatabaseSettings settings) {
+        this.dp = dp;
         this.settings = settings;
 
         if (dp.getConfig().getBoolean("mysql.enabled")) {
@@ -39,7 +42,12 @@ public class Database {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (Exception e) {
             this.setup = false;
-            logger.error("Could not find the appropriate SQL drivers.");
+
+            // Send the log message
+            logger.error(" ", e);
+
+            // Disable the plugin
+            Bukkit.getScheduler().runTask(this.dp, () -> this.dp.getPluginLoader().disablePlugin(this.dp));
         }
 
         HikariConfig config = new HikariConfig();
@@ -56,8 +64,11 @@ public class Database {
             this.hikariDataSource = new HikariDataSource(config);
         } catch (Exception e) {
             this.setup = false;
-            logger.error("An error occurred while setting up HikariCP -> ");
-            logger.error(e.getMessage());
+
+            // Send the log message
+            logger.error(" ", e);
+
+            Bukkit.getScheduler().runTask(this.dp, () -> this.dp.getPluginLoader().disablePlugin(this.dp));
         }
 
         if (!setup)
@@ -99,8 +110,11 @@ public class Database {
         } catch (SQLException e) {
             this.setup = false;
 
-            logger.error("Failed to create MYSQL tables -> ");
-            logger.error(e.getMessage());
+            // Send the error message
+            logger.error(" ", e);
+
+            // Disabling the plugin
+            Bukkit.getScheduler().runTask(this.dp, () -> this.dp.getPluginLoader().disablePlugin(this.dp));
         }
     }
 
