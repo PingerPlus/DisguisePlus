@@ -111,30 +111,30 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     @Override
     public void onDisable() {
-//        if (this.conversationUtil != null) {
-//            this.conversationUtil.cancelAllConversations();
-//        }
-//
-//        if (this.settings != null) {
-//            this.getSettings().saveConfig();
-//        }
-//
-//        logger.info("Successfully saved all local settings.");
-//
-//        if (this.skinFactory != null) {
-//            this.skinFactory.saveLocally();
-//        }
-//
-//        logger.info("Successfully saved the skin factory.");
-//
-//        if (this.sum != null) {
-//            // Save the information
-//            for (User user : this.sum.getUsers()) {
-//                ((SimpleUser) user).saveInformation();
-//            }
-//        }
-//
-//        logger.info("Successfully saved all user data.");
+        if (this.conversationUtil != null) {
+            this.conversationUtil.cancelAllConversations();
+        }
+
+        if (this.settings != null) {
+            this.getSettings().saveConfig();
+        }
+
+        logger.info("Successfully saved all local settings.");
+
+        if (this.skinFactory != null) {
+            this.skinFactory.saveLocally();
+        }
+
+        logger.info("Successfully saved the skin factory.");
+
+        if (this.sum != null) {
+            // Save the information
+            for (User user : this.sum.getUsers()) {
+                ((SimpleUser) user).saveInformation();
+            }
+        }
+
+        logger.info("Successfully saved all user data.");
     }
 
     @Override
