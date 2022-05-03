@@ -2,6 +2,7 @@ package net.pinger.disguise.skin;
 
 import net.pinger.bukkit.item.FreshMaterial;
 import net.pinger.bukkit.item.ItemBuilder;
+import net.pinger.disguise.Skin;
 import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguise.utils.PropertyUtil;
 import org.bukkit.inventory.ItemStack;

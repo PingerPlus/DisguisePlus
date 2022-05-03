@@ -1,6 +1,6 @@
 package net.pinger.disguise.user;
 
-import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.Skin;
 import net.pinger.disguise.statistic.Statistic;
 import org.bukkit.entity.Player;
 

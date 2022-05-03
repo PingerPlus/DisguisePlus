@@ -1,8 +1,6 @@
 package net.pinger.disguise;
 
-import net.pinger.disguise.exceptions.InvalidUrlException;
 import net.pinger.disguise.exceptions.InvalidUserException;
-import net.pinger.disguise.skin.Skin;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;

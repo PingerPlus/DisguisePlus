@@ -1,7 +1,7 @@
 package net.pinger.disguise.utils;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import net.pinger.disguise.SkinPack;
+
 import java.util.UUID;
 
 public class HttpUtil {
@@ -67,7 +67,7 @@ public class HttpUtil {
     }
 
     /**
-     * This method creates a URL link for a specific {@link net.pinger.disguise.skin.SkinPack}.
+     * This method creates a URL link for a specific {@link SkinPack}.
      *
      * @param category the category of the pack
      * @param name the name of the pack

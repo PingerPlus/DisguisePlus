@@ -3,7 +3,7 @@ package net.pinger.disguise.packet;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.minecraft.server.v1_16_R2.*;
-import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.Skin;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;

@@ -2,12 +2,10 @@ package net.pinger.disguise.prompts.packs;
 
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.manager.skin.SkinFetcher;
-import net.pinger.disguise.skin.SimpleSkin;
 import net.pinger.disguise.skin.SimpleSkinPack;
-import net.pinger.disguise.skin.Skin;
-import net.pinger.disguise.skin.SkinPack;
+import net.pinger.disguise.Skin;
+import net.pinger.disguise.SkinPack;
 import net.pinger.disguise.user.User;
-import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;

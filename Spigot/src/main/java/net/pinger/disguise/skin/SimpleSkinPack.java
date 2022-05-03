@@ -2,7 +2,8 @@ package net.pinger.disguise.skin;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.pinger.disguise.DisguisePlus;
+import net.pinger.disguise.Skin;
+import net.pinger.disguise.SkinPack;
 
 import javax.annotation.Nonnull;
 import java.io.File;

@@ -1,19 +1,13 @@
 package net.pinger.disguise.listeners;
 
 import net.pinger.disguise.DisguisePlus;
-import net.pinger.disguise.DisguisePlusAPI;
-import net.pinger.disguise.skin.SkinPack;
 import net.pinger.disguise.user.SimpleUser;
 import net.pinger.disguise.user.SimpleUserManager;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class LoginListener implements Listener {
 

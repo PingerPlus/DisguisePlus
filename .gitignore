@@ -19,7 +19,6 @@
 *.tar.gz
 *.rar
 
-Bukkit
 .idea
 /.idea
 /target/
@@ -29,11 +28,6 @@ Bukkit
 /target/maven-archiver
 /target/classes
 /target/maven-status
-
-# Spigot
-# Spigot/**
-
-# v1_7
 
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml

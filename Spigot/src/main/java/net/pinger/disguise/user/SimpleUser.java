@@ -3,7 +3,7 @@ package net.pinger.disguise.user;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.database.Database;
 import net.pinger.disguise.skin.SimpleSkin;
-import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.Skin;
 import net.pinger.disguise.statistic.DisguiseStatistic;
 import net.pinger.disguise.statistic.NickStatistic;
 import net.pinger.disguise.statistic.SkinStatistic;

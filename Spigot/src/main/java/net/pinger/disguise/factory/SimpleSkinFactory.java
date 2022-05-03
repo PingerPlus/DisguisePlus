@@ -8,19 +8,16 @@ import net.pinger.common.http.HttpRequest;
 import net.pinger.common.http.HttpResponse;
 import net.pinger.common.http.request.HttpGetRequest;
 import net.pinger.common.lang.Lists;
-import net.pinger.common.lang.Maps;
 import net.pinger.disguise.DisguisePlus;
+import net.pinger.disguise.SkinFactory;
 import net.pinger.disguise.exceptions.SkinCloudDownloadException;
-import net.pinger.disguise.skin.SimpleSkin;
 import net.pinger.disguise.skin.SimpleSkinPack;
-import net.pinger.disguise.skin.Skin;
-import net.pinger.disguise.skin.SkinPack;
+import net.pinger.disguise.Skin;
+import net.pinger.disguise.SkinPack;
 import net.pinger.disguise.skin.loader.SkinPackLoader;
 import net.pinger.disguise.utils.HttpUtil;
 import net.pinger.disguise.utils.ReferenceUtil;
 import net.pinger.disguise.utils.SkinUtil;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +27,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SimpleSkinFactory implements SkinFactory {
@@ -131,7 +127,7 @@ public class SimpleSkinFactory implements SkinFactory {
             for (Map.Entry<String, JsonElement> element : object.entrySet()) {
                 for (JsonElement packName : element.getValue().getAsJsonArray()) {
                     // Add the pack tot he list
-                    if (this.getSkinPackByName(element.getKey(), packName.getAsString()) != null)
+                    if (this.getSkinPack(element.getKey(), packName.getAsString()) != null)
                         continue;
 
                     SkinPack pack = SkinPackLoader.getSkinPack(element.getKey(), packName.getAsString());
@@ -154,7 +150,7 @@ public class SimpleSkinFactory implements SkinFactory {
 
         for (SkinPack skins : skinPacks) {
             if (this.categorySkins.containsKey(skins.getCategory())) {
-                if (this.getSkinPackByName(skins.getCategory(), skins.getName()) != null) {
+                if (this.getSkinPack(skins.getCategory(), skins.getName()) != null) {
                     continue;
                 }
 
@@ -233,7 +229,7 @@ public class SimpleSkinFactory implements SkinFactory {
 
     @Nullable
     @Override
-    public SkinPack getSkinPackByName(String name) {
+    public SkinPack getSkinPack(String name) {
         for (SkinPack pack : this.getSkinPacks()) {
             if (pack.getName().equalsIgnoreCase(name))
                 return pack;
@@ -244,7 +240,7 @@ public class SimpleSkinFactory implements SkinFactory {
 
     @Nullable
     @Override
-    public SkinPack getSkinPackByName(String category, String name) {
+    public SkinPack getSkinPack(String category, String name) {
         for (SkinPack pack : this.getSkinPacks(category)) {
             if (pack.getName().equalsIgnoreCase(name))
                 return pack;

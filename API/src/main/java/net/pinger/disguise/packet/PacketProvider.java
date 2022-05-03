@@ -1,7 +1,7 @@
 package net.pinger.disguise.packet;
 
 import net.pinger.bukkit.nms.NMS;
-import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.Skin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;

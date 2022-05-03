@@ -2,7 +2,7 @@ package net.pinger.disguise.utils;
 
 import com.google.gson.JsonObject;
 import net.pinger.disguise.skin.SimpleSkin;
-import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.Skin;
 
 public class SkinUtil {
 

@@ -1,4 +1,6 @@
-package net.pinger.disguise.skin;
+package net.pinger.disguise;
+
+import net.pinger.disguise.Skin;
 
 import java.util.List;
 

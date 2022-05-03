@@ -9,7 +9,7 @@ import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.network.protocol.game.ClientboundRespawnPacket;
 import net.minecraft.network.protocol.game.ClientboundSetDefaultSpawnPositionPacket;
 import net.minecraft.server.level.ServerPlayer;
-import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.Skin;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 

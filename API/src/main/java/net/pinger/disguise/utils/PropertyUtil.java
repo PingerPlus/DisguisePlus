@@ -3,7 +3,7 @@ package net.pinger.disguise.utils;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.util.com.mojang.authlib.properties.Property;
 import net.pinger.bukkit.nms.NMS;
-import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.Skin;
 
 import java.util.UUID;
 

@@ -8,9 +8,8 @@ import net.pinger.disguise.manager.nick.NickFetcher;
 import net.pinger.disguise.manager.nick.SimpleNickSetter;
 import net.pinger.disguise.manager.skin.SkinFetcher;
 import net.pinger.disguise.packet.PacketProvider;
-import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.Skin;
 import net.pinger.disguise.user.User;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 

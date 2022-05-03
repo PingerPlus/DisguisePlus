@@ -7,7 +7,7 @@ import com.mojang.authlib.GameProfile;
 import net.pinger.bukkit.item.FreshMaterial;
 import net.pinger.bukkit.item.ItemBuilder;
 import net.pinger.bukkit.nms.NMS;
-import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.Skin;
 import net.pinger.disguise.utils.PropertyUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;

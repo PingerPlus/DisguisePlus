@@ -1,8 +1,8 @@
 package net.pinger.disguise.skin;
 
 import net.pinger.common.lang.Maps;
+import net.pinger.disguise.Skin;
 
-import java.util.List;
 import java.util.Map;
 
 public class SkinQueue {

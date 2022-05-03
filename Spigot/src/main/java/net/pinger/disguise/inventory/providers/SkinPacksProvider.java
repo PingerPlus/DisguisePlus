@@ -5,25 +5,17 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import fr.minuskube.inv.content.Pagination;
 import fr.minuskube.inv.content.SlotIterator;
-import joptsimple.internal.Strings;
 import net.pinger.bukkit.item.FreshMaterial;
 import net.pinger.bukkit.item.ItemBuilder;
 import net.pinger.bukkit.item.mask.impl.TwoWayLoadingMask;
 import net.pinger.disguise.DisguisePlus;
-import net.pinger.disguise.DisguisePlusAPI;
 import net.pinger.disguise.factory.SimpleSkinFactory;
 import net.pinger.disguise.inventory.SimpleInventoryManager;
 import net.pinger.disguise.prompts.packs.CreateCategoryPrompt;
-import net.pinger.disguise.skin.Skin;
-import net.pinger.disguise.skin.SkinPack;
-import net.pinger.disguise.utils.DateUtil;
+import net.pinger.disguise.SkinPack;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.joda.time.DateTime;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SkinPacksProvider implements InventoryProvider {
 

@@ -2,24 +2,19 @@ package net.pinger.disguise.manager.implementation;
 
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.DisguisePlusAPI;
-import net.pinger.disguise.exceptions.InvalidUrlException;
-import net.pinger.disguise.exceptions.InvalidUserException;
 import net.pinger.disguise.manager.SimpleDisguiseManager;
-import net.pinger.disguise.manager.nick.NickFetcher;
 import net.pinger.disguise.manager.nick.SimpleNickSetter;
 import net.pinger.disguise.manager.skin.SkinFetcher;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.settings.DisguiseSettings;
-import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.Skin;
 import net.pinger.disguise.statistic.NickStatistic;
 import net.pinger.disguise.statistic.SkinStatistic;
 import net.pinger.disguise.user.User;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 
 public class BaseDisguiseManager extends SimpleDisguiseManager {
 

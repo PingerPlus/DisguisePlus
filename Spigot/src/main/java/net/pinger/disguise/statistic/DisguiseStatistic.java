@@ -1,6 +1,6 @@
 package net.pinger.disguise.statistic;
 
-import net.pinger.disguise.skin.Skin;
+import net.pinger.disguise.Skin;
 import net.pinger.disguise.user.User;
 
 public class DisguiseStatistic implements Statistic {

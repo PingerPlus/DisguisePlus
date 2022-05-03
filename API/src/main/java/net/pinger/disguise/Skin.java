@@ -1,4 +1,4 @@
-package net.pinger.disguise.skin;
+package net.pinger.disguise;
 
 import org.bukkit.inventory.ItemStack;
 

@@ -10,11 +10,9 @@ import net.pinger.common.lang.Lists;
 import net.pinger.disguise.configuration.BaseConfiguration;
 import net.pinger.disguise.database.Database;
 import net.pinger.disguise.database.settings.DatabaseSettings;
-import net.pinger.disguise.exceptions.ProviderNotFoundException;
 import net.pinger.disguise.executors.DatabaseExecutor;
 import net.pinger.disguise.executors.NickExecutor;
 import net.pinger.disguise.factory.SimpleSkinFactory;
-import net.pinger.disguise.factory.SkinFactory;
 import net.pinger.disguise.inventory.SimpleInventoryManager;
 import net.pinger.disguise.listeners.LoginListener;
 import net.pinger.disguise.manager.implementation.BaseDisguiseManager;
@@ -24,7 +22,6 @@ import net.pinger.disguise.settings.DisguiseSettings;
 import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguise.user.SimpleUser;
 import net.pinger.disguise.user.SimpleUserManager;
-import net.pinger.disguise.user.User;
 import net.pinger.disguise.user.UserManager;
 import net.pinger.disguise.utils.ConversationUtil;
 import org.bukkit.Bukkit;
@@ -129,8 +126,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
         if (this.sum != null) {
             // Save the information
-            for (User user : this.sum.getUsers()) {
-                ((SimpleUser) user).saveInformation();
+            for (SimpleUser user : this.sum.getUsers()) {
+                user.saveInformation();
             }
         }
 
