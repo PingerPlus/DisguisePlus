@@ -1,8 +1,8 @@
 package net.pinger.disguise.context;
 
 import net.minecraft.util.com.mojang.authlib.properties.Property;
-import net.pinger.bukkit.nms.NMS;
 import net.pinger.disguise.Skin;
+import net.pinger.disguise.server.MinecraftServer;
 
 public class PropertyContext {
 
@@ -18,7 +18,7 @@ public class PropertyContext {
      */
 
     public static Object createProperty(Skin skin) {
-        if (NMS.atLeast("1.8"))
+        if (MinecraftServer.atLeast("1.8"))
             return new com.mojang.authlib.properties.Property("textures", skin.getValue(), skin.getSignature());
 
         return new Property("textures", skin.getValue(), skin.getSignature());
