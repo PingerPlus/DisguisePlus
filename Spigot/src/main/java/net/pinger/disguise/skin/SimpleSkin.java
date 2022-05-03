@@ -4,7 +4,7 @@ import net.pinger.bukkit.item.FreshMaterial;
 import net.pinger.bukkit.item.ItemBuilder;
 import net.pinger.disguise.Skin;
 import net.pinger.disguise.skull.SkullManager;
-import net.pinger.disguise.utils.PropertyUtil;
+import net.pinger.disguise.context.PropertyContext;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -63,7 +63,7 @@ public class SimpleSkin implements Skin {
 
     @Override
     public Object getHandle() {
-        return PropertyUtil.getProperty(this);
+        return PropertyContext.getProperty(this);
     }
 
     /**

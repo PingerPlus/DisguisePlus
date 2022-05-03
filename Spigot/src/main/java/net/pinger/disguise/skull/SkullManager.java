@@ -8,7 +8,7 @@ import net.pinger.bukkit.item.FreshMaterial;
 import net.pinger.bukkit.item.ItemBuilder;
 import net.pinger.bukkit.nms.NMS;
 import net.pinger.disguise.Skin;
-import net.pinger.disguise.utils.PropertyUtil;
+import net.pinger.disguise.context.PropertyContext;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
@@ -72,7 +72,7 @@ public class SkullManager {
                 metaSetProfileMethod.setAccessible(true);
             }
 
-            metaSetProfileMethod.invoke(meta, PropertyUtil.createProfile(skin));
+            metaSetProfileMethod.invoke(meta, PropertyContext.createProfile(skin));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
             // if in an older API where there is no setProfile method,
             // we set the profile field directly.
@@ -82,7 +82,7 @@ public class SkullManager {
                     metaProfileField.setAccessible(true);
                 }
 
-                metaProfileField.set(meta, PropertyUtil.createProfile(skin));
+                metaProfileField.set(meta, PropertyContext.createProfile(skin));
             } catch (NoSuchFieldException | IllegalAccessException ex2) {
                 logger.error("Failed to mutate the given meta object.");
                 logger.error(ex2.getMessage());
