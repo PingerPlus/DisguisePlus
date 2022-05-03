@@ -1,7 +1,7 @@
-package net.pinger.disguise.configuration;
+package net.pinger.disguise.file.configuration;
 
-import net.pinger.common.file.Reader;
 import net.pinger.disguise.DisguisePlus;
+import net.pinger.disguise.file.FileReader;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,16 +13,16 @@ public class BaseConfiguration {
 
     private final FileConfiguration messages;
 
-    public BaseConfiguration(DisguisePlus bj) {
+    public BaseConfiguration(DisguisePlus disguisePlus) {
         // Create the file
-        File file = new File(bj.getDataFolder(), "messages.yml");
+        File file = new File(disguisePlus.getDataFolder(), "messages.yml");
         this.messages = YamlConfiguration.loadConfiguration(file);
 
         // Keep
         this.messages.options().copyDefaults(true);
 
         // Read the source file
-        String read = Reader.read(bj.getResource("messages.yml"));
+        String read = FileReader.read(disguisePlus.getResource("messages.yml"));
 
         // Make the configuration
         YamlConfiguration configuration = new YamlConfiguration();
@@ -37,8 +37,8 @@ public class BaseConfiguration {
 
             this.messages.save(file);
         } catch (Exception e) {
-            bj.getLogger().warning("Failed to parse messages.yml file.");
-            bj.getLogger().warning(e.getMessage());
+            disguisePlus.getLogger().warning("Failed to parse messages.yml file.");
+            disguisePlus.getLogger().warning(e.getMessage());
         }
     }
 
@@ -48,6 +48,9 @@ public class BaseConfiguration {
 
     public String of(String key, boolean translate) {
         String value = this.messages.getString(key);
+
+        // Update value
+        value = value == null ? "" : value;
 
         if (!translate)
             return ChatColor.stripColor(value);
