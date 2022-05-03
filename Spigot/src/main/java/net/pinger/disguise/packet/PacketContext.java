@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class PacketManager {
+public class PacketContext {
 
     private static final Logger logger = LoggerFactory.getLogger("PacketManager");
 
     private static PacketProvider<?> provider = null;
     private static final Set<Class<? extends PacketProvider<?>>> providers = Sets.newLinkedHashSet();
-    private static Map<String, List<String>> providerCompatibility = Maps.newHashMap();
+    private static final Map<String, List<String>> providerCompatibility = Maps.newHashMap();
 
     static {
         providers.add(PacketProvider_v1_17_1.class);

@@ -28,9 +28,9 @@ public class DisguisePlusAPI {
     }
 
     /**
-     * Returns the packet packet that corresponds to the version of the server.
+     * Returns the packet that corresponds to the version of the server.
      *
-     * @return the packet packet
+     * @return the packet
      */
 
     public static PacketProvider<?> getPacketProvider() {

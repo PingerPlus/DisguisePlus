@@ -1,4 +1,4 @@
-package net.pinger.disguise.user;
+package net.pinger.disguise.internal.user;
 
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.database.Database;
@@ -8,6 +8,7 @@ import net.pinger.disguise.statistic.DisguiseStatistic;
 import net.pinger.disguise.statistic.NickStatistic;
 import net.pinger.disguise.statistic.SkinStatistic;
 import net.pinger.disguise.statistic.Statistic;
+import net.pinger.disguise.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
-public class SimpleUser implements User {
+public class UserImpl implements User {
 
     private static final Logger logger = LoggerFactory.getLogger("UserConnection");
 
@@ -40,7 +41,7 @@ public class SimpleUser implements User {
     // The disguise statistic
     private DisguiseStatistic disguiseStatistic = null;
 
-    SimpleUser(DisguisePlus dp, UUID id) {
+    UserImpl(DisguisePlus dp, UUID id) {
         this.dp = dp;
         this.id = id;
     }

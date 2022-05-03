@@ -16,12 +16,12 @@ import net.pinger.disguise.factory.SimpleSkinFactory;
 import net.pinger.disguise.inventory.SimpleInventoryManager;
 import net.pinger.disguise.listeners.LoginListener;
 import net.pinger.disguise.manager.implementation.BaseDisguiseManager;
-import net.pinger.disguise.packet.PacketManager;
+import net.pinger.disguise.packet.PacketContext;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.settings.DisguiseSettings;
 import net.pinger.disguise.skull.SkullManager;
-import net.pinger.disguise.user.SimpleUser;
-import net.pinger.disguise.user.SimpleUserManager;
+import net.pinger.disguise.internal.user.UserImpl;
+import net.pinger.disguise.internal.user.UserManagerImpl;
 import net.pinger.disguise.user.UserManager;
 import net.pinger.disguise.utils.ConversationUtil;
 import org.bukkit.Bukkit;
@@ -49,7 +49,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private SimpleInventoryManager inventoryManager;
     private DisguiseSettings settings = new DisguiseSettings(this);
     private final SkullManager skullManager = new SkullManager();
-    private SimpleUserManager sum;
+    private UserManagerImpl sum;
     private BaseDisguiseManager customManager;
 
     private PacketProvider<?> provider;
@@ -63,7 +63,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.addDefaultConfig();
 
         try {
-            this.provider = PacketManager.getCorrespondingProvider();
+            this.provider = PacketContext.getCorrespondingProvider();
         } catch (Exception e) {
             logger.error(" ", e);
 
@@ -76,7 +76,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.inventoryManager = new SimpleInventoryManager(this);
         this.skinFactory = new SimpleSkinFactory(this);
         this.configuration = new BaseConfiguration(this);
-        this.sum = new SimpleUserManager(this);
+        this.sum = new UserManagerImpl(this);
 
         CommandService service = Drink.get(this);
 
@@ -126,7 +126,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
         if (this.sum != null) {
             // Save the information
-            for (SimpleUser user : this.sum.getUsers()) {
+            for (UserImpl user : this.sum.getUsers()) {
                 user.saveInformation();
             }
         }

@@ -1,4 +1,4 @@
 package net.pinger.disguise.placeholders;
 
-public class SimplePlaceholderExpansion {
+public class DisguiseExpansion {
 }

@@ -1,8 +1,8 @@
 package net.pinger.disguise.listeners;
 
 import net.pinger.disguise.DisguisePlus;
-import net.pinger.disguise.user.SimpleUser;
-import net.pinger.disguise.user.SimpleUserManager;
+import net.pinger.disguise.internal.user.UserImpl;
+import net.pinger.disguise.internal.user.UserManagerImpl;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -20,7 +20,7 @@ public class LoginListener implements Listener {
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent event) {
         // Player of the event
-        SimpleUser s = (SimpleUser) this.dp.getUserManager()
+        UserImpl s = (UserImpl) this.dp.getUserManager()
                 .getUser(event.getPlayer().getUniqueId());
 
         // Set the name
@@ -29,11 +29,11 @@ public class LoginListener implements Listener {
 
     @EventHandler
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
-        SimpleUserManager manager = ((SimpleUserManager) this.dp.getUserManager());
+        UserManagerImpl manager = ((UserManagerImpl) this.dp.getUserManager());
         manager.createPlayer(event.getUniqueId());
 
         // Get the user again
-        SimpleUser s = (SimpleUser) manager.getUser(event.getUniqueId());
+        UserImpl s = (UserImpl) manager.getUser(event.getUniqueId());
 
         // Here we will load the user data
         s.retrieveInformation();
@@ -41,14 +41,14 @@ public class LoginListener implements Listener {
 
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
-        SimpleUser s = (SimpleUser) this.dp.getUserManager()
+        UserImpl s = (UserImpl) this.dp.getUserManager()
                 .getUser(event.getPlayer().getUniqueId());
 
         // Save the data
         s.saveInformation();
 
         // Remove the player from the users
-        ((SimpleUserManager) this.dp.getUserManager()).removePlayer(event.getPlayer());
+        ((UserManagerImpl) this.dp.getUserManager()).removePlayer(event.getPlayer());
     }
 
 }
