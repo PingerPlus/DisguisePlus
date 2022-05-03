@@ -2,10 +2,23 @@ package net.pinger.disguise;
 
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nonnull;
+
+/**
+ * This class represents a type which can be used for changing
+ * the player's properties through the GameObject type.
+ * <p>
+ * Each skin has a Base64 encoded value and signature, which is
+ * used for the transformation.
+ *
+ * @since 2.0
+ */
+
 public interface Skin {
 
     /**
-     * Returns the value of this skin.
+     * This method returns the encoded
+     * value of this skin.
      *
      * @return the value
      */
@@ -13,20 +26,13 @@ public interface Skin {
     String getValue();
 
     /**
-     * Returns the signature of this skin.
+     * This method returns the encoded
+     * signature of this skin.
      *
      * @return the signature
      */
 
     String getSignature();
-
-    /**
-     * Transform this skin into a property object based on the current version of the server.
-     *
-     * @return the property
-     */
-
-    Object toProperty();
 
     /**
      * Transforms this skin to a skull.
@@ -39,5 +45,14 @@ public interface Skin {
 
     ItemStack toSkull();
 
+    /**
+     * This method returns the property handle
+     * for this skin.
+     *
+     * @return the handle
+     */
+
+    @Nonnull
+    Object getHandle();
 
 }

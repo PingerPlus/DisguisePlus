@@ -27,11 +27,11 @@ public class PacketProvider_v1_17 implements PacketProvider<Packet> {
         ServerPlayer handle = ((CraftPlayer) player).getHandle();
         GameProfile profile = handle.getGameProfile();
 
-        if (!(skin.toProperty() instanceof Property)) {
+        if (!(skin.getHandle() instanceof Property)) {
             return;
         }
 
-        Property prop = (Property) skin.toProperty();
+        Property prop = (Property) skin.getHandle();
 
         this.clearProperties(player);
         profile.getProperties().put("textures", prop);

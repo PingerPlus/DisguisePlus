@@ -24,11 +24,11 @@ public class PacketProvider_v1_16_2 implements PacketProvider<Packet> {
         EntityPlayer ep = ((CraftPlayer) player).getHandle();
         GameProfile profile = ep.getProfile();
 
-        if (!(skin.toProperty() instanceof Property)) {
+        if (!(skin.getHandle() instanceof Property)) {
             return;
         }
 
-        Property prop = (Property) skin.toProperty();
+        Property prop = (Property) skin.getHandle();
 
         // Clear the props
         this.clearProperties(player);

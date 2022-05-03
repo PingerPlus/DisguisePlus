@@ -62,7 +62,7 @@ public class SimpleSkin implements Skin {
      */
 
     @Override
-    public Object toProperty() {
+    public Object getHandle() {
         return PropertyUtil.getProperty(this);
     }
 
