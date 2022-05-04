@@ -2,7 +2,7 @@ package net.pinger.disguise.prompts.packs;
 
 import net.pinger.common.lang.Lists;
 import net.pinger.disguise.DisguisePlus;
-import net.pinger.disguise.factory.SimpleSkinFactory;
+import net.pinger.disguise.internal.SkinFactoryImpl;
 import net.pinger.disguise.skin.SimpleSkinPack;
 import net.pinger.disguise.user.User;
 import org.bukkit.conversations.ConversationContext;
@@ -31,7 +31,7 @@ public class CreatePackPrompt extends StringPrompt {
     public @Nullable Prompt acceptInput(@NotNull ConversationContext conversationContext, @Nullable String s) {
         Player p = (Player) conversationContext.getForWhom();
         User user = this.dm.getUserManager().getUser(p);
-        SimpleSkinFactory factory = (SimpleSkinFactory) this.dm.getSkinFactory();
+        SkinFactoryImpl factory = (SkinFactoryImpl) this.dm.getSkinFactory();
 
         if (s.isEmpty()) {
             return this;

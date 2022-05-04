@@ -1,9 +1,8 @@
 package net.pinger.disguise.prompts.packs;
 
 import net.pinger.disguise.DisguisePlus;
-import net.pinger.disguise.factory.SimpleSkinFactory;
+import net.pinger.disguise.internal.SkinFactoryImpl;
 import net.pinger.disguise.user.User;
-import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -33,11 +32,11 @@ public class CreateCategoryPrompt extends StringPrompt {
             return this;
 
         // Create the category
-        if (!(this.dp.getSkinFactory() instanceof SimpleSkinFactory))
+        if (!(this.dp.getSkinFactory() instanceof SkinFactoryImpl))
             return Prompt.END_OF_CONVERSATION;
 
         user.sendRawMessage("categories.success-create", s);
-        SimpleSkinFactory factory = (SimpleSkinFactory) this.dp.getSkinFactory();
+        SkinFactoryImpl factory = (SkinFactoryImpl) this.dp.getSkinFactory();
         factory.createCategory(s);
         this.dp.getInventoryManager().getSkinPacksProvider().open(p);
 

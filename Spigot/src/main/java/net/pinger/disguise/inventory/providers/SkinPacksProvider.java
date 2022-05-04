@@ -9,7 +9,7 @@ import net.pinger.bukkit.item.FreshMaterial;
 import net.pinger.bukkit.item.ItemBuilder;
 import net.pinger.bukkit.item.mask.impl.TwoWayLoadingMask;
 import net.pinger.disguise.DisguisePlus;
-import net.pinger.disguise.factory.SimpleSkinFactory;
+import net.pinger.disguise.internal.SkinFactoryImpl;
 import net.pinger.disguise.inventory.SimpleInventoryManager;
 import net.pinger.disguise.prompts.packs.CreateCategoryPrompt;
 import net.pinger.disguise.SkinPack;
@@ -44,7 +44,7 @@ public class SkinPacksProvider implements InventoryProvider {
         // Pagination
         Pagination page = contents.pagination();
 
-        SimpleSkinFactory simpleSkinFactory = (SimpleSkinFactory) this.dp.getSkinFactory();
+        SkinFactoryImpl simpleSkinFactory = (SkinFactoryImpl) this.dp.getSkinFactory();
         ClickableItem[] items = new ClickableItem[simpleSkinFactory.getSkinCategories().size()];
 
         int i = 0;

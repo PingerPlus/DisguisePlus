@@ -8,6 +8,7 @@ import net.pinger.disguise.context.PropertyContext;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import javax.annotation.Nonnull;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -61,9 +62,9 @@ public class SimpleSkin implements Skin {
      * @return the property
      */
 
-    @Override
+    @Override @Nonnull
     public Object getHandle() {
-        return PropertyContext.getProperty(this);
+        return PropertyContext.createProperty(this);
     }
 
     /**

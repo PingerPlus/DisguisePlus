@@ -1,7 +1,7 @@
 package net.pinger.disguise.prompts.packs;
 
 import net.pinger.disguise.DisguisePlus;
-import net.pinger.disguise.factory.SimpleSkinFactory;
+import net.pinger.disguise.internal.SkinFactoryImpl;
 import net.pinger.disguise.SkinPack;
 import net.pinger.disguise.user.User;
 import org.bukkit.conversations.ConversationContext;
@@ -32,7 +32,7 @@ public class ConfirmDeletePackPrompt extends StringPrompt {
         if (!s.equalsIgnoreCase("confirm"))
             return this;
 
-        ((SimpleSkinFactory) this.dp.getSkinFactory()).deleteSkinPack(this.pack);
+        ((SkinFactoryImpl) this.dp.getSkinFactory()).deleteSkinPack(this.pack);
         user.sendRawMessage("skin-packs.success-delete", this.pack.getName());
 
         this.dp.getInventoryManager().getCategoryProvider(this.pack.getCategory()).open(p);

@@ -1,4 +1,4 @@
-package net.pinger.disguise.factory;
+package net.pinger.disguise.internal;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -21,6 +21,7 @@ import net.pinger.disguise.utils.SkinUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,7 +30,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SimpleSkinFactory implements SkinFactory {
+public class SkinFactoryImpl implements SkinFactory {
 
     private static final Logger logger = LoggerFactory.getLogger("SkinFactory");
 
@@ -43,7 +44,7 @@ public class SimpleSkinFactory implements SkinFactory {
     // The disguise instance
     private final DisguisePlus dp;
 
-    public SimpleSkinFactory(DisguisePlus dp) {
+    public SkinFactoryImpl(DisguisePlus dp) {
         this.dp = dp;
 
         // Initialize the loader
@@ -126,7 +127,7 @@ public class SimpleSkinFactory implements SkinFactory {
 
             for (Map.Entry<String, JsonElement> element : object.entrySet()) {
                 for (JsonElement packName : element.getValue().getAsJsonArray()) {
-                    // Add the pack tot he list
+                    // Add the pack to the list
                     if (this.getSkinPack(element.getKey(), packName.getAsString()) != null)
                         continue;
 
@@ -217,14 +218,35 @@ public class SimpleSkinFactory implements SkinFactory {
         this.categorySkins.get(category).add(pack);
     }
 
-    @Override
-    public Skin[] getSkins() {
-        return this.skins.toArray(new Skin[0]);
+    @Override @Nonnull
+    public Skin getRandomSkin() {
+        return this.skins.get(new Random().nextInt(this.skins.size()));
     }
 
     @Override
-    public Skin getRandomSkin() {
-        return this.skins.get(new Random().nextInt(this.skins.size()));
+    public Skin getRandomSkin(String category) {
+        List<SkinPack> packs = this.categorySkins.get(category);
+
+        if (packs == null || packs.isEmpty()) {
+            return null;
+        }
+
+        int index = new Random().nextInt(packs.size());
+        SkinPack pack = packs.get(index);
+
+        // Check if the pack has any skins
+        // We have to check this for the NullPointerException
+        if (pack.getSkins().isEmpty()) {
+            return null;
+        }
+
+        // Get the second
+        // Random index
+        int secondIndex = new Random().nextInt(pack.getSkins().size());
+
+        // Return that
+        // Second skin pack
+        return pack.getSkins().get(secondIndex);
     }
 
     @Nullable

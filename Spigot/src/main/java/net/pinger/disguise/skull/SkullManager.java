@@ -72,7 +72,7 @@ public class SkullManager {
                 metaSetProfileMethod.setAccessible(true);
             }
 
-            metaSetProfileMethod.invoke(meta, PropertyContext.createProfile(skin));
+            metaSetProfileMethod.invoke(meta, PropertyContext.createProperty(skin));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
             // if in an older API where there is no setProfile method,
             // we set the profile field directly.
@@ -82,7 +82,7 @@ public class SkullManager {
                     metaProfileField.setAccessible(true);
                 }
 
-                metaProfileField.set(meta, PropertyContext.createProfile(skin));
+                metaProfileField.set(meta, PropertyContext.createProperty(skin));
             } catch (NoSuchFieldException | IllegalAccessException ex2) {
                 logger.error("Failed to mutate the given meta object.");
                 logger.error(ex2.getMessage());

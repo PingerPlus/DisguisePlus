@@ -7,12 +7,12 @@ import com.jonahseguin.drink.Drink;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import net.pinger.bukkit.plugin.BukkitPlugin;
 import net.pinger.common.lang.Lists;
-import net.pinger.disguise.configuration.BaseConfiguration;
 import net.pinger.disguise.database.Database;
 import net.pinger.disguise.database.settings.DatabaseSettings;
 import net.pinger.disguise.executors.DatabaseExecutor;
 import net.pinger.disguise.executors.NickExecutor;
-import net.pinger.disguise.factory.SimpleSkinFactory;
+import net.pinger.disguise.file.configuration.BaseConfiguration;
+import net.pinger.disguise.internal.SkinFactoryImpl;
 import net.pinger.disguise.inventory.SimpleInventoryManager;
 import net.pinger.disguise.listeners.LoginListener;
 import net.pinger.disguise.manager.implementation.BaseDisguiseManager;
@@ -43,7 +43,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             .create();
 
     private BaseConfiguration configuration;
-    private SimpleSkinFactory skinFactory;
+    private SkinFactoryImpl skinFactory;
     private ConversationUtil conversationUtil;
     private Database database;
     private SimpleInventoryManager inventoryManager;
@@ -74,7 +74,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.database = new Database(this, DatabaseSettings.create(this.getConfig()));
         this.conversationUtil = new ConversationUtil(this);
         this.inventoryManager = new SimpleInventoryManager(this);
-        this.skinFactory = new SimpleSkinFactory(this);
+        this.skinFactory = new SkinFactoryImpl(this);
         this.configuration = new BaseConfiguration(this);
         this.sum = new UserManagerImpl(this);
 
