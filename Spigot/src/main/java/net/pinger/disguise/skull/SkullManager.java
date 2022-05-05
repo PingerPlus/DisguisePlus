@@ -3,12 +3,11 @@ package net.pinger.disguise.skull;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.mojang.authlib.GameProfile;
 import net.pinger.bukkit.item.FreshMaterial;
 import net.pinger.bukkit.item.ItemBuilder;
-import net.pinger.bukkit.nms.NMS;
 import net.pinger.disguise.Skin;
-import net.pinger.disguise.context.PropertyContext;
+import net.pinger.disguise.context.GameObjectContext;
+import net.pinger.disguise.server.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
@@ -52,7 +51,7 @@ public class SkullManager {
         SkullMeta meta = (SkullMeta) stack.getItemMeta();
 
         // Setting the owner
-        if (NMS.atLeast("1.12"))
+        if (MinecraftServer.atLeast("1.12"))
             meta.setOwningPlayer(player);
         else
             meta.setOwner(player.getName());
@@ -68,11 +67,11 @@ public class SkullManager {
     public static void mutateItemMeta(SkullMeta meta, Skin skin) {
         try {
             if (metaSetProfileMethod == null) {
-                metaSetProfileMethod = meta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
+                metaSetProfileMethod = meta.getClass().getDeclaredMethod("setProfile");
                 metaSetProfileMethod.setAccessible(true);
             }
 
-            metaSetProfileMethod.invoke(meta, PropertyContext.createProperty(skin));
+            metaSetProfileMethod.invoke(meta, GameObjectContext.createProfile(skin));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
             // if in an older API where there is no setProfile method,
             // we set the profile field directly.
@@ -82,7 +81,7 @@ public class SkullManager {
                     metaProfileField.setAccessible(true);
                 }
 
-                metaProfileField.set(meta, PropertyContext.createProperty(skin));
+                metaProfileField.set(meta, GameObjectContext.createProfile(skin));
             } catch (NoSuchFieldException | IllegalAccessException ex2) {
                 logger.error("Failed to mutate the given meta object.");
                 logger.error(ex2.getMessage());
