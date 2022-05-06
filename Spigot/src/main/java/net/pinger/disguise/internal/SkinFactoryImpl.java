@@ -11,7 +11,6 @@ import net.pinger.common.lang.Lists;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.SkinFactory;
 import net.pinger.disguise.exceptions.SkinCloudDownloadException;
-import net.pinger.disguise.skin.SimpleSkinPack;
 import net.pinger.disguise.Skin;
 import net.pinger.disguise.SkinPack;
 import net.pinger.disguise.skin.loader.SkinPackLoader;
@@ -315,7 +314,7 @@ public class SkinFactoryImpl implements SkinFactory {
                 // Also create the data file and store it
                 File data = new File(pf, "data.json");
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(data))) {
-                    writer.write(ReferenceUtil.GSON.toJson(((SimpleSkinPack) sp).toJsonArray()));
+                    writer.write(ReferenceUtil.GSON.toJson(((SkinPackImpl) sp).toJsonArray()));
                 } catch (IOException e) {
                     logger.error("Failed to save data within the pack -> ", e);
                     logger.error(e.getMessage());
@@ -336,7 +335,7 @@ public class SkinFactoryImpl implements SkinFactory {
     }
 
     public boolean deleteSkinPack(SkinPack pack) {
-        SimpleSkinPack converted = (SimpleSkinPack) pack;
+        SkinPackImpl converted = (SkinPackImpl) pack;
 
         // Remove from the target files
         this.categorySkins.get(pack.getCategory()).remove(pack);

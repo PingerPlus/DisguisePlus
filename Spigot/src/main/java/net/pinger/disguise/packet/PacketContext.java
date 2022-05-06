@@ -1,10 +1,10 @@
 package net.pinger.disguise.packet;
 
 import com.google.common.collect.Sets;
-import net.pinger.bukkit.nms.NMS;
 import net.pinger.common.lang.Lists;
 import net.pinger.common.lang.Maps;
 import net.pinger.disguise.exceptions.ProviderNotFoundException;
+import net.pinger.disguise.server.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,14 +41,14 @@ public class PacketContext {
                 String version = String.join(".", splitter);
 
                 // If we found the class with the corresponding version
-                if (NMS.isVersion(version)) {
-                    logger.info("Found the appropriate provider for version " + NMS.STRIPPED_VERSION);
+                if (MinecraftServer.isVersion(version)) {
+                    logger.info("Found the appropriate provider for version " + MinecraftServer.STRIPPED_VERSION);
                     return provider = clazz.getConstructor().newInstance();
                 }
 
                 if (providerCompatibility.containsKey(version)) {
                     for (String serverVersion : providerCompatibility.get(version)) {
-                        if (NMS.isVersion(serverVersion)) {
+                        if (MinecraftServer.isVersion(serverVersion)) {
                             // Then the current class is also compatible with the current version
                             logger.info("Found the appropriate provider for version " + name.replace("_", "."));
                             return provider = clazz.getConstructor().newInstance();

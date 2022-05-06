@@ -2,7 +2,7 @@ package net.pinger.disguise.prompts.packs;
 
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.manager.skin.SkinFetcher;
-import net.pinger.disguise.skin.SimpleSkinPack;
+import net.pinger.disguise.internal.SkinPackImpl;
 import net.pinger.disguise.SkinPack;
 import net.pinger.disguise.user.User;
 import org.bukkit.conversations.ConversationContext;
@@ -35,7 +35,7 @@ public class CreateSkinImagePrompt extends StringPrompt {
         if (s.isEmpty())
             return this;
 
-        SimpleSkinPack simple = (SimpleSkinPack) pack;
+        SkinPackImpl simple = (SkinPackImpl) pack;
 
         // Add the skin
         SkinFetcher.catchSkin(s, skin -> {

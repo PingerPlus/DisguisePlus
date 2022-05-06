@@ -7,7 +7,7 @@ import net.pinger.common.http.HttpRequest;
 import net.pinger.common.http.HttpResponse;
 import net.pinger.common.http.request.HttpGetRequest;
 import net.pinger.common.lang.Lists;
-import net.pinger.disguise.skin.SimpleSkinPack;
+import net.pinger.disguise.internal.SkinPackImpl;
 import net.pinger.disguise.Skin;
 import net.pinger.disguise.SkinPack;
 import net.pinger.disguise.utils.HttpUtil;
@@ -34,7 +34,7 @@ public class SkinPackLoader {
             skins.add(SkinUtil.getFromJson(object.getAsJsonObject()));
         }
 
-        return new SimpleSkinPack(null, category, name, skins);
+        return new SkinPackImpl(null, category, name, skins);
     }
 
     public static SkinPack getSkinPack(File f, String category, String name) {
@@ -51,7 +51,7 @@ public class SkinPackLoader {
             skins.add(SkinUtil.getFromJson(el.getAsJsonObject()));
         }
 
-        return new SimpleSkinPack(f.getParentFile(), category, name, skins);
+        return new SkinPackImpl(f.getParentFile(), category, name, skins);
     }
 
 

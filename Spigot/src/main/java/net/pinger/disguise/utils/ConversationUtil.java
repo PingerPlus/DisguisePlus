@@ -1,6 +1,6 @@
 package net.pinger.disguise.utils;
 
-import net.pinger.common.lang.Lists;
+import com.google.common.collect.Lists;
 import net.pinger.disguise.DisguisePlus;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
@@ -28,18 +28,7 @@ public class ConversationUtil {
      */
 
     public void createConversation(Player player, Prompt prompt) {
-        Conversation conversation = this.factory.withFirstPrompt(prompt)
-                .withLocalEcho(false)
-                .withTimeout(10)
-                .withEscapeSequence("return")
-                .buildConversation(player);
-
-        // Automatically do this
-        player.closeInventory();
-
-        this.conversations.add(conversation);
-        // Start it
-        conversation.begin();
+        this.createConversation(player, prompt, 10);
     }
 
     public void createConversation(Player player, Prompt prompt, int timeout) {
@@ -53,6 +42,7 @@ public class ConversationUtil {
         player.closeInventory();
 
         this.conversations.add(conversation);
+
         // Start it
         conversation.begin();
     }

@@ -1,7 +1,7 @@
 package net.pinger.disguise.utils;
 
 import com.google.gson.JsonObject;
-import net.pinger.disguise.skin.SimpleSkin;
+import net.pinger.disguise.internal.SkinImpl;
 import net.pinger.disguise.Skin;
 
 public class SkinUtil {
@@ -19,7 +19,7 @@ public class SkinUtil {
         JsonObject properties = object.getAsJsonObject("properties");
 
         // Return the new Skin
-        return SimpleSkin.newBuilder(
+        return SkinImpl.newBuilder(
                 properties.get("value").getAsString(),
                 properties.get("signature").getAsString());
     }
@@ -32,7 +32,7 @@ public class SkinUtil {
      */
 
     public static Skin getSkinFromMineskin(JsonObject object) {
-        return SimpleSkin.newBuilder(
+        return SkinImpl.newBuilder(
                 object.get("value").getAsString(),
                 object.get("signature").getAsString()
         );
@@ -49,7 +49,7 @@ public class SkinUtil {
         JsonObject obj = object.getAsJsonArray("properties").get(0)
                 .getAsJsonObject();
 
-        return SimpleSkin.newBuilder(
+        return SkinImpl.newBuilder(
                 obj.get("value").getAsString(),
                 obj.get("signature").getAsString());
     }

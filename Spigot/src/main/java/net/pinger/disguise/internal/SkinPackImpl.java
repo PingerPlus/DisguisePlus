@@ -1,4 +1,4 @@
-package net.pinger.disguise.skin;
+package net.pinger.disguise.internal;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -10,14 +10,14 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
-public class SimpleSkinPack implements SkinPack {
+public class SkinPackImpl implements SkinPack {
 
     private final File base;
 
     private final String category, name;
     private final List<Skin> skins;
 
-    public SimpleSkinPack(File base, String category, String name, List<Skin> skins) {
+    public SkinPackImpl(File base, String category, String name, List<Skin> skins) {
         this.base = base;
         this.category = category;
         this.name = name;

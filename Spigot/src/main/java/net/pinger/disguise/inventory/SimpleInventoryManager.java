@@ -49,9 +49,6 @@ public class SimpleInventoryManager {
                 .provider(new SettingsProvider(this.disguise))
                 .title(ChatColor.DARK_GRAY + String.format("Disguise Plus %s", this.disguise.getDescription().getVersion()))
                 .parent(this.getDisguisePlusProvider())
-                .listener(new InventoryListener<>(InventoryDragEvent.class, inv -> {
-
-                }))
                 .manager(this.inventoryManager)
                 .size(6, 9)
                 .build();

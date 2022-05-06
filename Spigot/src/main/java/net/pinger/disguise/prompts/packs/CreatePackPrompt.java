@@ -3,7 +3,7 @@ package net.pinger.disguise.prompts.packs;
 import net.pinger.common.lang.Lists;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.internal.SkinFactoryImpl;
-import net.pinger.disguise.skin.SimpleSkinPack;
+import net.pinger.disguise.internal.SkinPackImpl;
 import net.pinger.disguise.user.User;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -40,7 +40,7 @@ public class CreatePackPrompt extends StringPrompt {
         if (factory.getSkinPack(s) != null && factory.getSkinPack(s).getCategory().equalsIgnoreCase(this.category))
             return this;
 
-        factory.createSkinPack(this.category, new SimpleSkinPack(null, this.category, s, Lists.newArrayList()));
+        factory.createSkinPack(this.category, new SkinPackImpl(null, this.category, s, Lists.newArrayList()));
         this.dm.getInventoryManager().getCategoryProvider(this.category).open(p);
         user.sendRawMessage("skin-packs.success-create", s);
         return Prompt.END_OF_CONVERSATION;

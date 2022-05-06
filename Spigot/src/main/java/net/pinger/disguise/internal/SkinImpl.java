@@ -1,4 +1,4 @@
-package net.pinger.disguise.skin;
+package net.pinger.disguise.internal;
 
 import net.pinger.bukkit.item.FreshMaterial;
 import net.pinger.bukkit.item.ItemBuilder;
@@ -14,7 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class SimpleSkin implements Skin {
+public class SkinImpl implements Skin {
 
     private final String signature, value;
     private final ItemStack skull = new ItemBuilder(FreshMaterial.PLAYER_HEAD.toMaterial(), (short) 3).toItemStack();
@@ -22,7 +22,7 @@ public class SimpleSkin implements Skin {
     // This is the id retrieved from sql
     private long id;
 
-    private SimpleSkin(String value, String signature) {
+    private SkinImpl(String value, String signature) {
         this.signature = signature;
         this.value = value;
 
@@ -33,7 +33,7 @@ public class SimpleSkin implements Skin {
     }
 
     public static Skin newBuilder(String value, String signature) {
-        return new SimpleSkin(value, signature);
+        return new SkinImpl(value, signature);
     }
 
     /**
@@ -118,7 +118,7 @@ public class SimpleSkin implements Skin {
 
             try (ResultSet set = statement.getResultSet()) {
                 if (set.next()) {
-                    return new SimpleSkin(set.getString("texture"), set.getString("signature"));
+                    return new SkinImpl(set.getString("texture"), set.getString("signature"));
                 }
             }
         }

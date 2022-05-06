@@ -2,7 +2,7 @@ package net.pinger.disguise.internal.user;
 
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.database.Database;
-import net.pinger.disguise.skin.SimpleSkin;
+import net.pinger.disguise.internal.SkinImpl;
 import net.pinger.disguise.Skin;
 import net.pinger.disguise.statistic.DisguiseStatistic;
 import net.pinger.disguise.statistic.NickStatistic;
@@ -341,7 +341,7 @@ public class UserImpl implements User {
                     // If it's found
                     if (set.next()) {
                         // First retrieve the skin
-                        Skin skin = SimpleSkin.retrieveSkin(set.getLong("skin_id"), connection);
+                        Skin skin = SkinImpl.retrieveSkin(set.getLong("skin_id"), connection);
                         this.disguiseStatistic = new DisguiseStatistic(this, true, skin, set.getString("nick"));
                     }
                 }
@@ -369,7 +369,7 @@ public class UserImpl implements User {
                     // If it's found
                     if (set.next()) {
                         // Retrieve the skin first
-                        Skin skin = SimpleSkin.retrieveSkin(set.getLong("skin_id"), connection);
+                        Skin skin = SkinImpl.retrieveSkin(set.getLong("skin_id"), connection);
                         this.skinStatistic = new SkinStatistic(this, true, skin);
                     }
                 }
@@ -406,7 +406,7 @@ public class UserImpl implements User {
                     statement.setString(1, this.id.toString());
                     statement.setBoolean(2, true);
                     statement.setString(3, this.disguiseStatistic.getNick());
-                    statement.setLong(4,  ((SimpleSkin) this.disguiseStatistic.getSkin()).getId(connection));
+                    statement.setLong(4,  ((SkinImpl) this.disguiseStatistic.getSkin()).getId(connection));
                     statement.executeUpdate();
                 }
             }
@@ -436,7 +436,7 @@ public class UserImpl implements User {
                 try (PreparedStatement statement = connection.prepareStatement("REPLACE INTO skined VALUES(?, ?, ?);")) {
                     statement.setString(1, this.id.toString());
                     statement.setBoolean(2, true);
-                    statement.setLong(3, ((SimpleSkin) this.skinStatistic.getSkin()).getId(connection));
+                    statement.setLong(3, ((SkinImpl) this.skinStatistic.getSkin()).getId(connection));
                     statement.executeUpdate();
                 }
             }

@@ -2,7 +2,7 @@ package net.pinger.disguise.prompts.packs;
 
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.manager.skin.SkinFetcher;
-import net.pinger.disguise.skin.SimpleSkinPack;
+import net.pinger.disguise.internal.SkinPackImpl;
 import net.pinger.disguise.Skin;
 import net.pinger.disguise.SkinPack;
 import net.pinger.disguise.user.User;
@@ -44,7 +44,7 @@ public class CreateSkinNamePrompt extends StringPrompt {
             user.sendRawMessage("skins.success-name", s);
 
             // Add the skin
-            ((SimpleSkinPack) this.pack).addSkin(skin);
+            ((SkinPackImpl) this.pack).addSkin(skin);
         }
 
         // Check for error here

@@ -24,8 +24,11 @@ public class DateUtil {
     }
 
     public static String getFormattedTime(DateTime x, DateTime y) {
-        return getFormatter().print(new Period(x, y)).length() > 0 ?
-                getFormatter().print(new Period(x, y)) : "Now";
+        String formattedTime = getFormatter().print(new Period(x, y));
+
+        // We need to check for the condition
+        // Where the seconds are 0 or -1
+        return formattedTime.length() > 0 ? formattedTime : "Now";
     }
 
 
