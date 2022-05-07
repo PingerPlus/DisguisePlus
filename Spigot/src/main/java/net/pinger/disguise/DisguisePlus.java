@@ -7,15 +7,11 @@ import com.jonahseguin.drink.Drink;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import net.pinger.bukkit.plugin.BukkitPlugin;
 import net.pinger.common.lang.Lists;
-import net.pinger.disguise.database.Database;
-import net.pinger.disguise.database.settings.DatabaseSettings;
-import net.pinger.disguise.executors.DatabaseExecutor;
-import net.pinger.disguise.executors.NickExecutor;
+import net.pinger.disguise.executors.DisguisePlusExecutor;
 import net.pinger.disguise.file.configuration.BaseConfiguration;
 import net.pinger.disguise.internal.SkinFactoryImpl;
 import net.pinger.disguise.inventory.SimpleInventoryManager;
 import net.pinger.disguise.listeners.LoginListener;
-import net.pinger.disguise.manager.implementation.BaseDisguiseManager;
 import net.pinger.disguise.packet.PacketContext;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.settings.DisguiseSettings;
@@ -45,12 +41,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private BaseConfiguration configuration;
     private SkinFactoryImpl skinFactory;
     private ConversationUtil conversationUtil;
-    private Database database;
     private SimpleInventoryManager inventoryManager;
     private DisguiseSettings settings = new DisguiseSettings(this);
     private final SkullManager skullManager = new SkullManager();
     private UserManagerImpl sum;
-    private BaseDisguiseManager customManager;
 
     private PacketProvider<?> provider;
 
@@ -71,7 +65,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             this.getPluginLoader().disablePlugin(this);
         }
 
-        this.database = new Database(this, DatabaseSettings.create(this.getConfig()));
         this.conversationUtil = new ConversationUtil(this);
         this.inventoryManager = new SimpleInventoryManager(this);
         this.skinFactory = new SkinFactoryImpl(this);
@@ -81,12 +74,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         CommandService service = Drink.get(this);
 
         // Registering the commands
-        service.register(new DatabaseExecutor(this), "dp");
-        service.register(new NickExecutor(this), "nick");
+        service.register(new DisguisePlusExecutor(this), "dp");
         service.registerCommands();
 
         Bukkit.getPluginManager().registerEvents(new LoginListener(this), this);
-        this.customManager = new BaseDisguiseManager(this, this.provider);
 
         // Make sure that we created all instances
         // Of the api, before we connect to the api
@@ -158,10 +149,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         return conversationUtil;
     }
 
-    public Database getSQLDatabase() {
-        return database;
-    }
-
     public SimpleInventoryManager getInventoryManager() {
         return inventoryManager;
     }
@@ -180,9 +167,5 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     public BaseConfiguration getConfiguration() {
         return configuration;
-    }
-
-    public BaseDisguiseManager getBaseManager() {
-        return customManager;
     }
 }

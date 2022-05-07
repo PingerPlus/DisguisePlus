@@ -1,4 +1,4 @@
-package net.pinger.disguise.manager.nick;
+package net.pinger.disguise.fetcher;
 
 import com.google.gson.JsonObject;
 import net.pinger.common.http.HttpRequest;

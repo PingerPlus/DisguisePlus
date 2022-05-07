@@ -1,27 +1,38 @@
-package net.pinger.disguise.manager;
+package net.pinger.disguise.internal;
 
 import net.pinger.disguise.DisguiseManager;
 import net.pinger.disguise.DisguisePlus;
 import net.pinger.disguise.DisguisePlusAPI;
 import net.pinger.disguise.exceptions.InvalidUserException;
-import net.pinger.disguise.manager.nick.NickFetcher;
-import net.pinger.disguise.manager.nick.SimpleNickSetter;
-import net.pinger.disguise.manager.skin.SkinFetcher;
+import net.pinger.disguise.fetcher.NickFetcher;
+import net.pinger.disguise.fetcher.SkinFetcher;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.Skin;
 import net.pinger.disguise.user.User;
+import net.pinger.disguise.utils.StringUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
-public class SimpleDisguiseManager implements DisguiseManager {
+public class DisguiseManagerImpl implements DisguiseManager {
 
     protected final DisguisePlus dp;
     private final PacketProvider<?> provider;
 
-    public SimpleDisguiseManager(DisguisePlus dp, PacketProvider<?> provider) {
+    // Method responsible for changing the nickname
+    private static Method playerHandleMethod;
+    private static Method profileMethod;
+
+    // The logger
+    private static final Logger logger = LoggerFactory.getLogger("DisguisePlus");
+
+    public DisguiseManagerImpl(DisguisePlus dp, PacketProvider<?> provider) {
         this.dp = dp;
         this.provider = provider;
     }
@@ -38,9 +49,8 @@ public class SimpleDisguiseManager implements DisguiseManager {
     public void disguise(Player player) {
         this.applySkin(player, DisguisePlusAPI.getSkinFactory().getRandomSkin());
 
-        // Apply a random nick aswell
-        this.applyNickname(player,
-                this.dp.getSettings().getCreator().createNick());
+        // Apply a random nick as well
+        this.applyNickname(player, StringUtil.randomize());
     }
 
     /**
@@ -105,7 +115,7 @@ public class SimpleDisguiseManager implements DisguiseManager {
         if (name.isEmpty() || name.length() >= 16)
             throw new IllegalArgumentException("Length cannot be more or equal to 16");
 
-        SimpleNickSetter.applyNick(player, ChatColor.translateAlternateColorCodes('&', name));
+        this.applyNick(player, ChatColor.translateAlternateColorCodes('&', name));
     }
 
     @Override
@@ -116,5 +126,43 @@ public class SimpleDisguiseManager implements DisguiseManager {
         // Apply the nick
         this.applyNickname(player, s.getDefaultName());
     }
+
+    /**
+     * This method applies a nick to a specific player.
+     * It shouldn't be used anywhere outside the {@link DisguiseManagerImpl} class.
+     *
+     * @param player the player
+     * @param name the name
+     */
+
+    private void applyNick(Player player, String name) {
+        try {
+            // Set the player handle method
+            if (playerHandleMethod == null)
+                playerHandleMethod = player.getClass().getMethod("getHandle");
+
+            Object entity = playerHandleMethod.invoke(player);
+
+            // Set the profile method
+            if (profileMethod == null) {
+                profileMethod = entity.getClass().getMethod("getProfile");
+            }
+
+            Object ep = profileMethod.invoke(entity);
+            Field nameField = ep.getClass().getDeclaredField("name");
+
+            // Set the field
+            nameField.setAccessible(true);
+            nameField.set(ep, name);
+
+            // Change the player fields
+            player.setDisplayName(name);
+            player.setPlayerListName(name);
+        } catch (Exception e) {
+            logger.error("Failed to load set a nick for player -> " + player.getName());
+            logger.error(e.getMessage());
+        }
+    }
+
 
 }

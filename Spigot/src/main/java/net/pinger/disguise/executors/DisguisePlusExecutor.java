@@ -6,11 +6,11 @@ import com.jonahseguin.drink.annotation.Sender;
 import net.pinger.disguise.DisguisePlus;
 import org.bukkit.entity.Player;
 
-public class DatabaseExecutor {
+public class DisguisePlusExecutor {
 
     private final DisguisePlus disguisePlus;
 
-    public DatabaseExecutor(DisguisePlus disguisePlus) {
+    public DisguisePlusExecutor(DisguisePlus disguisePlus) {
         this.disguisePlus = disguisePlus;
     }
 
