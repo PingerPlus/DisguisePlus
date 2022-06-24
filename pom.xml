@@ -13,21 +13,7 @@
         <module>API</module>
         <module>Spigot</module>
         <module>SkinDatabase</module>
-        <module>v1_17_1</module>
-        <module>v1_17</module>
-        <module>v1_16_4</module>
-        <module>v1_16_2</module>
-        <module>v1_7_10</module>
     </modules>
-
-    <dependencies>
-        <dependency>
-            <groupId>net.pinger</groupId>
-            <artifactId>Bukkit</artifactId>
-            <version>LATEST</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 
 
 </project>
