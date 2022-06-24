@@ -118,7 +118,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         if (this.sum != null) {
             // Save the information
             for (UserImpl user : this.sum.getUsers()) {
-                user.saveInformation();
+//                user.saveInformation();
             }
         }
 

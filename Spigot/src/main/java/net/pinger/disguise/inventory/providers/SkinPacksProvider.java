@@ -44,17 +44,17 @@ public class SkinPacksProvider implements InventoryProvider {
         // Pagination
         Pagination page = contents.pagination();
 
-        SkinFactoryImpl simpleSkinFactory = (SkinFactoryImpl) this.dp.getSkinFactory();
-        ClickableItem[] items = new ClickableItem[simpleSkinFactory.getSkinCategories().size()];
+        SkinFactoryImpl factory = (SkinFactoryImpl) this.dp.getSkinFactory();
+        ClickableItem[] items = new ClickableItem[factory.getSkinCategories().size()];
 
         int i = 0;
-        for (String category : simpleSkinFactory.getSkinCategories()) {
-            if (simpleSkinFactory.getSkinPacks(category).isEmpty())
+        for (String category : factory.getSkinCategories()) {
+            if (factory.getSkinPacks(category).isEmpty())
                 items[i++] = ClickableItem.of(this.getItemFromSkin(this.dp.getSkullManager().getDefaultPlayerSkull(), category, state), e -> {
                     this.dp.getInventoryManager().getCategoryProvider(category).open((Player) e.getWhoClicked());
                 });
             else
-                items[i++] = ClickableItem.of(this.getItemFromPack(simpleSkinFactory.getSkinPacks(category).get(0), state), e -> {
+                items[i++] = ClickableItem.of(this.getItemFromPack(factory.getSkinPacks(category).get(0), state), e -> {
                     this.dp.getInventoryManager().getCategoryProvider(category).open((Player) e.getWhoClicked());
                 });
         }

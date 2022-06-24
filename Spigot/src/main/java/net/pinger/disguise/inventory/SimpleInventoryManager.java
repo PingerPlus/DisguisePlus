@@ -34,16 +34,6 @@ public class SimpleInventoryManager {
         this.inventoryManager.init();
     }
 
-    public SmartInventory getDatabaseProvider() {
-       return SmartInventory.builder()
-                .provider(new DatabaseProvider(this.disguise))
-                .title(ChatColor.DARK_GRAY + "Settings > MySQL Database")
-                .parent(this.getSettingsProvider())
-                .manager(this.inventoryManager)
-                .size(6, 9)
-                .build();
-    }
-
     public SmartInventory getSettingsProvider() {
         return SmartInventory.builder()
                 .provider(new SettingsProvider(this.disguise))
@@ -130,14 +120,6 @@ public class SimpleInventoryManager {
                 .build();
     }
 
-    public SmartInventory getCreatorProvider() {
-        return SmartInventory.builder()
-                .provider(new CreatorProvider(this.disguise))
-                .manager(this.inventoryManager)
-                .title(ChatColor.DARK_GRAY + "Disguise > Nick Creator")
-                .parent(this.getDisguiseSettings())
-                .build();
-    }
     public SmartInventory getAddSkinProvider(SkinPack pack) {
         return SmartInventory.builder()
                 .provider(new AddSkinProvider(this.disguise, pack))

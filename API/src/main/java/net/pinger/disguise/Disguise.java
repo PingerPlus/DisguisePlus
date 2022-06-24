@@ -5,7 +5,7 @@ import net.pinger.disguise.user.UserManager;
 
 public interface Disguise {
 
-    PacketProvider getPacketProvider();
+    PacketProvider<?> getPacketProvider();
 
     //
 

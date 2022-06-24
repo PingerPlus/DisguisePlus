@@ -3,7 +3,6 @@ package net.pinger.disguise.settings;
 import com.google.common.collect.Sets;
 import net.pinger.common.lang.Lists;
 import net.pinger.disguise.DisguisePlus;
-import net.pinger.disguise.nick.SimpleNickCreator;
 import net.pinger.disguise.settings.display.DisplaySettings;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -17,7 +16,6 @@ public class DisguiseSettings {
 
     private Set<String> disabledWorlds;
     private boolean online;
-    private SimpleNickCreator creator;
     private final DisplaySettings ds;
     private boolean update;
     private boolean metrics;
@@ -43,7 +41,6 @@ public class DisguiseSettings {
         this.max = Math.max(3, Math.max(this.max, 16));
 
         // Update classes
-        this.creator = SimpleNickCreator.createFrom(cfg.getString("nick.pattern"));
         this.ds = new DisplaySettings(cfg);
     }
 
@@ -229,16 +226,6 @@ public class DisguiseSettings {
     }
 
     /**
-     * Returns the nick creator.
-     *
-     * @return the nick creator
-     */
-
-    public SimpleNickCreator getCreator() {
-        return creator;
-    }
-
-    /**
      * Returns the display settings of this settings.
      *
      * @return the display settings
@@ -272,7 +259,6 @@ public class DisguiseSettings {
         cfg.set("disabled-worlds", Lists.newArrayList(this.disabledWorlds.toArray()));
 
         // Update nick creator
-        this.creator.saveToConfig(cfg);
         this.ds.saveToConfig(cfg);
         this.dp.saveConfig();
     }

@@ -42,35 +42,6 @@ public class DSProvider implements InventoryProvider {
         int state = contents.property("state", 0);
         contents.setProperty("state", state + 1);
 
-        List<String> dbl = Lists.newArrayList();
-        dbl.add(ChatColor.GRAY + "Click to edit the settings");
-
-        if (this.dp.getSQLDatabase().isDatabaseSetup()) {
-            dbl.add("");
-            dbl.add(ChatColor.GRAY + "Status: ");
-            dbl.add(ChatColor.YELLOW + "Already Connected");
-        }
-
-        // MySQL Database
-        ItemStack db = new ItemBuilder(FreshMaterial.ENDER_CHEST.toMaterial())
-                .setName(new TwoWayLoadingMask(ChatColor.YELLOW, ChatColor.GOLD).getMaskedString("Database", state))
-                .setLore(dbl)
-                .toItemStack();
-
-        contents.set(0, 5, ClickableItem.of(db, e -> {
-            Player p = (Player) e.getWhoClicked();
-
-            // Checking if they are OP and they can change the Database
-            if (!p.isOp())
-                return;
-
-            if (this.dp.getSQLDatabase().isDatabaseSetup()) {
-                return;
-            }
-
-            this.dp.getInventoryManager().getDatabaseProvider().open(p);
-        }));
-
         // Disabled World
         ItemStack dw = new ItemBuilder(FreshMaterial.OBSIDIAN.toMaterial())
                 .setName(new TwoWayLoadingMask(ChatColor.YELLOW, ChatColor.GOLD).getMaskedString("General Settings", state))
@@ -95,10 +66,6 @@ public class DSProvider implements InventoryProvider {
                 .setName(new TwoWayLoadingMask(ChatColor.DARK_AQUA, ChatColor.AQUA).getMaskedString("Nick Creator", state))
                 .setLore(ChatColor.AQUA + "Click " + ChatColor.GRAY + "to" + ChatColor.GOLD + " choose " + ChatColor.GRAY + "a custom pattern for your skins.")
                 .toItemStack();
-
-        contents.set(2, 4, ClickableItem.of(nc, e -> {
-            this.dp.getInventoryManager().getCreatorProvider().open((Player) e.getWhoClicked());
-        }));
 
         SimpleInventoryManager.addReturnButton(4, 4, contents);
     }

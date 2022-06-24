@@ -41,6 +41,7 @@ public class SkinImpl implements Skin {
      *
      * @return the value
      */
+
     @Override
     public String getValue() {
         return this.value;

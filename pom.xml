@@ -17,6 +17,7 @@
         <module>v1_17</module>
         <module>v1_16_4</module>
         <module>v1_16_2</module>
+        <module>v1_7_10</module>
     </modules>
 
     <dependencies>

@@ -21,7 +21,6 @@
 
 .idea
 /.idea
-/target/
 */target/**
 /mvn
 /target/lib

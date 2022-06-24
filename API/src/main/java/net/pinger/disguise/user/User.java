@@ -88,15 +88,6 @@ public interface User {
     boolean hasSkinApplied();
 
     /**
-     * This method attaches a certain statistic
-     * to this user.
-     *
-     * @param statistic the statistic
-     */
-
-    void setStatistic(Statistic statistic);
-
-    /**
      * Transforms the current user to a player.
      *
      * @return the player

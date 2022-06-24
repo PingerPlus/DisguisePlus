@@ -20,8 +20,6 @@
     <orderEntry type="library" name="Maven: fr.minuskube.inv:smart-invs:1.2.7" level="project" />
     <orderEntry type="library" name="Maven: com.tchristofferson:ConfigUpdater:1.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot:1.17.1-R0.1-SNAPSHOT" level="project" />
-    <orderEntry type="module" module-name="v1_17_1" />
-    <orderEntry type="module" module-name="v1_17" />
     <orderEntry type="library" name="Maven: net.pinger:Bukkit:1.1.9" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.28" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.6" level="project" />

@@ -42,37 +42,6 @@ public class GSProvider implements InventoryProvider {
         int state = contents.property("state", 0);
         contents.setProperty("state", state + 1);
 
-        // MySQL Database
-        List<String> dbl = Lists.newArrayList();
-        dbl.add(ChatColor.GRAY + "Click to edit the settings");
-
-        if (this.dp.getSQLDatabase().isDatabaseSetup()) {
-            dbl.add("");
-            dbl.add(ChatColor.GRAY + "Status: ");
-            dbl.add(ChatColor.YELLOW + "Already Connected");
-        }
-
-        // MySQL Database
-        ItemStack db = new ItemBuilder(FreshMaterial.ENDER_CHEST.toMaterial())
-                .setName(new TwoWayLoadingMask(ChatColor.YELLOW, ChatColor.GOLD).getMaskedString("Database", state))
-                .setLore(dbl)
-                .toItemStack();
-
-        contents.set(0, 5, ClickableItem.of(db, e -> {
-            Player p = (Player) e.getWhoClicked();
-
-            // Checking if they are OP and they can change the Database
-            if (!p.isOp())
-                return;
-
-            if (this.dp.getSQLDatabase().isDatabaseSetup()) {
-                return;
-            }
-
-            this.dp.getInventoryManager().getDatabaseProvider().open(p);
-        }));
-
-
         // Disabled World
         ItemStack dw = new ItemBuilder(FreshMaterial.OBSIDIAN.toMaterial())
                 .setName(new TwoWayLoadingMask(ChatColor.YELLOW, ChatColor.GOLD).getMaskedString("General Settings", state))
