@@ -1,8 +1,11 @@
 package net.pinger.disguiseplus;
 
+import net.pinger.disguise.Skin;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This class represents a factory holder for every skin that gets loaded
@@ -13,7 +16,7 @@ import java.util.List;
  *
  * Apart from this, do note that two skin packs can have the same name in two different categories, which is why
  * it is preferred to use {@link #getSkinPack(String, String)} where you need to specify the
- * category name, rather than {@link  #getSkinPack(String)}
+ * category name, rather than {@link #getSkinPack(String)}
  *
  * @since 2.0
  * @author Pinger
@@ -21,32 +24,9 @@ import java.util.List;
 
 public interface SkinFactory {
 
-    /**
-     * This method is used to retrieve a random skin
-     * from all the packs that can be found in the {@link #getSkinPacks()} method.
-     * <p>
-     * The retrieved skin can never be null, as we make sure that
-     * there is at least one backup skin at all times.
-     *
-     * @return the random skin
-     */
+    void createCategory(String category);
 
-    @Nonnull
-    Skin getRandomSkin();
-
-    /**
-     * This method retrieves a random skin from the
-     * specified category.
-     * <p>
-     * This method will return null if the category was not found,
-     * or if the category doesn't contain any skin packs with skins in it.
-     *
-     * @param category the category to search for
-     * @return the random skin
-     */
-
-    @Nullable
-    Skin getRandomSkin(String category);
+    void deleteSkinCategory(String category);
 
     /**
      * This method is used to retrieve a certain {@link SkinPack}
@@ -62,6 +42,10 @@ public interface SkinFactory {
 
     @Nullable
     SkinPack getSkinPack(String name);
+
+    SkinPack createSkinPack(String category, String name);
+
+    void deleteSkinPack(SkinPack pack);
 
     /**
      * This method is used to retrieve a certain {@link SkinPack}
@@ -94,4 +78,33 @@ public interface SkinFactory {
      */
 
     List<? extends SkinPack> getSkinPacks();
+
+    /**
+     * This method is used to retrieve a random skin
+     * from all the packs that can be found in the {@link #getSkinPacks()} method.
+     * <p>
+     * The retrieved skin can never be null, as we make sure that
+     * there is at least one backup skin at all times.
+     *
+     * @return the random skin
+     */
+
+    @Nonnull
+    Skin getRandomSkin();
+
+    /**
+     * This method retrieves a random skin from the
+     * specified category.
+     * <p>
+     * This method will return null if the category was not found,
+     * or if the category doesn't contain any skin packs with skins in it.
+     *
+     * @param category the category to search for
+     * @return the random skin
+     */
+
+    @Nullable
+    Skin getRandomSkin(String category);
+
+    Set<String> getCategories();
 }

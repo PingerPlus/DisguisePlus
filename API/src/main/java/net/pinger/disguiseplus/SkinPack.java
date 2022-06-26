@@ -1,5 +1,9 @@
 package net.pinger.disguiseplus;
 
+import com.google.gson.JsonArray;
+import net.pinger.disguise.Skin;
+
+import java.io.File;
 import java.util.List;
 
 /**
@@ -12,6 +16,12 @@ import java.util.List;
  */
 
 public interface SkinPack extends Iterable<Skin> {
+
+    void addSkin(Skin skin);
+
+    void removeSkin(Skin skin);
+
+    File getFile();
 
     /**
      * This method returns the unique name of this
@@ -43,5 +53,6 @@ public interface SkinPack extends Iterable<Skin> {
 
     List<Skin> getSkins();
 
+    JsonArray toJsonArray();
 
 }

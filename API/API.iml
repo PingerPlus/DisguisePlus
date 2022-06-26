@@ -13,10 +13,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot:1.16.4-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.bukkit:craftbukkit:1.7.10-R0.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: joda-time:joda-time:2.10.6" level="project" />
-    <orderEntry type="library" name="Maven: net.pinger:Bukkit:1.1.9" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.28" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.28" level="project" />
-    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.6" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.pinger.disguise:API:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-simple:1.7.36" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-api:1.7.36" level="project" />
   </component>
 </module>

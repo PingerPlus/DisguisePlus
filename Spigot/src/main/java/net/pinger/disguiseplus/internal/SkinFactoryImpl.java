@@ -3,13 +3,8 @@ package net.pinger.disguiseplus.internal;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.pinger.common.file.Reader;
-import net.pinger.common.http.HttpRequest;
-import net.pinger.common.http.HttpResponse;
-import net.pinger.common.http.request.HttpGetRequest;
-import net.pinger.common.lang.Lists;
+import net.pinger.disguise.Skin;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.exceptions.SkinCloudDownloadException;
 import net.pinger.disguiseplus.skin.loader.SkinPackLoader;
 import net.pinger.disguiseplus.utils.HttpUtil;
 import net.pinger.disguiseplus.utils.ReferenceUtil;
@@ -33,11 +28,8 @@ public class SkinFactoryImpl implements SkinFactory {
     private static final Logger logger = LoggerFactory.getLogger("SkinFactory");
 
     // The list of skins
-    private final List<Skin> skins = Lists.newArrayList();
-    private final List<net.pinger.disguiseplus.SkinPack> skinPacks = Lists.newArrayList();
-
-    // Categorized skins
-    private final Map<String, List<net.pinger.disguiseplus.SkinPack>> categorySkins = new TreeMap<>();
+    private final List<SkinPack> skinPacks = new ArrayList<>();
+    private final Map<String, List<SkinPack>> categorySkins = new TreeMap<>();
 
     // The disguise instance
     private final DisguisePlus dp;
@@ -50,53 +42,104 @@ public class SkinFactoryImpl implements SkinFactory {
         this.retrieveSkinPacks();
     }
 
-    private void retrieveFromCloud() {
-        long time = System.currentTimeMillis();
+    @Override
+    public void createCategory(String category) {
+        this.categorySkins.put(category, new ArrayList<>());
+    }
 
-        int size = this.skins.size();
+    @Override
+    public void deleteSkinCategory(String category) {
+        this.categorySkins.remove(category);
+    }
 
-        // Clear it every time
-        this.skins.clear();
+    @Override
+    public SkinPack createSkinPack(String category, String name) {
+        return new SkinPackImpl(null, category, name, new ArrayList<>());
+    }
 
-        File data = new File(this.dp.getDataFolder(), "data");
-        if (!data.exists())
-            data.mkdirs();
+    @Override
+    public void deleteSkinPack(SkinPack pack) {
 
-        // Create the load file
-        File load = new File(data, "skins.json");
+    }
 
-        try {
-            HttpRequest request = new HttpGetRequest(HttpUtil.CLOUD_URL);
-            HttpResponse response = request.connect();
-
-                // Check if the response is valid
-            if (response.getResponse().isEmpty()) {
-                if (load.length() <= 1)
-                    throw new SkinCloudDownloadException();
-                else
-                    this.retrieveFromFile(load);
-            }
-
-            JsonArray array = this.dp.getGson().fromJson(response.getResponse(), JsonArray.class);
-
-            // Write to the backup file
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(load))) {
-                writer.write(this.dp.getGson().toJson(array));
-            }
-                // Saving it here
-            for (JsonElement skin : array) {
-                this.skins.add(SkinUtil.getFromJson(skin.getAsJsonObject()));
-            }
-
-            if (this.skins.size() > size) {
-                logger.info("Successfully downloaded " + (this.skins.size() - size) + " skins from the cloud!");
-                logger.info(String.format("Time: %sms", System.currentTimeMillis() - time));
-            }
-
-        } catch (Exception e) {
-            logger.error("Failed to load skins from the cloud: ");
-            logger.error(e.getMessage());
+    @Nullable
+    @Override
+    public SkinPack getSkinPack(String name) {
+        for (SkinPack pack : this.getSkinPacks()) {
+            if (pack.getName().equalsIgnoreCase(name))
+                return pack;
         }
+
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public SkinPack getSkinPack(String category, String name) {
+        for (SkinPack pack : this.getSkinPacks(category)) {
+            if (pack.getName().equalsIgnoreCase(name))
+                return pack;
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<? extends SkinPack> getSkinPacks(String category) {
+        return this.categorySkins.getOrDefault(category, new ArrayList<>());
+    }
+
+    @Override
+    public List<? extends SkinPack> getSkinPacks() {
+        return this.skinPacks;
+    }
+
+    @Override @Nonnull
+    public Skin getRandomSkin() {
+        // Get random skin pack first
+        int packIndex = new Random().nextInt(this.skinPacks.size());
+        SkinPack pack = this.skinPacks.get(packIndex);
+
+        // We're avoiding IndexOutOfBoundException here
+        // By waiting for index
+        if (pack.getSkins().isEmpty()) {
+            return null;
+        }
+
+        // Load the index
+        int skinIndex = new Random().nextInt(pack.getSkins().size());
+        return pack.getSkins().get(skinIndex);
+    }
+
+    @Override
+    public Skin getRandomSkin(String category) {
+        List<SkinPack> packs = this.categorySkins.get(category);
+
+        if (packs == null || packs.isEmpty()) {
+            return null;
+        }
+
+        int index = new Random().nextInt(packs.size());
+        SkinPack pack = packs.get(index);
+
+        // Check if the pack has any skins
+        // We have to check this for the NullPointerException
+        if (pack.getSkins().isEmpty()) {
+            return null;
+        }
+
+        // Get the second
+        // Random index
+        int secondIndex = new Random().nextInt(pack.getSkins().size());
+
+        // Return that
+        // Second skin pack
+        return pack.getSkins().get(secondIndex);
+    }
+
+    @Override
+    public Set<String> getCategories() {
+        return this.categorySkins.keySet();
     }
 
     private void retrieveSkinPacks() {
@@ -205,85 +248,6 @@ public class SkinFactoryImpl implements SkinFactory {
         logger.info("Successfully loaded " + skins.size() + " from the backup file!");
     }
 
-    public void createCategory(String category) {
-        this.categorySkins.putIfAbsent(category, Lists.newArrayList());
-    }
-
-    public void createSkinPack(String category, net.pinger.disguiseplus.SkinPack pack) {
-        this.skinPacks.add(pack);
-
-        // Add to category
-        this.categorySkins.get(category).add(pack);
-    }
-
-    @Override @Nonnull
-    public Skin getRandomSkin() {
-        return this.skins.get(new Random().nextInt(this.skins.size()));
-    }
-
-    @Override
-    public Skin getRandomSkin(String category) {
-        List<net.pinger.disguiseplus.SkinPack> packs = this.categorySkins.get(category);
-
-        if (packs == null || packs.isEmpty()) {
-            return null;
-        }
-
-        int index = new Random().nextInt(packs.size());
-        net.pinger.disguiseplus.SkinPack pack = packs.get(index);
-
-        // Check if the pack has any skins
-        // We have to check this for the NullPointerException
-        if (pack.getSkins().isEmpty()) {
-            return null;
-        }
-
-        // Get the second
-        // Random index
-        int secondIndex = new Random().nextInt(pack.getSkins().size());
-
-        // Return that
-        // Second skin pack
-        return pack.getSkins().get(secondIndex);
-    }
-
-    @Nullable
-    @Override
-    public net.pinger.disguiseplus.SkinPack getSkinPack(String name) {
-        for (net.pinger.disguiseplus.SkinPack pack : this.getSkinPacks()) {
-            if (pack.getName().equalsIgnoreCase(name))
-                return pack;
-        }
-
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public net.pinger.disguiseplus.SkinPack getSkinPack(String category, String name) {
-        for (net.pinger.disguiseplus.SkinPack pack : this.getSkinPacks(category)) {
-            if (pack.getName().equalsIgnoreCase(name))
-                return pack;
-        }
-
-        return null;
-    }
-
-
-    @Override
-    public List<? extends net.pinger.disguiseplus.SkinPack> getSkinPacks(String category) {
-        return this.categorySkins.getOrDefault(category, Lists.newArrayList());
-    }
-
-    @Override
-    public List<? extends net.pinger.disguiseplus.SkinPack> getSkinPacks() {
-        return this.skinPacks;
-    }
-
-    public Set<String> getSkinCategories() {
-        return this.categorySkins.keySet();
-    }
-
     /**
      * This method saves the entire skin factory to the local server for faster retrieval.
      *
@@ -333,17 +297,17 @@ public class SkinFactoryImpl implements SkinFactory {
         }
     }
 
-    public boolean deleteSkinPack(SkinPack pack) {
-        SkinPackImpl converted = (SkinPackImpl) pack;
-
-        // Remove from the target files
-        this.categorySkins.get(pack.getCategory()).remove(pack);
-        this.skinPacks.remove(pack);
-
-        if (converted.getBase() == null || !converted.getBase().exists()) {
-            return true;
-        }
-
-        return converted.delete();
-    }
+//    public boolean deleteSkinPack(SkinPack pack) {
+//        SkinPackImpl converted = (SkinPackImpl) pack;
+//
+//        // Remove from the target files
+//        this.categorySkins.get(pack.getCategory()).remove(pack);
+//        this.skinPacks.remove(pack);
+//
+//        if (converted.getBase() == null || !converted.getBase().exists()) {
+//            return true;
+//        }
+//
+//        return converted.delete();
+//    }
 }

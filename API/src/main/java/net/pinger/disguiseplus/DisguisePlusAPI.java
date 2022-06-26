@@ -1,7 +1,5 @@
 package net.pinger.disguiseplus;
 
-import net.pinger.disguise.packet.PacketProvider;
-
 public class DisguisePlusAPI {
 
     private static Disguise disguise;
@@ -25,16 +23,6 @@ public class DisguisePlusAPI {
         }
 
         DisguisePlusAPI.disguise = disguise;
-    }
-
-    /**
-     * Returns the packet that corresponds to the version of the server.
-     *
-     * @return the packet
-     */
-
-    public static PacketProvider<?> getPacketProvider() {
-        return disguise.getPacketProvider();
     }
 
     /**
