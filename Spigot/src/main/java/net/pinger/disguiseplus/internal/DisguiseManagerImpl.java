@@ -4,7 +4,6 @@ import net.pinger.disguiseplus.DisguiseManager;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.DisguisePlusAPI;
 import net.pinger.disguiseplus.exceptions.InvalidUserException;
-import net.pinger.disguiseplus.fetcher.NickFetcher;
 import net.pinger.disguiseplus.fetcher.SkinFetcher;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguiseplus.user.User;

@@ -1,5 +1,6 @@
 package net.pinger.disguiseplus.user;
 
+import net.pinger.disguise.Skin;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
