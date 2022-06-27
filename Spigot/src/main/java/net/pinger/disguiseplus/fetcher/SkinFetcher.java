@@ -8,7 +8,6 @@ import net.pinger.common.http.request.HttpPostRequest;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.exceptions.InvalidUrlException;
 import net.pinger.disguiseplus.utils.HttpUtil;
-import net.pinger.disguiseplus.utils.ReferenceUtil;
 import net.pinger.disguiseplus.utils.SkinUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;

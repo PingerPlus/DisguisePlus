@@ -13,7 +13,6 @@ import net.pinger.disguiseplus.SkinPack;
 import net.pinger.disguiseplus.exception.DownloadFailedException;
 import net.pinger.disguiseplus.exception.SaveFailedException;
 import net.pinger.disguiseplus.utils.HttpUtil;
-import net.pinger.disguiseplus.utils.ReferenceUtil;
 import net.pinger.disguiseplus.utils.SkinUtil;
 
 import javax.annotation.Nullable;
