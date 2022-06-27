@@ -299,7 +299,47 @@ public class SkinFactoryImpl implements SkinFactory {
 
     @Override
     public void saveSkins() throws SaveFailedException {
+        try {
+            // Object that will later be converted
+            // Or rather saved in the categories.json file
+            JsonObject categories = new JsonObject();
 
+            // Loop through each category
+            for (Map.Entry<String, List<SkinPack>> category : this.categorySkins.entrySet()) {
+                // Make a json array for each category
+                JsonArray packArray = new JsonArray();
+
+                // Get the category directory
+                File categoryDir = new File(getFile(), category.getKey());
+
+                // Loop through each skin category
+                for (SkinPack skinPack : category.getValue()) {
+                    // Get the pack directory
+                    File packDir = new File(categoryDir, skinPack.getName());
+
+                    // Get the json file
+                    File packFile = new File(packDir, "pack.json");
+//                    packFile.mkdirs();
+
+                    // Save the files
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(packFile))) {
+                        writer.write(DisguisePlus.GSON.toJson(skinPack, SkinPack.class));
+                    }
+
+                    // Add to the array
+                    packArray.add(skinPack.getName());
+                }
+
+                categories.add(category.getKey(), packArray);
+            }
+
+            // Save the categories.json file
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(getCategoriesFile()))) {
+                writer.write(DisguisePlus.GSON.toJson(categories));
+            }
+        } catch (Exception e) {
+            throw new SaveFailedException("Failed to save skins from the skin cache", e);
+        }
     }
 
     @Override
@@ -310,94 +350,5 @@ public class SkinFactoryImpl implements SkinFactory {
     @Override
     public File getCategoriesFile() {
         return this.categoriesFile;
-    }
-
-    private void retrieveSkinPacks() {
-        long time = System.currentTimeMillis();
-        this.skinPacks.clear();
-
-        // Retrieve first from the categories.json
-        File categories = new File(this.file, "categories.json");
-
-        if (categories.exists() && categories.length() >= 1) {
-            this.retrievePacksLocally(categories);
-        }
-
-        DisguisePlus.getOutput().info(String.format("Successfully retrieved %s skins within %s skin packs.", skinPacks.stream().mapToInt(skins -> skins.getSkins().size()).sum(), skinPacks.size()));
-        DisguisePlus.getOutput().info(String.format("Time: %sms", System.currentTimeMillis() - time));
-
-        // Get the skins sorted throughout this category
-        skinPacks.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
-    }
-
-    private void retrievePacksLocally(File f) {
-        // Load from the categories.json
-        JsonObject categories = DisguisePlus.GSON.fromJson(new FileReader(f), JsonObject.class);
-
-        for (Map.Entry<String, JsonElement> category : categories.entrySet()) {
-            for (JsonElement element : category.getValue().getAsJsonArray()) {
-                // The file
-                File result = new File(new File(new File(getFile(), category.getKey()), element.getAsString()), "data.json");
-
-
-
-//                net.pinger.disguiseplus.SkinPack pack = this.createSkinPack(category.getKey(), element.getAsString(), result);
-
-                if (pack == null)
-                    continue;
-
-                this.skinPacks.add(pack);
-            }
-        }
-    }
-
-
-    /**
-     * This method saves the entire skin factory to the local server for faster retrieval.
-     *
-     * @author Pinger
-     * @since 2.0.0
-     */
-
-    public void saveLocally() {
-        File base = new File(new File(this.dp.getDataFolder(), "data"), "categories");
-        base.mkdirs();
-
-        JsonObject obj = new JsonObject();
-
-        for (Map.Entry<String, List<net.pinger.disguiseplus.SkinPack>> pack : this.categorySkins.entrySet()) {
-            // Add for each category
-            JsonArray array = new JsonArray();
-
-            // Create a new file for this category
-            File dir = new File(base, pack.getKey());
-            dir.mkdirs();
-
-            // Now create a folder for each pack
-            for (net.pinger.disguiseplus.SkinPack sp : pack.getValue()) {
-                File pf = new File(dir, sp.getName());
-                pf.mkdirs();
-
-                // Also create the data file and store it
-                File data = new File(pf, "data.json");
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(data))) {
-                    writer.write(ReferenceUtil.GSON.toJson(((SkinPackImpl) sp).toJsonArray()));
-                } catch (IOException e) {
-                    logger.error("Failed to save data within the pack -> ", e);
-                    logger.error(e.getMessage());
-                }
-
-                array.add(sp.getName());
-            }
-
-            obj.add(pack.getKey(), array);
-        }
-
-        File categories = new File(base, "categories.json");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(categories))) {
-            writer.write(ReferenceUtil.GSON.toJson(obj));
-        } catch (IOException e) {
-            logger.error("Failed to save the categories.json file", e);
-        }
     }
 }
