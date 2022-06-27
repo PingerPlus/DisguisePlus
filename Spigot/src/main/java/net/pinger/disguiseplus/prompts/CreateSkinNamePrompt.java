@@ -1,4 +1,4 @@
-package net.pinger.disguiseplus.prompts.packs;
+package net.pinger.disguiseplus.prompts;
 
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.fetcher.SkinFetcher;

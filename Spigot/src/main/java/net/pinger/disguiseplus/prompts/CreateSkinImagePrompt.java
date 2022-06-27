@@ -1,4 +1,4 @@
-package net.pinger.disguiseplus.prompts.packs;
+package net.pinger.disguiseplus.prompts;
 
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.fetcher.SkinFetcher;
@@ -9,8 +9,6 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class CreateSkinImagePrompt extends StringPrompt {
 

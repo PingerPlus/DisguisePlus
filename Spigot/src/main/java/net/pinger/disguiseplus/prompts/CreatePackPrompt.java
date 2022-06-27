@@ -1,4 +1,4 @@
-package net.pinger.disguiseplus.prompts.packs;
+package net.pinger.disguiseplus.prompts;
 
 import net.pinger.common.lang.Lists;
 import net.pinger.disguiseplus.DisguisePlus;

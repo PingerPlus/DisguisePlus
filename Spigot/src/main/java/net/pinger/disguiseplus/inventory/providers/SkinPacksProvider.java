@@ -11,7 +11,7 @@ import net.pinger.bukkit.item.mask.impl.TwoWayLoadingMask;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
 import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
-import net.pinger.disguiseplus.prompts.packs.CreateCategoryPrompt;
+import net.pinger.disguiseplus.prompts.CreateCategoryPrompt;
 import net.pinger.disguiseplus.SkinPack;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

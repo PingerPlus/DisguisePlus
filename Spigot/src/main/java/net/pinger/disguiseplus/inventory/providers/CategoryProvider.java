@@ -10,7 +10,7 @@ import net.pinger.bukkit.item.ItemBuilder;
 import net.pinger.bukkit.item.mask.impl.TwoWayLoadingMask;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
-import net.pinger.disguiseplus.prompts.packs.CreatePackPrompt;
+import net.pinger.disguiseplus.prompts.CreatePackPrompt;
 import net.pinger.disguiseplus.SkinFactory;
 import net.pinger.disguiseplus.SkinPack;
 import org.bukkit.ChatColor;
