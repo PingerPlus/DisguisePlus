@@ -15,11 +15,13 @@ import java.util.List;
  * @since 2.0
  */
 
-public interface SkinPack extends Iterable<Skin> {
+public interface SkinPack extends Iterable<Skin>, Comparable<SkinPack> {
 
     void addSkin(Skin skin);
 
     void removeSkin(Skin skin);
+
+    boolean isCustomSkinPack();
 
     File getFile();
 

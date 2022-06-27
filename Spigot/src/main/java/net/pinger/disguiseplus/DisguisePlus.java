@@ -1,5 +1,7 @@
 package net.pinger.disguiseplus;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguiseplus.executors.DisguisePlusExecutor;
 import net.pinger.disguiseplus.file.configuration.BaseConfiguration;
@@ -11,7 +13,8 @@ import net.pinger.disguiseplus.internal.user.UserImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
 import net.pinger.disguiseplus.utils.ConversationUtil;
 import org.bukkit.plugin.java.JavaPlugin;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
@@ -19,10 +22,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     private static final Logger logger = LoggerFactory.getLogger("DisguisePlus");
 
-    private final Gson gson = new GsonBuilder()
-            .enableComplexMapKeySerialization()
-            .setPrettyPrinting()
-            .create();
+    // Gson
+    public static Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
 
     private BaseConfiguration configuration;
     private SkinFactoryImpl skinFactory;
@@ -42,18 +43,9 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         // Load the config
         this.addDefaultConfig();
 
-        try {
-            this.provider = PacketContext.getCorrespondingProvider();
-        } catch (Exception e) {
-            logger.error(" ", e);
-
-            // Disable this plugin
-            this.getPluginLoader().disablePlugin(this);
-        }
-
         this.conversationUtil = new ConversationUtil(this);
         this.inventoryManager = new SimpleInventoryManager(this);
-        this.skinFactory = new SkinFactoryImpl(this);
+        this.skinFactory = new SkinFactoryImpl(this, getConfig().getBoolean("downloadBaseSkins"));
         this.configuration = new BaseConfiguration(this);
         this.sum = new UserManagerImpl(this);
 
@@ -134,10 +126,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         return inventoryManager;
     }
 
-    public Gson getGson() {
-        return gson;
-    }
-
     public DisguiseSettings getSettings() {
         return settings;
     }
@@ -145,4 +133,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     public BaseConfiguration getConfiguration() {
         return configuration;
     }
+
+    public static Logger getOutput() {
+        return logger;
+    }
+
+
 }

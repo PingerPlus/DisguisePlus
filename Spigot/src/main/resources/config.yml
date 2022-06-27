@@ -103,3 +103,8 @@ mysql:
 disabled-worlds:
   - nether
 
+
+# Whether the plugin should download default Skin Packs
+# If set to false, they will not be included
+# Also will not cache them even if they are stored within the local files
+downloadBaseSkins: true

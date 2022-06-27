@@ -1,9 +1,13 @@
 package net.pinger.disguiseplus;
 
 import net.pinger.disguise.Skin;
+import net.pinger.disguiseplus.exception.DownloadFailedException;
+import net.pinger.disguiseplus.exception.SaveFailedException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -28,6 +32,16 @@ public interface SkinFactory {
 
     void deleteSkinCategory(String category);
 
+    SkinPack createSkinPack(String category, String name, List<Skin> skins, boolean custom);
+
+    SkinPack createSkinPack(String category, String name, List<Skin> skins);
+
+    SkinPack createSkinPack(String category, String name, boolean custom);
+
+    SkinPack createSkinPack(String category, String name);
+
+    void deleteSkinPack(SkinPack pack);
+
     /**
      * This method is used to retrieve a certain {@link SkinPack}
      * with a specific name.
@@ -42,10 +56,6 @@ public interface SkinFactory {
 
     @Nullable
     SkinPack getSkinPack(String name);
-
-    SkinPack createSkinPack(String category, String name);
-
-    void deleteSkinPack(SkinPack pack);
 
     /**
      * This method is used to retrieve a certain {@link SkinPack}
@@ -67,7 +77,6 @@ public interface SkinFactory {
      * @return the skin pack
      */
 
-    @Nullable
     List<? extends SkinPack> getSkinPacks(String category);
 
     /**
@@ -79,17 +88,7 @@ public interface SkinFactory {
 
     List<? extends SkinPack> getSkinPacks();
 
-    /**
-     * This method is used to retrieve a random skin
-     * from all the packs that can be found in the {@link #getSkinPacks()} method.
-     * <p>
-     * The retrieved skin can never be null, as we make sure that
-     * there is at least one backup skin at all times.
-     *
-     * @return the random skin
-     */
-
-    @Nonnull
+    @Nullable
     Skin getRandomSkin();
 
     /**
@@ -107,4 +106,12 @@ public interface SkinFactory {
     Skin getRandomSkin(String category);
 
     Set<String> getCategories();
+
+    void downloadSkins() throws DownloadFailedException;
+
+    void saveSkins() throws SaveFailedException;
+
+    File getFile();
+
+    File getCategoriesFile();
 }

@@ -7,7 +7,6 @@ import net.pinger.common.http.request.HttpGetRequest;
 import net.pinger.common.http.request.HttpPostRequest;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.exceptions.InvalidUrlException;
-import net.pinger.disguiseplus.skin.SkinQueue;
 import net.pinger.disguiseplus.utils.HttpUtil;
 import net.pinger.disguiseplus.utils.ReferenceUtil;
 import net.pinger.disguiseplus.utils.SkinUtil;
