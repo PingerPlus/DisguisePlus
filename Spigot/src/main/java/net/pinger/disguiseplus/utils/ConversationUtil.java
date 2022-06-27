@@ -31,6 +31,15 @@ public class ConversationUtil {
         this.createConversation(player, prompt, 10);
     }
 
+    /**
+     * This method creates a conversation for a certain player
+     * with a specific timeout.
+     *
+     * @param player the player
+     * @param prompt the prompt
+     * @param timeout the timeout
+     */
+
     public void createConversation(Player player, Prompt prompt, int timeout) {
         Conversation conversation = this.factory.withFirstPrompt(prompt)
                 .withLocalEcho(false)
