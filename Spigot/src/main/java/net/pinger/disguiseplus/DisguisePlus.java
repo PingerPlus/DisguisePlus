@@ -8,7 +8,6 @@ import net.pinger.disguiseplus.file.configuration.BaseConfiguration;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
 import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
 import net.pinger.disguiseplus.listeners.LoginListener;
-import net.pinger.disguiseplus.settings.DisguiseSettings;
 import net.pinger.disguiseplus.internal.user.UserImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
 import net.pinger.disguiseplus.utils.ConversationUtil;
@@ -29,7 +28,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private SkinFactoryImpl skinFactory;
     private ConversationUtil conversationUtil;
     private SimpleInventoryManager inventoryManager;
-    private DisguiseSettings settings = new DisguiseSettings(this);
     private final SkullManager skullManager = new SkullManager();
     private UserManagerImpl sum;
 
