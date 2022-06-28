@@ -4,10 +4,8 @@ import net.pinger.disguise.Skin;
 import net.pinger.disguiseplus.exception.DownloadFailedException;
 import net.pinger.disguiseplus.exception.SaveFailedException;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 

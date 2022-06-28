@@ -57,6 +57,14 @@ public class SkinFactoryImpl implements SkinFactory {
 
     @Override
     public SkinPack createSkinPack(String category, String name, List<Skin> skins, boolean custom) {
+        // Edge case
+        // Where we do not create new skin packs
+        // If already the same name exists in the given category
+        if (getSkinPack(category, name) != null) {
+            return null;
+        }
+
+        // Create the new implementation instance
         SkinPack pack = new SkinPackImpl(null, category, name, skins, custom);
 
         // We do not cache skin packs when they are not custom

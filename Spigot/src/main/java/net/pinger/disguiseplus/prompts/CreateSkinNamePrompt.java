@@ -1,7 +1,6 @@
 package net.pinger.disguiseplus.prompts;
 
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.fetcher.SkinFetcher;
 import net.pinger.disguiseplus.internal.SkinPackImpl;
 import net.pinger.disguiseplus.SkinPack;
 import net.pinger.disguiseplus.user.User;

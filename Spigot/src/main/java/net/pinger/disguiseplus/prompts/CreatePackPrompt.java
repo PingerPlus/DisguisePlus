@@ -1,16 +1,16 @@
 package net.pinger.disguiseplus.prompts;
 
-import net.pinger.common.lang.Lists;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.internal.SkinFactoryImpl;
+import net.pinger.disguiseplus.SkinFactory;
 import net.pinger.disguiseplus.internal.SkinPackImpl;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class CreatePackPrompt extends StringPrompt {
 
@@ -22,22 +22,23 @@ public class CreatePackPrompt extends StringPrompt {
         this.category = category;
     }
 
-    @Override
-    public @NotNull String getPromptText(@NotNull ConversationContext conversationContext) {
+    @Override @Nonnull
+    public String getPromptText(@Nonnull ConversationContext conversationContext) {
         return this.dm.getConfiguration().of("skin-packs.create");
     }
 
-    @Override
-    public @Nullable Prompt acceptInput(@NotNull ConversationContext conversationContext, @Nullable String s) {
+    @Override @Nullable
+    public Prompt acceptInput(@Nonnull ConversationContext conversationContext, @Nullable String s) {
         Player p = (Player) conversationContext.getForWhom();
         User user = this.dm.getUserManager().getUser(p);
-        SkinFactoryImpl factory = (SkinFactoryImpl) this.dm.getSkinFactory();
+        SkinFactory factory = this.dm.getSkinFactory();
 
-        if (s.isEmpty()) {
+
+        if (s == null) {
             return this;
         }
 
-        if (factory.getSkinPack(s) != null && factory.getSkinPack(s).getCategory().equalsIgnoreCase(this.category))
+        if (factory.getSkinPack(category, s) != null)
             return this;
 
         factory.createSkinPack(this.category, new SkinPackImpl(null, this.category, s, Lists.newArrayList()));
