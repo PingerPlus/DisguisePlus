@@ -1,7 +1,7 @@
 package net.pinger.disguiseplus.prompts;
 
+import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.internal.SkinPackImpl;
 import net.pinger.disguiseplus.SkinPack;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.conversations.ConversationContext;
@@ -9,10 +9,13 @@ import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class CreateSkinImagePrompt extends StringPrompt {
 
     private final DisguisePlus dp;
-    private final net.pinger.disguiseplus.SkinPack pack;
+    private final SkinPack pack;
 
     public CreateSkinImagePrompt(DisguisePlus dp, SkinPack pack) {
         this.dp = dp;
@@ -20,34 +23,37 @@ public class CreateSkinImagePrompt extends StringPrompt {
     }
 
     @Override
-    public @NotNull String getPromptText(@NotNull ConversationContext conversationContext) {
+    @Nonnull
+    public String getPromptText(@Nonnull ConversationContext conversationContext) {
         return this.dp.getConfiguration().of("skins.image-url");
     }
 
     @Override
-    public @Nullable Prompt acceptInput(@NotNull ConversationContext conversationContext, @Nullable String s) {
+    @Nullable
+    public Prompt acceptInput(@Nonnull ConversationContext conversationContext, @Nullable String s) {
         Player p = (Player) conversationContext.getForWhom();
         User user = this.dp.getUserManager().getUser(p.getUniqueId());
 
-        if (s.isEmpty())
+        if (s == null) {
             return this;
+        }
 
-        SkinPackImpl simple = (SkinPackImpl) pack;
+        DisguiseAPI.getSkinManager().getFromImage(s, skin -> {
+            if (!skin.success()) {
+                user.sendRawMessage("skins.error-url");
+                return;
+            }
 
-        // Add the skin
-        SkinFetcher.catchSkin(s, skin -> {
-            simple.addSkin(skin);
-            user.sendRawMessage("skins.success-url", s);
+            // Add the skin if there was no error
+            pack.addSkin(skin.get());
 
-            // Reopen the inv
-            this.dp.getInventoryManager().getExactPackProvider(this.pack).open(p);
-        }, err -> {
-            user.sendRawMessage("skins.error-url", s);
-
-            // Reopen the inv
-            this.dp.getInventoryManager().getExactPackProvider(this.pack).open(p);
+            // Send the success message
+            user.sendRawMessage("skins.success-url");
         });
 
+        // Reopen the inventory
+        // For this player
+        this.dp.getInventoryManager().getExactPackProvider(pack).open(p);
         return Prompt.END_OF_CONVERSATION;
     }
 }

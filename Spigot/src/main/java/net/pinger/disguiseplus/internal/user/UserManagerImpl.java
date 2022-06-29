@@ -1,6 +1,5 @@
 package net.pinger.disguiseplus.internal.user;
 
-import net.pinger.common.lang.Maps;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.user.User;
 import net.pinger.disguiseplus.user.UserManager;
@@ -12,7 +11,7 @@ import java.util.*;
 public class UserManagerImpl implements UserManager {
 
     private final DisguisePlus dp;
-    private final Map<UUID, UserImpl> users = Maps.newHashMap();
+    private final Map<UUID, UserImpl> users = new HashMap<>();
 
     public UserManagerImpl(DisguisePlus dp) {
         this.dp = dp;
@@ -27,12 +26,12 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
-    public net.pinger.disguiseplus.user.User getUser(UUID id) {
+    public User getUser(UUID id) {
         return this.users.get(id);
     }
 
     @Override
-    public net.pinger.disguiseplus.user.User getUser(Player player) {
+    public User getUser(Player player) {
         return this.users.get(player.getUniqueId());
     }
 
@@ -41,8 +40,8 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
-    public List<? extends net.pinger.disguiseplus.user.User> getOnlinePlayers() {
-        List<net.pinger.disguiseplus.user.User> users = new LinkedList<>();
+    public List<? extends User> getOnlinePlayers() {
+        List<User> users = new LinkedList<>();
 
         // Loop through the players
         for (Player p : Bukkit.getOnlinePlayers()) {

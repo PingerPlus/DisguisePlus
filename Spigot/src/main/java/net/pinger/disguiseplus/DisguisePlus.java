@@ -10,7 +10,9 @@ import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
 import net.pinger.disguiseplus.listeners.LoginListener;
 import net.pinger.disguiseplus.internal.user.UserImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
+import net.pinger.disguiseplus.user.UserManager;
 import net.pinger.disguiseplus.utils.ConversationUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +32,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private SimpleInventoryManager inventoryManager;
     private final SkullManager skullManager = new SkullManager();
     private UserManagerImpl sum;
-
-    private PacketProvider<?> provider;
 
     @Override
     public void onEnable() {
@@ -79,10 +79,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             this.conversationUtil.cancelAllConversations();
         }
 
-        if (this.settings != null) {
-            this.getSettings().saveConfig();
-        }
-
         logger.info("Successfully saved all local settings.");
 
         if (this.skinFactory != null) {
@@ -122,10 +118,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     public SimpleInventoryManager getInventoryManager() {
         return inventoryManager;
-    }
-
-    public DisguiseSettings getSettings() {
-        return settings;
     }
 
     public BaseConfiguration getConfiguration() {

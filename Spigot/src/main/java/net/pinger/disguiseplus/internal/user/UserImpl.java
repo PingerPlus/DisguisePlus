@@ -1,5 +1,6 @@
 package net.pinger.disguiseplus.internal.user;
 
+import net.pinger.disguise.Skin;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.Bukkit;

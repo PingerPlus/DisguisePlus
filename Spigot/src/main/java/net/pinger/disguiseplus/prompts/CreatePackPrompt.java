@@ -33,7 +33,6 @@ public class CreatePackPrompt extends StringPrompt {
         User user = this.dm.getUserManager().getUser(p);
         SkinFactory factory = this.dm.getSkinFactory();
 
-
         if (s == null) {
             return this;
         }

@@ -1,5 +1,7 @@
 package net.pinger.disguiseplus.prompts;
 
+import net.pinger.disguise.DisguiseAPI;
+import net.pinger.disguise.Skin;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.internal.SkinPackImpl;
 import net.pinger.disguiseplus.SkinPack;
@@ -8,8 +10,9 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class CreateSkinNamePrompt extends StringPrompt {
 
@@ -22,19 +25,24 @@ public class CreateSkinNamePrompt extends StringPrompt {
     }
 
     @Override
-    public @NotNull String getPromptText(@NotNull ConversationContext conversationContext) {
+    @Nonnull
+    public String getPromptText(@Nonnull ConversationContext conversationContext) {
         return this.dp.getConfiguration().of("skins.player-name");
     }
 
     @Override
-    public @Nullable Prompt acceptInput(@NotNull ConversationContext conversationContext, @Nullable String s) {
+    @Nullable
+    public Prompt acceptInput(@Nonnull ConversationContext conversationContext, @Nullable String s) {
         Player p = (Player) conversationContext.getForWhom();
         User user = this.dp.getUserManager().getUser(p);
 
-        if (s.isEmpty())
+        // Check if input is empty
+        if (s == null) {
             return this;
+        }
 
-        Skin skin = SkinFetcher.getSkin(s);
+        // Fetch skin here
+        Skin skin = null;
 
         if (skin == null) {
             user.sendRawMessage("skins.error-name", s);
