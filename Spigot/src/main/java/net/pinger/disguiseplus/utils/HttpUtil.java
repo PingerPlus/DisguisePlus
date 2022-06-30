@@ -7,18 +7,6 @@ import java.util.UUID;
 public class HttpUtil {
 
     /**
-     * The cloud url where the skins are downloaded from
-     */
-
-    public static final String CLOUD_URL = "https://raw.githubusercontent.com/ITSPINGER/Skins/master/SkinDatabase/src/main/resources/skins.json";
-
-    /**
-     * The link to the mojang servers where the skin information is downloaded from
-     */
-
-    private static final String MOJANG_URL = "https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false";
-
-    /**
      * The link to retrieve a uuid of a player
      */
 
@@ -52,18 +40,6 @@ public class HttpUtil {
 
     public static String toMojangUrl(String s) {
         return String.format(MOJANG_NAME_URL, s);
-    }
-
-    /**
-     * Returns a {@link String} which represents a formatted url to the mojang servers.
-     * It specifically formats the {@link HttpUtil#MOJANG_URL} with the specified uuid.
-     *
-     * @param uuid the uuid of the player
-     * @return the formatted string
-     */
-
-    public static String toMojangUrl(UUID uuid) {
-        return String.format(MOJANG_URL, uuid);
     }
 
     /**

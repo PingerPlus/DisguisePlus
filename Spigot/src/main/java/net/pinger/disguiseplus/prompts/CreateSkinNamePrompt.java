@@ -1,9 +1,7 @@
 package net.pinger.disguiseplus.prompts;
 
-import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.Skin;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.internal.SkinPackImpl;
 import net.pinger.disguiseplus.SkinPack;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.conversations.ConversationContext;
@@ -50,11 +48,10 @@ public class CreateSkinNamePrompt extends StringPrompt {
             user.sendRawMessage("skins.success-name", s);
 
             // Add the skin
-            ((SkinPackImpl) this.pack).addSkin(skin);
+            this.pack.addSkin(skin);
         }
 
         // Check for error here
-
         this.dp.getInventoryManager().getExactPackProvider(this.pack).open(p);
         return Prompt.END_OF_CONVERSATION;
     }

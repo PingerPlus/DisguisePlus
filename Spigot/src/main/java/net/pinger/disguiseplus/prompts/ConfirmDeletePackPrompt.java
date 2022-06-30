@@ -9,6 +9,8 @@ import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+
 public class ConfirmDeletePackPrompt extends StringPrompt {
 
     private final DisguisePlus dp;
@@ -25,16 +27,18 @@ public class ConfirmDeletePackPrompt extends StringPrompt {
     }
 
     @Override
-    public Prompt acceptInput( ConversationContext conversationContext, String s) {
+    public Prompt acceptInput( ConversationContext conversationContext, @Nullable String s) {
         Player p = (Player) conversationContext.getForWhom();
         User user = this.dp.getUserManager().getUser(p.getUniqueId());
 
-        if (!s.equalsIgnoreCase("confirm"))
+        if (s == null || !s.equalsIgnoreCase("confirm"))
             return this;
 
-        ((SkinFactoryImpl) this.dp.getSkinFactory()).deleteSkinPack(this.pack);
+        // Delete the skin pack
+        this.dp.getSkinFactory().deleteSkinPack(this.pack);
         user.sendRawMessage("skin-packs.success-delete", this.pack.getName());
 
+        // Reopen the category provider
         this.dp.getInventoryManager().getCategoryProvider(this.pack.getCategory()).open(p);
         return Prompt.END_OF_CONVERSATION;
     }

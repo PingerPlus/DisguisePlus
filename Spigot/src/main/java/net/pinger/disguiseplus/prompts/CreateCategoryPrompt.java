@@ -1,14 +1,14 @@
 package net.pinger.disguiseplus.prompts;
 
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.internal.SkinFactoryImpl;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class CreateCategoryPrompt extends StringPrompt {
 
@@ -19,27 +19,28 @@ public class CreateCategoryPrompt extends StringPrompt {
     }
 
     @Override
-    public @NotNull String getPromptText(@NotNull ConversationContext conversationContext) {
+    @Nonnull
+    public String getPromptText(@Nonnull ConversationContext conversationContext) {
         return this.dp.getConfiguration().of("categories.create");
     }
 
     @Override
-    public @Nullable Prompt acceptInput(@NotNull ConversationContext conversationContext, @Nullable String s) {
+    @Nullable
+    public Prompt acceptInput(@Nonnull ConversationContext conversationContext, @Nullable String s) {
         Player p = (Player) conversationContext.getForWhom();
         User user = this.dp.getUserManager().getUser(p);
 
-        if (s.isEmpty())
+        // Break this prompt
+        // If the input is null
+        if (s == null)
             return this;
 
         // Create the category
-        if (!(this.dp.getSkinFactory() instanceof SkinFactoryImpl))
-            return Prompt.END_OF_CONVERSATION;
+        this.dp.getSkinFactory().createCategory(s);
 
+        // Send message and return
         user.sendRawMessage("categories.success-create", s);
-        SkinFactoryImpl factory = (SkinFactoryImpl) this.dp.getSkinFactory();
-        factory.createCategory(s);
         this.dp.getInventoryManager().getSkinPacksProvider().open(p);
-
         return Prompt.END_OF_CONVERSATION;
     }
 }

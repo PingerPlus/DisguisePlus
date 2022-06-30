@@ -33,14 +33,21 @@ public class CreatePackPrompt extends StringPrompt {
         User user = this.dm.getUserManager().getUser(p);
         SkinFactory factory = this.dm.getSkinFactory();
 
+        // Check if the input is null
+        // If so break this prompt
         if (s == null) {
             return this;
         }
 
-        if (factory.getSkinPack(category, s) != null)
+        // Check if the skin pack already exists
+        // If so then don't create another one
+        if (factory.getSkinPack(this.category, s) != null)
             return this;
 
-        factory.createSkinPack(this.category, new SkinPackImpl(null, this.category, s, Lists.newArrayList()));
+        // Create the skin pack
+        factory.createSkinPack(this.category, s);
+
+        // Send message and return
         this.dm.getInventoryManager().getCategoryProvider(this.category).open(p);
         user.sendRawMessage("skin-packs.success-create", s);
         return Prompt.END_OF_CONVERSATION;

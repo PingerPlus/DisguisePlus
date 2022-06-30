@@ -34,6 +34,8 @@ public class CreateSkinImagePrompt extends StringPrompt {
         Player p = (Player) conversationContext.getForWhom();
         User user = this.dp.getUserManager().getUser(p.getUniqueId());
 
+        // Check if the input is null
+        // If so break this prompt
         if (s == null) {
             return this;
         }
@@ -45,7 +47,7 @@ public class CreateSkinImagePrompt extends StringPrompt {
             }
 
             // Add the skin if there was no error
-            pack.addSkin(skin.get());
+            this.pack.addSkin(skin.get());
 
             // Send the success message
             user.sendRawMessage("skins.success-url");
