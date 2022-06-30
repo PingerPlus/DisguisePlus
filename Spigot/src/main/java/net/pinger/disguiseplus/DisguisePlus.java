@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jonahseguin.drink.CommandService;
 import com.jonahseguin.drink.Drink;
+import com.tchristofferson.configupdater.ConfigUpdater;
 import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguiseplus.executors.DisguisePlusExecutor;
 import net.pinger.disguiseplus.file.configuration.BaseConfiguration;
@@ -20,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class DisguisePlus extends JavaPlugin implements Disguise {
 
@@ -67,9 +69,9 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         File config = new File(getDataFolder(), "config.yml");
 
         try {
-            ConfigUpdater.update(this, "config.yml", config, Lists.newArrayList());
+            ConfigUpdater.update(this, "config.yml", config, new ArrayList<>());
         } catch (Exception e) {
-            BukkitPlugin.getPluginLogger().error("Failed to tasks the config: " + e.getMessage());
+            getOutput().error("Failed to tasks the config: " + e.getMessage());
         }
 
         this.reloadConfig();
