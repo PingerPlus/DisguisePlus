@@ -2,6 +2,8 @@ package net.pinger.disguiseplus;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jonahseguin.drink.CommandService;
+import com.jonahseguin.drink.Drink;
 import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguiseplus.executors.DisguisePlusExecutor;
 import net.pinger.disguiseplus.file.configuration.BaseConfiguration;
@@ -36,7 +38,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     @Override
     public void onEnable() {
         // Make sure to register the custom provider
-        DateTimeZone.setProvider(new UTCProvider());
+//        DateTimeZone.setProvider(new UTCProvider());
 
         // Load the config
         this.addDefaultConfig();
