@@ -152,7 +152,7 @@ public class SkinFactoryImpl implements SkinFactory {
 
     @Override
     public List<? extends SkinPack> getSkinPacks() {
-        return this.skinPacks;
+        return this.skinPacks.isEmpty() ? new ArrayList<>() : this.skinPacks;
     }
 
     @Override

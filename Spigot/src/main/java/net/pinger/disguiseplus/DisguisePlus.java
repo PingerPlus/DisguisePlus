@@ -97,6 +97,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         logger.info("Successfully saved all user data.");
     }
 
+    public static Logger getOutput() {
+        return logger;
+    }
+
     @Override
     public SkinFactory getSkinFactory() {
         return this.skinFactory;
@@ -124,9 +128,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         return configuration;
     }
 
-    public static Logger getOutput() {
-        return logger;
+    public SkullManager getSkullManager() {
+        return skullManager;
     }
-
-
 }

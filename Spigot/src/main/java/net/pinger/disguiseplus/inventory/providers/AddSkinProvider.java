@@ -1,24 +1,23 @@
 package net.pinger.disguiseplus.inventory.providers;
 
-import fr.minuskube.inv.ClickableItem;
-import fr.minuskube.inv.content.InventoryContents;
-import fr.minuskube.inv.content.InventoryProvider;
-import net.pinger.bukkit.item.FreshMaterial;
-import net.pinger.bukkit.item.ItemBuilder;
-import net.pinger.bukkit.item.mask.impl.TwoWayLoadingMask;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
+import net.pinger.disguiseplus.item.FreshMaterial;
+import net.pinger.disguiseplus.item.ItemBuilder;
 import net.pinger.disguiseplus.prompts.CreateSkinImagePrompt;
 import net.pinger.disguiseplus.prompts.CreateSkinNamePrompt;
 import net.pinger.disguiseplus.SkinPack;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.intelligent.inventories.contents.InventoryContents;
+import org.intelligent.inventories.item.IntelligentItem;
+import org.intelligent.inventories.provider.IntelligentProvider;
 
-public class AddSkinProvider implements InventoryProvider {
+public class AddSkinProvider implements IntelligentProvider {
 
     private final DisguisePlus dp;
-    private final net.pinger.disguiseplus.SkinPack pack;
+    private final SkinPack pack;
 
     public AddSkinProvider(DisguisePlus dp, SkinPack pack) {
         this.dp = dp;
@@ -26,39 +25,43 @@ public class AddSkinProvider implements InventoryProvider {
     }
 
     @Override
-    public void init(Player player, InventoryContents contents) {
+    public void initialize(Player player, InventoryContents contents) {
 
     }
 
     @Override
     public void update(Player player, InventoryContents contents) {
-        int refresh = contents.property("refresh", 0);
+        int refresh = contents.getProperty("refresh", 0);
         contents.setProperty("refresh", refresh + 1);
 
+        // Refresh every
+        // 2 ticks
         if (refresh % 2 != 0)
             return;
 
-        int state = contents.property("state", 0);
-        contents.setProperty("state", state + 1);
-
+        // Allows us to catch a skin
+        // From Player Name specified
+        // In the given prompt
         ItemStack name = new ItemBuilder(FreshMaterial.MUSIC_DISC_11.toMaterial())
-                .setName(new TwoWayLoadingMask(ChatColor.DARK_AQUA, ChatColor.AQUA).getMaskedString("From Player Name", state))
+                .setName(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "From Player Name")
                 .setLore(ChatColor.GRAY + "Create a new skin from a players name")
                 .hideAllAttributes()
                 .toItemStack();
 
-        contents.set(1, 3, ClickableItem.of(name, e -> {
+        contents.setItem(1, 3, IntelligentItem.createNew(name, e -> {
             this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateSkinNamePrompt(this.dp, this.pack), 25);
         }));
 
-
+        // Allows us to catch a skin
+        // From an Image Url which gets specified
+        // In the prompt
         ItemStack url = new ItemBuilder(FreshMaterial.MUSIC_DISC_13.toMaterial())
-                .setName(new TwoWayLoadingMask(ChatColor.DARK_AQUA, ChatColor.AQUA).getMaskedString("From Image URL", state))
+                .setName(ChatColor.AQUA + ChatColor.BOLD.toString() + "From Image URL")
                 .setLore(ChatColor.GRAY + "Create a new skin from an image url")
                 .hideAllAttributes()
                 .toItemStack();
 
-        contents.set(1, 5, ClickableItem.of(url, e -> {
+        contents.setItem(1, 5, IntelligentItem.createNew(url, e -> {
             this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateSkinImagePrompt(this.dp, this.pack), 25);
         }));
 

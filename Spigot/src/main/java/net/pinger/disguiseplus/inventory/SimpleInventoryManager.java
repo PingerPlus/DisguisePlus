@@ -1,192 +1,146 @@
 package net.pinger.disguiseplus.inventory;
 
-import fr.minuskube.inv.ClickableItem;
-import fr.minuskube.inv.InventoryManager;
-import fr.minuskube.inv.SmartInventory;
-import fr.minuskube.inv.content.InventoryContents;
-import fr.minuskube.inv.content.Pagination;
-import net.pinger.bukkit.item.FreshMaterial;
-import net.pinger.bukkit.item.ItemBuilder;
-import net.pinger.bukkit.item.mask.impl.TwoWayLoadingMask;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguise.inventory.providers.*;
 import net.pinger.disguiseplus.SkinPack;
 import net.pinger.disguiseplus.inventory.providers.*;
+import net.pinger.disguiseplus.item.FreshMaterial;
+import net.pinger.disguiseplus.item.ItemBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import org.intelligent.inventories.IntelligentInventory;
+import org.intelligent.inventories.IntelligentInventoryBuilder;
+import org.intelligent.inventories.contents.InventoryContents;
+import org.intelligent.inventories.contents.InventoryPagination;
+import org.intelligent.inventories.item.IntelligentItem;
+import org.intelligent.inventories.manager.IntelligentManager;
 
 public class SimpleInventoryManager {
 
     // Disguise instance
     private final DisguisePlus disguise;
-
-    // The inventory manager
-    private final InventoryManager inventoryManager;
+    private final IntelligentManager inventoryManager;
 
     public SimpleInventoryManager(DisguisePlus disguise) {
         this.disguise = disguise;
 
         // Initializing the IM
-        this.inventoryManager = new InventoryManager(disguise);
-        this.inventoryManager.init();
+        this.inventoryManager = new IntelligentManager(disguise);
     }
 
-    public SmartInventory getSettingsProvider() {
-        return SmartInventory.builder()
-                .provider(new SettingsProvider(this.disguise))
-                .title(ChatColor.DARK_GRAY + String.format("Disguise Plus %s", this.disguise.getDescription().getVersion()))
-                .parent(this.getDisguisePlusProvider())
-                .manager(this.inventoryManager)
-                .size(6, 9)
+    public IntelligentInventory getDisguisePlusProvider() {
+        return IntelligentInventoryBuilder.newBuilder()
+                .setProvider(new DisguisePlusProvider(this.disguise))
+                .setTitle(ChatColor.DARK_GRAY + "DisguisePlus 2.0.0")
+                .setManager(this.inventoryManager)
+                .setSize(5, 9)
                 .build();
     }
 
-    public SmartInventory getGeneralSettingsProvider() {
-        return SmartInventory.builder()
-                .provider(new GSProvider(this.disguise))
-                .title(ChatColor.DARK_GRAY + "Settings > General Settings")
-                .parent(this.getSettingsProvider())
-                .manager(this.inventoryManager)
-                .size(6, 9)
+    public IntelligentInventory getSkinPacksProvider() {
+        return IntelligentInventoryBuilder.newBuilder()
+                .setProvider(new SkinPacksProvider(this.disguise))
+                .setTitle(ChatColor.DARK_GRAY + "Skin Packs > Category")
+                .setManager(this.inventoryManager)
+                .setParent(this.getDisguisePlusProvider())
                 .build();
     }
 
-    public SmartInventory getWorldListProvider() {
-        return SmartInventory.builder()
-                .provider(new WorldListProvider(this.disguise))
-                .title(ChatColor.DARK_GRAY + "General Settings > Worlds")
-                .parent(this.getGeneralSettingsProvider())
-                .manager(this.inventoryManager)
-                .size(6, 9)
+    public IntelligentInventory getCategoryProvider(String category) {
+        return IntelligentInventoryBuilder.newBuilder()
+                .setProvider(new CategoryProvider(category, this.disguise))
+                .setTitle(ChatColor.DARK_GRAY + "Skin Packs > " + category)
+                .setParent(this.getSkinPacksProvider())
+                .setManager(this.inventoryManager)
                 .build();
     }
 
-    public SmartInventory getDisplayProvider() {
-        return SmartInventory.builder()
-                .provider(new DMProvider(this.disguise))
-                .title(ChatColor.DARK_GRAY + "General Settings > Display")
-                .parent(this.getGeneralSettingsProvider())
-                .manager(this.inventoryManager)
-                .size(6, 9)
+    public IntelligentInventory getExactPackProvider(SkinPack pack) {
+        return IntelligentInventoryBuilder.newBuilder()
+                .setProvider(new ExactPackProvider(pack, this.disguise))
+                .setTitle(ChatColor.DARK_GRAY + String.format("%s > %s", pack.getCategory(), pack.getName()))
+                .setParent(this.getCategoryProvider(pack.getCategory()))
+                .setManager(this.inventoryManager)
                 .build();
     }
 
-    public SmartInventory getDisguisePlusProvider() {
-        return SmartInventory.builder()
-                .provider(new DisguisePlusProvider(this.disguise))
-                .title(ChatColor.DARK_GRAY + "DisguisePlus 2.0.0")
-                .manager(this.inventoryManager)
-                .size(5, 9)
+    public IntelligentInventory getAddSkinProvider(SkinPack pack) {
+        return IntelligentInventoryBuilder.newBuilder()
+                .setProvider(new AddSkinProvider(this.disguise, pack))
+                .setManager(this.inventoryManager)
+                .setTitle(String.format(ChatColor.DARK_GRAY + "%s > Add Skin", pack.getName()))
+                .setSize(4, 9)
+                .setParent(this.getExactPackProvider(pack))
                 .build();
     }
 
-    public SmartInventory getSkinPacksProvider() {
-        return SmartInventory.builder()
-                .provider(new SkinPacksProvider(this.disguise))
-                .title(ChatColor.DARK_GRAY + "Skin Packs > Category")
-                .manager(this.inventoryManager)
-                .parent(this.getDisguisePlusProvider())
+    public IntelligentInventory getUserListProvider() {
+        return IntelligentInventoryBuilder.newBuilder()
+                .setProvider(new UserListProvider(this.disguise))
+                .setManager(this.inventoryManager)
+                .setTitle(ChatColor.DARK_GRAY + "User List")
+                .setParent(this.getDisguisePlusProvider())
                 .build();
-    }
-
-    public SmartInventory getCategoryProvider(String category) {
-        return SmartInventory.builder()
-                .provider(new CategoryProvider(category, this.disguise))
-                .title(ChatColor.DARK_GRAY + "Skin Packs > " + category)
-                .parent(this.getSkinPacksProvider())
-                .manager(this.inventoryManager)
-                .build();
-    }
-
-    public SmartInventory getExactPackProvider(net.pinger.disguiseplus.SkinPack pack) {
-        return SmartInventory.builder()
-                .provider(new ExactPackProvider(pack, this.disguise))
-                .title(ChatColor.DARK_GRAY + String.format("%s > %s", pack.getCategory(), pack.getName()))
-                .parent(this.getCategoryProvider(pack.getCategory()))
-                .manager(this.inventoryManager)
-                .build();
-    }
-
-    public SmartInventory getDisguiseSettings() {
-        return SmartInventory.builder()
-                .provider(new DSProvider(this.disguise))
-                .manager(this.inventoryManager)
-                .title(ChatColor.DARK_GRAY + "Settings > Disguise")
-                .parent(this.getSettingsProvider())
-                .size(5, 9)
-                .build();
-    }
-
-    public SmartInventory getAddSkinProvider(SkinPack pack) {
-        return SmartInventory.builder()
-                .provider(new AddSkinProvider(this.disguise, pack))
-                .manager(this.inventoryManager)
-                .title(String.format(ChatColor.DARK_GRAY + "%s > Add Skin", pack.getName()))
-                .size(4, 9)
-                .parent(this.getExactPackProvider(pack))
-                .build();
-    }
-
-    public SmartInventory getUserListProvider() {
-        return SmartInventory.builder()
-                .provider(new UserListProvider(this.disguise))
-                .manager(this.inventoryManager)
-                .title(ChatColor.DARK_GRAY +  "User List")
-                .parent(this.getDisguisePlusProvider())
-                .build();
-    }
-
-    public static void addReturnButton(int row, int col, InventoryContents contents) {
-        ItemStack stack = new ItemBuilder(FreshMaterial.OAK_SIGN.toMaterial())
-                    .setName(new TwoWayLoadingMask(ChatColor.AQUA, ChatColor.DARK_AQUA).getMaskedString("Back", contents.property("state", 1)))
-                    .setLore(ChatColor.GRAY + "Click to go back")
-                    .toItemStack();
-
-        // Creating the ClickableItem
-        ClickableItem item = ClickableItem.of(stack, e -> {
-           contents.inventory().getParent().ifPresent(inv -> {
-               inv.open((Player) e.getWhoClicked());
-           });
-
-           if (!contents.inventory().getParent().isPresent()) {
-               e.getWhoClicked().closeInventory();
-           }
-        });
-
-        // Adding it to the inventory
-        contents.set(row, col, item);
     }
 
     public static void addPageButtons(int row, InventoryContents contents) {
         // Pagination
-        Pagination p = contents.pagination();
+        InventoryPagination p = contents.getPagination();
 
         if (!p.isLast()) {
             // Get the item
-            ItemStack next = new ItemBuilder(FreshMaterial.ARROW.toMaterial())
-                        .setName(new TwoWayLoadingMask(ChatColor.AQUA, ChatColor.DARK_AQUA).getMaskedString("Next", contents.property("state", 1)))
-                        .toItemStack();
+            ItemStack next = new ItemBuilder(Material.ARROW)
+                    .setName(ChatColor.AQUA + ChatColor.BOLD.toString() + "Next Page")
+                    .toItemStack();
 
-            contents.set(row, 8, ClickableItem.of(next, e -> {
-                contents.inventory().open((Player) e.getWhoClicked(), p.next().getPage());
+            contents.setItem(row, 8, IntelligentItem.createNew(next, e -> {
+                contents.getIntelligentInventory().open((Player) e.getWhoClicked(), p.nextPage().getPage());
             }));
         } else {
-            contents.set(row, 8, ClickableItem.empty(new ItemStack(Material.AIR)));
+            contents.setItem(row, 8, IntelligentItem.createNew(new ItemStack(Material.AIR)));
         }
 
         if (!p.isFirst()) {
-            ItemStack previous = new ItemBuilder(FreshMaterial.ARROW.toMaterial())
-                    .setName(new TwoWayLoadingMask(ChatColor.AQUA, ChatColor.DARK_AQUA).getMaskedString("Previous", contents.property("state", 1)))
+            ItemStack previous = new ItemBuilder(Material.ARROW)
+                    .setName(ChatColor.AQUA + ChatColor.BOLD.toString() + "Previous Page")
                     .toItemStack();
 
-            contents.set(row, 0, ClickableItem.of(previous, e -> {
-                contents.inventory().open((Player) e.getWhoClicked(), p.previous().getPage());
+            contents.setItem(row, 0, IntelligentItem.createNew(previous, e -> {
+                contents.getIntelligentInventory().open((Player) e.getWhoClicked(), p.previousPage().getPage());
             }));
         } else {
-            contents.set(row, 0, ClickableItem.empty(new ItemStack(Material.AIR)));
+            contents.setItem(row, 0, IntelligentItem.createNew(new ItemStack(Material.AIR)));
         }
+    }
+
+    public static void addReturnButton(int row, int col, InventoryContents contents) {
+        ItemStack stack = new ItemBuilder(Material.OAK_SIGN)
+                .setName(ChatColor.AQUA + ChatColor.BOLD.toString() + "Back")
+                .setLore(ChatColor.GRAY + "Click to go back")
+                .toItemStack();
+
+        // Creating the ClickableItem
+        IntelligentItem item = IntelligentItem.createNew(stack, e -> {
+            if (e.isRightClick() || e.isShiftClick())
+                return;
+
+            if (e.getClick() == ClickType.NUMBER_KEY) {
+                return;
+            }
+
+            contents.getIntelligentInventory().getParent().ifPresent(inv -> {
+                inv.open((Player) e.getWhoClicked());
+            });
+
+            if (!contents.getIntelligentInventory().getParent().isPresent()) {
+                e.getWhoClicked().closeInventory();
+            }
+        });
+
+        // Adding it to the inventory
+        contents.setItem(row, col, item);
     }
 
 }

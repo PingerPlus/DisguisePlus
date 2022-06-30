@@ -1,23 +1,23 @@
 package net.pinger.disguiseplus.inventory.providers;
 
-import fr.minuskube.inv.ClickableItem;
-import fr.minuskube.inv.content.InventoryContents;
-import fr.minuskube.inv.content.InventoryProvider;
-import fr.minuskube.inv.content.Pagination;
-import fr.minuskube.inv.content.SlotIterator;
-import net.pinger.bukkit.item.FreshMaterial;
-import net.pinger.bukkit.item.ItemBuilder;
-import net.pinger.bukkit.item.mask.impl.TwoWayLoadingMask;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.internal.SkinFactoryImpl;
-import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
-import net.pinger.disguiseplus.prompts.CreateCategoryPrompt;
+import net.pinger.disguiseplus.SkinFactory;
 import net.pinger.disguiseplus.SkinPack;
+import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
+import net.pinger.disguiseplus.item.FreshMaterial;
+import net.pinger.disguiseplus.item.ItemBuilder;
+import net.pinger.disguiseplus.prompts.CreateCategoryPrompt;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.intelligent.inventories.contents.InventoryContents;
+import org.intelligent.inventories.contents.InventoryPagination;
+import org.intelligent.inventories.contents.InventorySlotIterator;
+import org.intelligent.inventories.contents.IteratorType;
+import org.intelligent.inventories.item.IntelligentItem;
+import org.intelligent.inventories.provider.IntelligentProvider;
 
-public class SkinPacksProvider implements InventoryProvider {
+public class SkinPacksProvider implements IntelligentProvider {
 
     private final DisguisePlus dp;
 
@@ -26,58 +26,57 @@ public class SkinPacksProvider implements InventoryProvider {
     }
 
     @Override
-    public void init(Player player, InventoryContents contents) {
+    public void initialize(Player player, InventoryContents contents) {
 
     }
 
     @Override
     public void update(Player player, InventoryContents contents) {
-        int refresh = contents.property("refresh", 0);
+        int refresh = contents.getProperty("refresh", 0);
         contents.setProperty("refresh", refresh + 1);
 
+        // Refresh
+        // Every 2 ticks
         if (refresh % 2 != 0)
             return;
 
-        int state = contents.property("state", 0);
-        contents.setProperty("state", state + 1);
-
         // Pagination
-        Pagination page = contents.pagination();
+        InventoryPagination page = contents.getPagination();
 
-        SkinFactoryImpl factory = (SkinFactoryImpl) this.dp.getSkinFactory();
-        ClickableItem[] items = new ClickableItem[factory.getSkinCategories().size()];
+        SkinFactory factory = this.dp.getSkinFactory();
+        IntelligentItem[] items = new IntelligentItem[factory.getCategories().size()];
 
+        // Loop through every category
+        // And add it to the inventory
         int i = 0;
-        for (String category : factory.getSkinCategories()) {
+        for (String category : factory.getCategories()) {
             if (factory.getSkinPacks(category).isEmpty())
-                items[i++] = ClickableItem.of(this.getItemFromSkin(this.dp.getSkullManager().getDefaultPlayerSkull(), category, state), e -> {
+                items[i++] = IntelligentItem.createNew(this.getItemFromSkin(this.dp.getSkullManager().getDefaultPlayerSkull(), category), e -> {
                     this.dp.getInventoryManager().getCategoryProvider(category).open((Player) e.getWhoClicked());
                 });
             else
-                items[i++] = ClickableItem.of(this.getItemFromPack(factory.getSkinPacks(category).get(0), state), e -> {
+                items[i++] = IntelligentItem.createNew(this.getItemFromPack(factory.getSkinPacks(category).get(0)), e -> {
                     this.dp.getInventoryManager().getCategoryProvider(category).open((Player) e.getWhoClicked());
                 });
         }
 
+        // Add all items to an iterator
         page.setItemsPerPage(21);
         page.setItems(items);
 
-        SlotIterator iterator = contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 1);
-        for (int n = 1; n < 4; n++) {
-            for (int m = 0; m < 9; m++) {
-                if (m == 0 || m == 8)
-                    iterator.blacklist(n, m);
-            }
-        }
-
+        // Blacklist certain slots
+        InventorySlotIterator iterator = contents.newIterator(IteratorType.HORIZONTAL, 1, 1);
+        iterator.blacklist(0, 8);
         page.addToIterator(iterator);
 
+        // Item for creating categories
+        // Through prompts
         ItemStack cat = new ItemBuilder(FreshMaterial.COMPASS.toMaterial())
-                .setName(new TwoWayLoadingMask(ChatColor.DARK_AQUA, ChatColor.AQUA).getMaskedString("Create Category", state))
+                .setName(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Create Category")
                 .setLore(ChatColor.GRAY + "Click to create a new category")
                 .toItemStack();
 
-        contents.set(5, 1, ClickableItem.of(cat, e -> {
+        contents.setItem(5, 1, IntelligentItem.createNew(cat, e -> {
             this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateCategoryPrompt(this.dp), 25);
         }));
 
@@ -85,11 +84,11 @@ public class SkinPacksProvider implements InventoryProvider {
         SimpleInventoryManager.addPageButtons(5, contents);
     }
 
-    private ItemStack getItemFromPack(SkinPack pack, int state) {
+    private ItemStack getItemFromPack(SkinPack pack) {
         ItemBuilder stack = new ItemBuilder(pack.getSkins().get(0).toSkull().clone());
 
         // Set stack
-        stack.setName(new TwoWayLoadingMask(ChatColor.YELLOW, ChatColor.GOLD).getMaskedString(pack.getCategory(), state));
+        stack.setName(ChatColor.GOLD + ChatColor.BOLD.toString() + pack.getCategory());
 
         // Set lore
         stack.setLore(String.format(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to view %s skin packs",
@@ -98,11 +97,11 @@ public class SkinPacksProvider implements InventoryProvider {
         return stack.toItemStack();
     }
 
-    private ItemStack getItemFromSkin(ItemStack s, String category, int state) {
+    private ItemStack getItemFromSkin(ItemStack s, String category) {
         ItemBuilder stack = new ItemBuilder(s.clone());
 
         // Set stack
-        stack.setName(new TwoWayLoadingMask(ChatColor.YELLOW, ChatColor.GOLD).getMaskedString(category, state));
+        stack.setName(ChatColor.YELLOW + ChatColor.BOLD.toString() + category);
 
         // Set lore
         stack.setLore(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to view the skin packs.");
