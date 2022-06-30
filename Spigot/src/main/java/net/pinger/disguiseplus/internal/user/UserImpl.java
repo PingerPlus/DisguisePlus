@@ -5,16 +5,12 @@ import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class UserImpl implements User {
-
-    private static final Logger logger = LoggerFactory.getLogger("UserConnection");
 
     private final DisguisePlus dp;
     private final UUID id;
