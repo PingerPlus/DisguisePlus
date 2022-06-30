@@ -28,17 +28,14 @@ public class SkinFactoryImpl implements SkinFactory {
     // Files
     private final File file;
     private final File categoriesFile;
-
-    // The disguise instance
-    private final DisguisePlus dp;
     private final boolean downloadBaseSkins;
 
     public SkinFactoryImpl(DisguisePlus dp, boolean downloadBaseSkins) {
-        this.dp = dp;
+        // The disguise instance
         this.downloadBaseSkins = downloadBaseSkins;
 
         // Update the file based on the main
-        this.file = new File(this.dp.getDataFolder(), "categories");
+        this.file = new File(dp.getDataFolder(), "categories");
         this.categoriesFile = new File(this.file, "categories.json");
     }
 
@@ -48,7 +45,7 @@ public class SkinFactoryImpl implements SkinFactory {
     }
 
     @Override
-    public void deleteSkinCategory(String category) {
+    public void deleteCategory(String category) {
         this.categorySkins.remove(category);
 
         // Also delete all packs that are inside this category
@@ -241,6 +238,9 @@ public class SkinFactoryImpl implements SkinFactory {
                                 // We automatically save the files
                                 // So need to check for saving here
                                 DisguisePlus.GSON.fromJson(packReader, SkinPack.class);
+
+                                // We also need to set the file here
+
                             }
                         }
                     }
