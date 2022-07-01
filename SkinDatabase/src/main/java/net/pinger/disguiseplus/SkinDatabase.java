@@ -1,11 +1,11 @@
-package disguiseplus;
+package net.pinger.disguiseplus;
 
 import com.google.gson.*;
-import disguiseplus.file.Reader;
-import disguiseplus.pack.SkinPackLoader;
-import disguiseplus.skin.Skin;
-import disguiseplus.skin.reader.SkinReader;
-import disguiseplus.util.ConverterUtil;
+import net.pinger.disguiseplus.file.Reader;
+import net.pinger.disguiseplus.pack.SkinPackLoader;
+import net.pinger.disguiseplus.skin.Skin;
+import net.pinger.disguiseplus.skin.reader.SkinReader;
+import net.pinger.disguiseplus.util.ConverterUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

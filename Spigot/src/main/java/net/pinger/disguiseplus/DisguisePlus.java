@@ -46,7 +46,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
         // Make sure to register the custom provider
 //        DateTimeZone.setProvider(new UTCProvider());
-        if (DisguiseAPI.applyProvider() == null) {
+        if (DisguiseAPI.getProvider() == null) {
             getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
             getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
             getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");

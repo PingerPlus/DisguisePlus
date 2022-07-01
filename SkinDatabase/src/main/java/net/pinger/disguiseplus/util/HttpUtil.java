@@ -1,4 +1,4 @@
-package disguiseplus.util;
+package net.pinger.disguiseplus.util;
 
 import java.util.UUID;
 

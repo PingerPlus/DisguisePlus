@@ -17,7 +17,7 @@
 
 package net.pinger.disguiseplus.item;
 
-import net.pinger.management.internal.MinecraftServer;
+import net.pinger.disguise.server.MinecraftServer;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Damageable;

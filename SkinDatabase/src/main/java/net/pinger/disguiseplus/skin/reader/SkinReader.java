@@ -1,11 +1,11 @@
-package disguiseplus.skin.reader;
+package net.pinger.disguiseplus.skin.reader;
 
 import com.google.gson.JsonObject;
-import disguiseplus.skin.Skin;
-import disguiseplus.util.HttpUtil;
-import net.pinger.common.http.HttpResponse;
-import net.pinger.common.http.request.HttpGetRequest;
-import disguiseplus.SkinDatabase;
+import net.pinger.disguise.http.HttpResponse;
+import net.pinger.disguise.http.request.HttpGetRequest;
+import net.pinger.disguiseplus.skin.Skin;
+import net.pinger.disguiseplus.util.HttpUtil;
+import net.pinger.disguiseplus.SkinDatabase;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -24,11 +24,6 @@ public class SkinReader {
         // Create a new http request
         HttpGetRequest req = new HttpGetRequest(HttpUtil.getNewSession(uuid));
         HttpResponse connect = req.connect();
-
-        // First edge case
-        if (connect.getCode() != 200) {
-            return null;
-        }
 
         // Edge case
         if (connect.getResponse().isEmpty() || connect.getResponse() == null) {

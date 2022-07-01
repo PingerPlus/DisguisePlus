@@ -1,15 +1,14 @@
-package disguiseplus.pack;
+package net.pinger.disguiseplus.pack;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import disguiseplus.skin.Skin;
-import disguiseplus.skin.reader.SkinReader;
-import net.pinger.common.http.HttpRequest;
-import net.pinger.common.http.HttpResponse;
-import net.pinger.common.http.request.HttpPostRequest;
-import net.pinger.common.lang.Lists;
-import disguiseplus.SkinDatabase;
-import disguiseplus.file.Reader;
+import net.pinger.disguiseplus.skin.Skin;
+import net.pinger.disguiseplus.skin.reader.SkinReader;
+import net.pinger.disguiseplus.SkinDatabase;
+import net.pinger.disguiseplus.file.Reader;
+import net.pinger.disguise.http.HttpRequest;
+import net.pinger.disguise.http.HttpResponse;
+import net.pinger.disguise.http.request.HttpPostRequest;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
@@ -42,7 +42,7 @@ public class SkinPackLoader {
 
         JsonArray array = new JsonArray();
 
-        List<String> skins = Lists.newArrayList();
+        List<String> skins = new ArrayList<>();
 
         // Going through each file
         for (File file : new File(SkinDatabase.BASE_PATH, fileName).listFiles()) {
@@ -103,7 +103,7 @@ public class SkinPackLoader {
      */
 
     private static List<String> retrieveSkinUrls(File file) {
-        List<String> urls = Lists.newArrayList();
+        List<String> urls = new ArrayList<>();
 
         try {
             Document execute = Jsoup.parse(file, "UTF-8");

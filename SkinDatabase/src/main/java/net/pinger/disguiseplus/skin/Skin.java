@@ -1,4 +1,4 @@
-package disguiseplus.skin;
+package net.pinger.disguiseplus.skin;
 
 import com.google.gson.JsonObject;
 

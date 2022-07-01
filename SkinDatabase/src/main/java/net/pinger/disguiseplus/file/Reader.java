@@ -15,7 +15,7 @@
  *
  */
 
-package disguiseplus.file;
+package net.pinger.disguiseplus.file;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
