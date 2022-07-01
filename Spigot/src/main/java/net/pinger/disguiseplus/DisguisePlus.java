@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.jonahseguin.drink.CommandService;
 import com.jonahseguin.drink.Drink;
 import com.tchristofferson.configupdater.ConfigUpdater;
+import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguiseplus.executors.DisguisePlusExecutor;
 import net.pinger.disguiseplus.file.configuration.BaseConfiguration;
@@ -39,8 +40,21 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     @Override
     public void onEnable() {
+        // Make sure that we created all instances
+        // Of the api, before we connect to the api
+        DisguisePlusAPI.setDisguise(this);
+
         // Make sure to register the custom provider
 //        DateTimeZone.setProvider(new UTCProvider());
+        if (DisguiseAPI.applyProvider() == null) {
+            getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
+            getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
+            getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
+
+            // Disable the plugin
+            this.getPluginLoader().disablePlugin(this);
+            return;
+        }
 
         // Load the config
         this.addDefaultConfig();
@@ -58,10 +72,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         service.registerCommands();
 
         Bukkit.getPluginManager().registerEvents(new LoginListener(this), this);
-
-        // Make sure that we created all instances
-        // Of the api, before we connect to the api
-        DisguisePlusAPI.setDisguise(this);
     }
 
     private void addDefaultConfig() {
@@ -83,10 +93,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             this.conversationUtil.cancelAllConversations();
         }
 
-        logger.info("Successfully saved all local settings.");
+        logger.info("Successfully cancelled all user conversation.");
 
         if (this.skinFactory != null) {
-            this.skinFactory.saveLocally();
+            this.skinFactory.saveSkins();
         }
 
         logger.info("Successfully saved the skin factory.");
