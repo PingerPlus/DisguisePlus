@@ -3,7 +3,6 @@ package net.pinger.disguiseplus.inventory;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.SkinPack;
 import net.pinger.disguiseplus.inventory.providers.*;
-import net.pinger.disguiseplus.item.FreshMaterial;
 import net.pinger.disguiseplus.item.ItemBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

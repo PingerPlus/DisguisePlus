@@ -83,7 +83,7 @@ public class SkinFactoryImpl implements SkinFactory {
         }
 
         // Create the category
-        this.categorySkins.put(category, Collections.singletonList(pack));
+        this.categorySkins.put(category, new ArrayList<>(Collections.singletonList(pack)));
         return pack;
     }
 
@@ -250,10 +250,14 @@ public class SkinFactoryImpl implements SkinFactory {
             throw new DownloadFailedException("Failed to download skins from local files", e);
         }
 
+        DisguisePlus.getOutput().info("HAHAHAHAH");
+
         // Check if we should even try to download from the internet
         if (!this.downloadBaseSkins) {
             return;
         }
+
+        DisguisePlus.getOutput().info("HAHAHAHAH");
 
         // Try to download from the database
         try {

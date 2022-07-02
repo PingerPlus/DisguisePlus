@@ -1,8 +1,8 @@
 package net.pinger.disguiseplus.inventory.providers;
 
+import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
-import net.pinger.disguiseplus.item.ItemBuilder;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -60,12 +60,9 @@ public class UserListProvider implements IntelligentProvider {
     }
 
     private ItemStack getItemStack(User user) {
-        ItemBuilder builder = new ItemBuilder(this.dp.getSkullManager().getSkullFrom(user.getId()).clone());
-
-        // Set the name
-        builder.setName(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + user.getDefaultName());
-        builder.setLore("");
-
-        return builder.toItemStack();
+        return new ItemBuilder(this.dp.getSkullManager().getSkullFrom(user.getId()).clone())
+                .name(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + user.getDefaultName())
+                .lore("")
+                .build();
     }
 }

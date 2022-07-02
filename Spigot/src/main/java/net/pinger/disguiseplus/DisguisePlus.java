@@ -62,8 +62,14 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.conversationUtil = new ConversationUtil(this);
         this.inventoryManager = new SimpleInventoryManager(this);
         this.skinFactory = new SkinFactoryImpl(this, getConfig().getBoolean("downloadBaseSkins"));
+
+        // Download skins
+        this.skinFactory.downloadSkins();
+
         this.configuration = new BaseConfiguration(this);
         this.sum = new UserManagerImpl(this);
+
+        getOutput().info(String.valueOf(skinFactory.getCategories().size()));
 
         CommandService service = Drink.get(this);
 

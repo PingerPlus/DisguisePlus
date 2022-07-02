@@ -1,10 +1,10 @@
 package net.pinger.disguiseplus.inventory.providers;
 
 import net.pinger.disguise.Skin;
+import net.pinger.disguise.item.ItemBuilder;
+import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
-import net.pinger.disguiseplus.item.FreshMaterial;
-import net.pinger.disguiseplus.item.ItemBuilder;
 import net.pinger.disguiseplus.prompts.ConfirmDeletePackPrompt;
 import net.pinger.disguiseplus.SkinPack;
 import org.bukkit.ChatColor;
@@ -63,20 +63,20 @@ public class ExactPackProvider implements IntelligentProvider {
             return;
 
         // Add a skin to this inventory
-        ItemStack cre = new ItemBuilder(FreshMaterial.COMPASS.toMaterial())
-                .setName(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Add Skin")
-                .setLore(ChatColor.GRAY + "Click to add a new skin")
-                .toItemStack();
+        ItemStack cre = new ItemBuilder(XMaterial.COMPASS)
+                .name(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Add Skin")
+                .lore(ChatColor.GRAY + "Click to add a new skin")
+                .build();
 
         contents.setItem(5, 1, IntelligentItem.createNew(cre, e -> {
             this.dp.getInventoryManager().getAddSkinProvider(this.pack).open((Player) e.getWhoClicked());
         }));
 
         // Delete this skin pack
-        ItemStack dl = new ItemBuilder(FreshMaterial.TRIPWIRE_HOOK.toMaterial())
-                .setName(ChatColor.AQUA + ChatColor.BOLD.toString() +"Delete Skin Pack")
-                .setLore(ChatColor.GRAY + "Click to delete this pack")
-                .toItemStack();
+        ItemStack dl = new ItemBuilder(XMaterial.TRIPWIRE_HOOK)
+                .name(ChatColor.AQUA + ChatColor.BOLD.toString() +"Delete Skin Pack")
+                .lore(ChatColor.GRAY + "Click to delete this pack")
+                .build();
 
         contents.setItem(5, 7, IntelligentItem.createNew(dl, e -> {
             this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new ConfirmDeletePackPrompt(this.dp, this.pack));
@@ -87,12 +87,9 @@ public class ExactPackProvider implements IntelligentProvider {
     }
 
     private ItemStack getSkinPack(Skin skin) {
-        ItemBuilder stack = new ItemBuilder(skin.toSkull());
-
-        // The name
-        stack.setName(" ");
-        stack.setLore("");
-
-        return stack.toItemStack();
+        return new ItemBuilder(skin.toSkull())
+                .name(" ")
+                .lore("")
+                .build();
     }
 }

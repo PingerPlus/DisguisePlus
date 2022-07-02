@@ -1,11 +1,11 @@
 package net.pinger.disguiseplus.inventory.providers;
 
+import net.pinger.disguise.item.ItemBuilder;
+import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.SkinFactory;
 import net.pinger.disguiseplus.SkinPack;
 import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
-import net.pinger.disguiseplus.item.FreshMaterial;
-import net.pinger.disguiseplus.item.ItemBuilder;
 import net.pinger.disguiseplus.prompts.CreateCategoryPrompt;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -66,15 +66,16 @@ public class SkinPacksProvider implements IntelligentProvider {
 
         // Blacklist certain slots
         InventorySlotIterator iterator = contents.newIterator(IteratorType.HORIZONTAL, 1, 1);
-        iterator.blacklist(0, 8);
+        iterator.blacklistColumn(0);
+        iterator.blacklistColumn(8);
         page.addToIterator(iterator);
 
         // Item for creating categories
         // Through prompts
-        ItemStack cat = new ItemBuilder(FreshMaterial.COMPASS.toMaterial())
-                .setName(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Create Category")
-                .setLore(ChatColor.GRAY + "Click to create a new category")
-                .toItemStack();
+        ItemStack cat = new ItemBuilder(XMaterial.COMPASS)
+                .name(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Create Category")
+                .lore(ChatColor.GRAY + "Click to create a new category")
+                .build();
 
         contents.setItem(5, 1, IntelligentItem.createNew(cat, e -> {
             this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateCategoryPrompt(this.dp), 25);
@@ -85,27 +86,16 @@ public class SkinPacksProvider implements IntelligentProvider {
     }
 
     private ItemStack getItemFromPack(SkinPack pack) {
-        ItemBuilder stack = new ItemBuilder(pack.getSkins().get(0).toSkull().clone());
-
-        // Set stack
-        stack.setName(ChatColor.GOLD + ChatColor.BOLD.toString() + pack.getCategory());
-
-        // Set lore
-        stack.setLore(String.format(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to view %s skin packs",
-                this.dp.getSkinFactory().getSkinPacks(pack.getCategory()).size()));
-
-        return stack.toItemStack();
+        return new ItemBuilder(pack.getSkins().get(0).toSkull().clone())
+                .name(ChatColor.GOLD + ChatColor.BOLD.toString() + pack.getCategory())
+                .lore(String.format(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to view %s skin packs", this.dp.getSkinFactory().getSkinPacks(pack.getCategory()).size()))
+                .build();
     }
 
     private ItemStack getItemFromSkin(ItemStack s, String category) {
-        ItemBuilder stack = new ItemBuilder(s.clone());
-
-        // Set stack
-        stack.setName(ChatColor.YELLOW + ChatColor.BOLD.toString() + category);
-
-        // Set lore
-        stack.setLore(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to view the skin packs.");
-
-        return stack.toItemStack();
+        return new ItemBuilder(s.clone())
+                .name(ChatColor.YELLOW + ChatColor.BOLD.toString() + category)
+                .lore(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to view the skin packs.")
+                .build();
     }
 }
