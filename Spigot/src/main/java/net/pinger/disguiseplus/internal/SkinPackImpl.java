@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class SkinPackImpl implements SkinPack {
 
-    private final File base;
+    private File base;
     private final String category, name;
     private final List<Skin> skins;
     private final boolean custom;
@@ -47,6 +47,14 @@ public class SkinPackImpl implements SkinPack {
     @Override
     public File getFile() {
         return this.base;
+    }
+
+    @Override
+    public void setFile(File file) {
+        if (this.base != null)
+            return;
+
+        this.base = file;
     }
 
     @Override

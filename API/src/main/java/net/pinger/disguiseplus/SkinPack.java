@@ -25,6 +25,8 @@ public interface SkinPack extends Iterable<Skin>, Comparable<SkinPack> {
 
     File getFile();
 
+    void setFile(File file);
+
     /**
      * This method returns the unique name of this
      * skin pack.
@@ -56,5 +58,4 @@ public interface SkinPack extends Iterable<Skin>, Comparable<SkinPack> {
     List<Skin> getSkins();
 
     JsonArray toJsonArray();
-
 }

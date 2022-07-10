@@ -235,12 +235,11 @@ public class SkinFactoryImpl implements SkinFactory {
 
                             // Create the file reader
                             try (FileReader packReader = new FileReader(packFile)) {
-                                // We automatically save the files
-                                // So need to check for saving here
-                                DisguisePlus.GSON.fromJson(packReader, SkinPack.class);
+                                SkinPack skinPack = DisguisePlus.GSON.fromJson(packReader, SkinPack.class);
 
-                                // We also need to set the file here
-
+                                // Set the file which we can use
+                                // To later delete the skin pack if needed
+                                skinPack.setFile(packFile);
                             }
                         }
                     }
