@@ -7,6 +7,7 @@ import com.jonahseguin.drink.Drink;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.skull.SkullManager;
+import net.pinger.disguiseplus.adapter.SkinPackAdapter;
 import net.pinger.disguiseplus.executors.DisguisePlusExecutor;
 import net.pinger.disguiseplus.file.configuration.BaseConfiguration;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
@@ -29,7 +30,11 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private static final Logger logger = LoggerFactory.getLogger("DisguisePlus");
 
     // Gson
-    public static Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
+    public static Gson GSON = new GsonBuilder()
+            .registerTypeHierarchyAdapter(SkinPack.class, new SkinPackAdapter())
+            .enableComplexMapKeySerialization()
+            .setPrettyPrinting()
+            .create();
 
     private BaseConfiguration configuration;
     private SkinFactoryImpl skinFactory;
@@ -70,7 +75,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.sum = new UserManagerImpl(this);
 
         getOutput().info(String.valueOf(skinFactory.getCategories().size()));
-
         CommandService service = Drink.get(this);
 
         // Registering the commands
@@ -87,9 +91,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         try {
             ConfigUpdater.update(this, "config.yml", config, new ArrayList<>());
         } catch (Exception e) {
-            getOutput().error("Failed to tasks the config: " + e.getMessage());
+            getOutput().error("Failed to update the config: " + e.getMessage());
         }
 
+        getOutput().info("Successfully loaded the config.yml");
         this.reloadConfig();
     }
 

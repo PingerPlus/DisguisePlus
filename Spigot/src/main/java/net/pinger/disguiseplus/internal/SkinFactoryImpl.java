@@ -250,14 +250,10 @@ public class SkinFactoryImpl implements SkinFactory {
             throw new DownloadFailedException("Failed to download skins from local files", e);
         }
 
-        DisguisePlus.getOutput().info("HAHAHAHAH");
-
         // Check if we should even try to download from the internet
         if (!this.downloadBaseSkins) {
             return;
         }
-
-        DisguisePlus.getOutput().info("HAHAHAHAH");
 
         // Try to download from the database
         try {
@@ -327,10 +323,10 @@ public class SkinFactoryImpl implements SkinFactory {
                 for (SkinPack skinPack : category.getValue()) {
                     // Get the pack directory
                     File packDir = new File(categoryDir, skinPack.getName());
+                    packDir.mkdirs();
 
                     // Get the json file
                     File packFile = new File(packDir, "pack.json");
-//                    packFile.mkdirs();
 
                     // Save the files
                     try (BufferedWriter writer = new BufferedWriter(new FileWriter(packFile))) {

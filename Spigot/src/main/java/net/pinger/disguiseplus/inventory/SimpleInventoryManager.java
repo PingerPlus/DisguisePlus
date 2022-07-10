@@ -1,9 +1,10 @@
 package net.pinger.disguiseplus.inventory;
 
+import net.pinger.disguise.item.ItemBuilder;
+import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.SkinPack;
 import net.pinger.disguiseplus.inventory.providers.*;
-import net.pinger.disguiseplus.item.ItemBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -90,9 +91,9 @@ public class SimpleInventoryManager {
 
         if (!p.isLast()) {
             // Get the item
-            ItemStack next = new ItemBuilder(Material.ARROW)
-                    .setName(ChatColor.AQUA + ChatColor.BOLD.toString() + "Next Page")
-                    .toItemStack();
+            ItemStack next = new ItemBuilder(XMaterial.ARROW)
+                    .name(ChatColor.AQUA + ChatColor.BOLD.toString() + "Next Page")
+                    .build();
 
             contents.setItem(row, 8, IntelligentItem.createNew(next, e -> {
                 contents.getIntelligentInventory().open((Player) e.getWhoClicked(), p.nextPage().getPage());
@@ -103,8 +104,8 @@ public class SimpleInventoryManager {
 
         if (!p.isFirst()) {
             ItemStack previous = new ItemBuilder(Material.ARROW)
-                    .setName(ChatColor.AQUA + ChatColor.BOLD.toString() + "Previous Page")
-                    .toItemStack();
+                    .name(ChatColor.AQUA + ChatColor.BOLD.toString() + "Previous Page")
+                    .build();
 
             contents.setItem(row, 0, IntelligentItem.createNew(previous, e -> {
                 contents.getIntelligentInventory().open((Player) e.getWhoClicked(), p.previousPage().getPage());
@@ -115,10 +116,10 @@ public class SimpleInventoryManager {
     }
 
     public static void addReturnButton(int row, int col, InventoryContents contents) {
-        ItemStack stack = new ItemBuilder(Material.OAK_SIGN)
-                .setName(ChatColor.AQUA + ChatColor.BOLD.toString() + "Back")
-                .setLore(ChatColor.GRAY + "Click to go back")
-                .toItemStack();
+        ItemStack stack = new ItemBuilder(XMaterial.OAK_SIGN)
+                .name(ChatColor.AQUA + ChatColor.BOLD.toString() + "Back")
+                .lore(ChatColor.GRAY + "Click to go back")
+                .build();
 
         // Creating the ClickableItem
         IntelligentItem item = IntelligentItem.createNew(stack, e -> {
