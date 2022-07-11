@@ -1,6 +1,8 @@
 package net.pinger.disguiseplus.prompts;
 
+import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.Skin;
+import net.pinger.disguise.exception.UserNotFoundException;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.SkinPack;
 import net.pinger.disguiseplus.user.User;
@@ -40,15 +42,19 @@ public class CreateSkinNamePrompt extends StringPrompt {
         }
 
         // Fetch skin here
-        Skin skin = null;
+        try {
+            Skin skin = DisguiseAPI.getSkinManager().getFromMojang(s);
 
-        if (skin == null) {
+            // Check if the skin is equal to null
+            // If not add it to the pack
+            if (skin != null) {
+                this.pack.addSkin(skin);
+                user.sendRawMessage("skins.success-name", s);
+            } else {
+                user.sendRawMessage("skins.error-name", s);
+            }
+        } catch (UserNotFoundException e) {
             user.sendRawMessage("skins.error-name", s);
-        } else {
-            user.sendRawMessage("skins.success-name", s);
-
-            // Add the skin
-            this.pack.addSkin(skin);
         }
 
         // Check for error here
