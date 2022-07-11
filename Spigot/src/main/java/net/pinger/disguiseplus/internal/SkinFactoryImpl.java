@@ -12,8 +12,10 @@ import net.pinger.disguiseplus.SkinFactory;
 import net.pinger.disguiseplus.SkinPack;
 import net.pinger.disguiseplus.exception.DownloadFailedException;
 import net.pinger.disguiseplus.exception.SaveFailedException;
+import net.pinger.disguiseplus.utils.FileUtil;
 import net.pinger.disguiseplus.utils.HttpUtil;
 import net.pinger.disguiseplus.utils.SkinUtil;
+import org.apache.logging.log4j.core.util.FileUtils;
 
 import javax.annotation.Nullable;
 import java.io.BufferedWriter;
@@ -120,7 +122,7 @@ public class SkinFactoryImpl implements SkinFactory {
 
         // Delete the skin pack
         // If the file exists
-        pack.getFile().delete();
+        FileUtil.deleteFile(pack.getFile().getParentFile());
     }
 
     @Nullable
