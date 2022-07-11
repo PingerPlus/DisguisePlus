@@ -46,18 +46,36 @@ public class SkinPacksProvider implements IntelligentProvider {
         SkinFactory factory = this.dp.getSkinFactory();
         IntelligentItem[] items = new IntelligentItem[factory.getCategories().size()];
 
+        // Get the default skull
+        ItemStack defaultSkull = this.dp.getSkullManager().getDefaultPlayerSkull();
+
         // Loop through every category
         // And add it to the inventory
         int i = 0;
         for (String category : factory.getCategories()) {
-            if (factory.getSkinPacks(category).isEmpty())
-                items[i++] = IntelligentItem.createNew(this.getItemFromSkin(this.dp.getSkullManager().getDefaultPlayerSkull(), category), e -> {
-                    this.dp.getInventoryManager().getCategoryProvider(category).open((Player) e.getWhoClicked());
-                });
-            else
-                items[i++] = IntelligentItem.createNew(this.getItemFromPack(factory.getSkinPacks(category).get(0)), e -> {
-                    this.dp.getInventoryManager().getCategoryProvider(category).open((Player) e.getWhoClicked());
-                });
+            // Get the necessary itemStack
+            ItemStack itemStack;
+
+            // Update depending on the condition
+            if (!factory.getSkinPacks(category).isEmpty()) {
+                // Get the first skin pack
+                SkinPack skinPack = factory.getSkinPacks(category).get(0);
+
+                // Check if it contains any skins and if not
+                // Get the default skull
+                if (skinPack.getSkins().isEmpty()) {
+                    itemStack = this.getItemFromSkin(defaultSkull, category);
+                } else {
+                    itemStack = this.getItemFromPack(skinPack);
+                }
+            } else {
+                itemStack = this.getItemFromSkin(defaultSkull, category);
+            }
+
+            // Add the item to the inventory
+            items[i++] = IntelligentItem.createNew(itemStack, e -> {
+                this.dp.getInventoryManager().getCategoryProvider(category).open(e.getWhoClicked());
+            });
         }
 
         // Add all items to an iterator
@@ -94,7 +112,7 @@ public class SkinPacksProvider implements IntelligentProvider {
 
     private ItemStack getItemFromSkin(ItemStack s, String category) {
         return new ItemBuilder(s.clone())
-                .name(ChatColor.YELLOW + ChatColor.BOLD.toString() + category)
+                .name(ChatColor.GOLD + ChatColor.BOLD.toString() + category)
                 .lore(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to view the skin packs.")
                 .build();
     }

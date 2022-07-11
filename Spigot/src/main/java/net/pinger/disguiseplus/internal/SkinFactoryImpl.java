@@ -7,7 +7,6 @@ import net.pinger.disguise.Skin;
 import net.pinger.disguise.http.HttpRequest;
 import net.pinger.disguise.http.HttpResponse;
 import net.pinger.disguise.http.request.HttpGetRequest;
-import net.pinger.disguiseplus.Disguise;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.SkinFactory;
 import net.pinger.disguiseplus.SkinPack;
