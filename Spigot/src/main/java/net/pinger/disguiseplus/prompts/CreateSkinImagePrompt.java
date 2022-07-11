@@ -51,11 +51,12 @@ public class CreateSkinImagePrompt extends StringPrompt {
 
             // Send the success message
             user.sendRawMessage("skins.success-url");
+
+            // Reopen the inventory
+            // For this player
+            this.dp.getInventoryManager().getExactPackProvider(pack).open(p);
         });
 
-        // Reopen the inventory
-        // For this player
-        this.dp.getInventoryManager().getExactPackProvider(pack).open(p);
         return Prompt.END_OF_CONVERSATION;
     }
 }
