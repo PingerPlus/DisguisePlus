@@ -7,6 +7,7 @@ import net.pinger.disguise.Skin;
 import net.pinger.disguise.http.HttpRequest;
 import net.pinger.disguise.http.HttpResponse;
 import net.pinger.disguise.http.request.HttpGetRequest;
+import net.pinger.disguiseplus.Disguise;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.SkinFactory;
 import net.pinger.disguiseplus.SkinPack;
@@ -16,7 +17,10 @@ import net.pinger.disguiseplus.utils.HttpUtil;
 import net.pinger.disguiseplus.utils.SkinUtil;
 
 import javax.annotation.Nullable;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.*;
 
 public class SkinFactoryImpl implements SkinFactory {
@@ -207,6 +211,12 @@ public class SkinFactoryImpl implements SkinFactory {
         this.skinPacks.clear();
         this.categorySkins.clear();
 
+        // Attempt to download skins
+        DisguisePlus.getOutput().info("Started the downloading skins process");
+        DisguisePlus.getOutput().info(String.format("Option for downloading default skins: %s", this.downloadBaseSkins));
+        DisguisePlus.getOutput().info("This might take a few seconds if there are no local files saved");
+        DisguisePlus.getOutput().info("Attempting to download skins from local files");
+
         try {
             // Always download local skins first
             if (categoriesFile.exists() && categoriesFile.length() >= 1) {
@@ -249,10 +259,23 @@ public class SkinFactoryImpl implements SkinFactory {
             throw new DownloadFailedException("Failed to download skins from local files", e);
         }
 
+        int skinPacks = this.skinPacks.size();
+        int totalSkins = this.skinPacks.stream().mapToInt(pack -> pack.getSkins().size()).sum();
+
+        // Output for different occasions
+        if (skinPacks > 0 && totalSkins > 0) {
+            DisguisePlus.getOutput().info(String.format("Downloaded %s skins from %s different skin packs", totalSkins, skinPacks));
+        } else {
+            DisguisePlus.getOutput().info("No skins were found within the local cache");
+        }
+
         // Check if we should even try to download from the internet
         if (!this.downloadBaseSkins) {
+            DisguisePlus.getOutput().info("Skipping downloading from the database since the config option is turned off");
             return;
         }
+
+        DisguisePlus.getOutput().info("Attempting to download skins from the database");
 
         // Try to download from the database
         try {
@@ -301,10 +324,23 @@ public class SkinFactoryImpl implements SkinFactory {
         } catch (Exception e) {
             throw new DownloadFailedException("Failed to download skins from the database", e);
         }
+
+        skinPacks = this.skinPacks.size();
+        totalSkins = this.skinPacks.stream().mapToInt(pack -> pack.getSkins().size()).sum() - totalSkins;
+
+        // Output for different occasions
+        if (skinPacks > 0 && totalSkins > 0) {
+            DisguisePlus.getOutput().info(String.format("Fetched %s skins from %s different skin packs from the database", totalSkins, skinPacks));
+        } else {
+            DisguisePlus.getOutput().info("No new skins were found within the database");
+        }
     }
 
     @Override
     public void saveSkins() throws SaveFailedException {
+        // Starting the process
+        DisguisePlus.getOutput().info("Attempting to save skins locally.");
+
         try {
             // Object that will later be converted
             // Or rather saved in the categories.json file
@@ -346,6 +382,8 @@ public class SkinFactoryImpl implements SkinFactory {
         } catch (Exception e) {
             throw new SaveFailedException("Failed to save skins from the skin cache", e);
         }
+
+        DisguisePlus.getOutput().info("Successfully saved skins locally");
     }
 
     @Override

@@ -11,10 +11,9 @@ import net.pinger.disguiseplus.adapter.SkinPackAdapter;
 import net.pinger.disguiseplus.executors.DisguisePlusExecutor;
 import net.pinger.disguiseplus.file.configuration.BaseConfiguration;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
+import net.pinger.disguiseplus.internal.user.UserManagerImpl;
 import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
 import net.pinger.disguiseplus.listeners.LoginListener;
-import net.pinger.disguiseplus.internal.user.UserImpl;
-import net.pinger.disguiseplus.internal.user.UserManagerImpl;
 import net.pinger.disguiseplus.user.UserManager;
 import net.pinger.disguiseplus.utils.ConversationUtil;
 import org.bukkit.Bukkit;
@@ -66,18 +65,14 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
         this.conversationUtil = new ConversationUtil(this);
         this.inventoryManager = new SimpleInventoryManager(this);
+        this.configuration = new BaseConfiguration(this);
+        this.sum = new UserManagerImpl(this);
         this.skinFactory = new SkinFactoryImpl(this, getConfig().getBoolean("downloadBaseSkins"));
 
         // Download skins
         this.skinFactory.downloadSkins();
 
-        this.configuration = new BaseConfiguration(this);
-        this.sum = new UserManagerImpl(this);
-
-        getOutput().info(String.valueOf(skinFactory.getCategories().size()));
         CommandService service = Drink.get(this);
-
-        // Registering the commands
         service.register(new DisguisePlusExecutor(this), "dp");
         service.registerCommands();
 
@@ -104,22 +99,13 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             this.conversationUtil.cancelAllConversations();
         }
 
-        logger.info("Successfully cancelled all user conversation.");
-
         if (this.skinFactory != null) {
             this.skinFactory.saveSkins();
         }
 
-        logger.info("Successfully saved the skin factory.");
-
-        if (this.sum != null) {
-            // Save the information
-            for (UserImpl user : this.sum.getUsers()) {
-//                user.saveInformation();
-            }
-        }
-
-        logger.info("Successfully saved all user data.");
+//        if (this.sum != null) {
+//            // Save the information for users
+//        }
     }
 
     public static Logger getOutput() {
