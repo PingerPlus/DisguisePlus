@@ -1,9 +1,11 @@
 package net.pinger.disguiseplus.inventory.providers;
 
+import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.Skin;
 import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.DisguisePlusAPI;
 import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
 import net.pinger.disguiseplus.prompts.ConfirmDeletePackPrompt;
 import net.pinger.disguiseplus.SkinPack;
@@ -41,9 +43,10 @@ public class ExactPackProvider implements IntelligentProvider {
             // Get the pack
             Skin skin = skins.get(i);
 
-            items[i] = IntelligentItem.createNew(this.getSkinPack(skin), e -> {
+            items[i] = IntelligentItem.createNew(this.getSkinPack(skin, (i + 1)), e -> {
                 // Here perform action
                 // For every skin
+                DisguisePlusAPI.getDisguiseManager().applySkin(player, skin);
             });
         }
 
@@ -86,10 +89,12 @@ public class ExactPackProvider implements IntelligentProvider {
         SimpleInventoryManager.addPageButtons(5, contents);
     }
 
-    private ItemStack getSkinPack(Skin skin) {
+    private ItemStack getSkinPack(Skin skin, int index) {
         return new ItemBuilder(skin.toSkull())
-                .name(" ")
-                .lore("")
+                .name(ChatColor.GOLD + ChatColor.BOLD.toString() + this.pack.getName() + " > " + ChatColor.RESET + ChatColor.YELLOW + index)
+                .lore(ChatColor.GRAY + "Click here to " + ChatColor.AQUA + "apply" + ChatColor.GRAY + " this skin", "",
+                        ChatColor.GRAY + "Times Worn: ", ChatColor.AQUA + "Unknown", "",
+                        ChatColor.GRAY + "Average Time Worn: ", ChatColor.AQUA + "Unknown")
                 .build();
     }
 }

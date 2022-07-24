@@ -10,6 +10,7 @@ import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguiseplus.adapter.SkinPackAdapter;
 import net.pinger.disguiseplus.executors.DisguisePlusExecutor;
 import net.pinger.disguiseplus.file.configuration.BaseConfiguration;
+import net.pinger.disguiseplus.internal.DisguiseManagerImpl;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
 import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
@@ -40,6 +41,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private ConversationUtil conversationUtil;
     private SimpleInventoryManager inventoryManager;
     private final SkullManager skullManager = new SkullManager();
+    private DisguiseManager disguiseManager;
     private UserManagerImpl sum;
 
     @Override
@@ -68,6 +70,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.configuration = new BaseConfiguration(this);
         this.sum = new UserManagerImpl(this);
         this.skinFactory = new SkinFactoryImpl(this, getConfig().getBoolean("downloadBaseSkins"));
+        this.disguiseManager = new DisguiseManagerImpl(this, DisguiseAPI.getProvider());
 
         // Download skins
         this.skinFactory.downloadSkins();
@@ -119,7 +122,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     @Override
     public DisguiseManager getManager() {
-        return null;
+        return this.disguiseManager;
     }
 
     @Override
