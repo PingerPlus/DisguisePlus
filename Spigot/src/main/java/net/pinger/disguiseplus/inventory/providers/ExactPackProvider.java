@@ -74,7 +74,7 @@ public class ExactPackProvider implements IntelligentProvider {
 
         // Delete this skin pack
         ItemStack dl = new ItemBuilder(XMaterial.TRIPWIRE_HOOK)
-                .name(ChatColor.AQUA + ChatColor.BOLD.toString() +"Delete Skin Pack")
+                .name(ChatColor.AQUA + ChatColor.BOLD.toString() + "Delete Skin Pack")
                 .lore(ChatColor.GRAY + "Click to delete this pack")
                 .build();
 

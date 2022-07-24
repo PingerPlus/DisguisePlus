@@ -51,10 +51,27 @@ public class SkinFactoryImpl implements SkinFactory {
 
     @Override
     public void deleteCategory(String category) {
-        this.categorySkins.remove(category);
+        List<SkinPack> skinPacks = this.categorySkins.get(category);
 
-        // Also delete all packs that are inside this category
-        this.skinPacks.removeIf(pack -> pack.getCategory().equalsIgnoreCase(category));
+        // Get all the skins packs and also delete
+        for (Iterator<SkinPack> iterator = skinPacks.iterator(); iterator.hasNext();) {
+            SkinPack pack = iterator.next();
+
+            // Remove from the iterator
+            iterator.remove();
+
+            // Delete the skin from here
+            if (pack.getFile() == null || !pack.getFile().exists()) {
+                continue;
+            }
+
+            // Delete the skin pack
+            // If the file exists
+            FileUtil.deleteFile(pack.getFile().getParentFile());
+        }
+
+        // Delete the category at last
+        this.categorySkins.remove(category);
     }
 
     @Override

@@ -78,6 +78,19 @@ public class CategoryProvider implements IntelligentProvider {
             this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreatePackPrompt(this.dp, this.category), 25);
         }));
 
+        // Deleting the skin pack item
+        ItemStack dp = new ItemBuilder(XMaterial.TRIPWIRE_HOOK)
+                .name(ChatColor.AQUA + ChatColor.BOLD.toString() + "Delete Category")
+                .lore(ChatColor.GRAY + "Click to delete this category")
+                .build();
+
+        contents.setItem(5, 7, IntelligentItem.createNew(dp, e -> {
+            this.dp.getSkinFactory().deleteCategory(this.category);
+
+            // Open the parent inventory
+            this.dp.getInventoryManager().getSkinPacksProvider().open(e.getWhoClicked());
+        }));
+
         SimpleInventoryManager.addReturnButton(5, 4, contents);
         SimpleInventoryManager.addPageButtons(5, contents);
     }
