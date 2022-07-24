@@ -23,12 +23,18 @@ public class DisguisePlusProvider implements IntelligentProvider {
         // Get skull for this player
         ItemStack skull = new ItemBuilder(this.dp.getSkullManager().getSkullFrom(player.getUniqueId()))
                 .name(ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD + "Users")
-                .lore(ChatColor.AQUA + "Click" + ChatColor.GRAY + " to view users.")
+                .lore(ChatColor.GRAY + "Coming soon...")
                 .build();
 
-        contents.setItem(1, 2, IntelligentItem.createNew(skull, e -> {
-            this.dp.getInventoryManager().getUserListProvider().open((Player) e.getWhoClicked());
-        }));
+        contents.setItem(1, 2, IntelligentItem.createNew(skull));
+
+        // Settings
+        ItemStack settings = new ItemBuilder(XMaterial.COMMAND_BLOCK)
+                .name(ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD + "Settings")
+                .lore(ChatColor.GRAY + "Coming soon...")
+                .build();
+
+        contents.setItem(3, 4, IntelligentItem.createNew(settings));
     }
 
     @Override
