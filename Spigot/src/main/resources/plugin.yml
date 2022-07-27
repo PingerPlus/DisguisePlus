@@ -2,4 +2,4 @@ name: DisguisePlus
 version: 2.0.0
 main: net.pinger.disguiseplus.DisguisePlus
 depend: [DisguiseAPI]
-api-version: 1.17
+api-version: 1.13

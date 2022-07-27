@@ -1,5 +1,6 @@
 package net.pinger.disguiseplus;
 
+import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jonahseguin.drink.CommandService;
@@ -23,7 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DisguisePlus extends JavaPlugin implements Disguise {
 
@@ -46,6 +49,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     @Override
     public void onEnable() {
+
         // Make sure that we created all instances
         // Of the api, before we connect to the api
         DisguisePlusAPI.setDisguise(this);

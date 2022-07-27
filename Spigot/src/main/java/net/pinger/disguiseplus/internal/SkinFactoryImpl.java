@@ -15,7 +15,6 @@ import net.pinger.disguiseplus.exception.SaveFailedException;
 import net.pinger.disguiseplus.utils.FileUtil;
 import net.pinger.disguiseplus.utils.HttpUtil;
 import net.pinger.disguiseplus.utils.SkinUtil;
-import org.apache.logging.log4j.core.util.FileUtils;
 
 import javax.annotation.Nullable;
 import java.io.BufferedWriter;
