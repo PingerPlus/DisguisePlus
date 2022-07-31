@@ -17,7 +17,7 @@ import net.pinger.disguiseplus.internal.PlayerMatcherImpl;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
 import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
-import net.pinger.disguiseplus.listeners.LoginListener;
+import net.pinger.disguiseplus.listeners.PlayerListener;
 import net.pinger.disguiseplus.user.User;
 import net.pinger.disguiseplus.user.UserManager;
 import net.pinger.disguiseplus.utils.ConversationUtil;
@@ -71,7 +71,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.addDefaultConfig();
 
         this.sum = new UserManagerImpl(this);
-        Bukkit.getPluginManager().registerEvents(new LoginListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
 
         this.skullManager = new SkullManager();
         this.playerMatcher = new PlayerMatcherImpl();

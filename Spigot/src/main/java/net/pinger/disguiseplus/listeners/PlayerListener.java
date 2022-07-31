@@ -9,11 +9,11 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class LoginListener implements Listener {
+public class PlayerListener implements Listener {
 
     private final DisguisePlus dp;
 
-    public LoginListener(DisguisePlus dp) {
+    public PlayerListener(DisguisePlus dp) {
         this.dp = dp;
     }
 
