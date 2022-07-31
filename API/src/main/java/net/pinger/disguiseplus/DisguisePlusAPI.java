@@ -45,5 +45,14 @@ public class DisguisePlusAPI {
         return disguise.getManager();
     }
 
+    /**
+     * Returns the {@link PlayerMatcher} instance.
+     *
+     * @return the player matcher
+     */
+
+    public static PlayerMatcher getPlayerMatcher() {
+        return disguise.getPlayerMatcher();
+    }
 
 }

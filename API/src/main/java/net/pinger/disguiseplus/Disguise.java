@@ -13,4 +13,13 @@ public interface Disguise {
     //
 
     UserManager getUserManager();
+
+    /**
+     * This method returns the object which
+     * validates player id's.
+     *
+     * @return the name validator
+     */
+
+    PlayerMatcher getPlayerMatcher();
 }

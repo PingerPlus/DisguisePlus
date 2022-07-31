@@ -11,6 +11,7 @@ import net.pinger.disguiseplus.adapter.SkinPackAdapter;
 import net.pinger.disguiseplus.executors.DisguisePlusExecutor;
 import net.pinger.disguiseplus.file.configuration.BaseConfiguration;
 import net.pinger.disguiseplus.internal.DisguiseManagerImpl;
+import net.pinger.disguiseplus.internal.PlayerMatcherImpl;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
 import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
@@ -18,7 +19,6 @@ import net.pinger.disguiseplus.listeners.LoginListener;
 import net.pinger.disguiseplus.user.UserManager;
 import net.pinger.disguiseplus.utils.ConversationUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private SkinFactoryImpl skinFactory;
     private ConversationUtil conversationUtil;
     private SimpleInventoryManager inventoryManager;
-    private final SkullManager skullManager = new SkullManager();
+    private PlayerMatcher playerMatcher;
+    private SkullManager skullManager;
     private DisguiseManager disguiseManager;
     private UserManagerImpl sum;
 
@@ -68,6 +69,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.sum = new UserManagerImpl(this);
         Bukkit.getPluginManager().registerEvents(new LoginListener(this), this);
 
+        this.skullManager = new SkullManager();
+        this.playerMatcher = new PlayerMatcherImpl();
         this.conversationUtil = new ConversationUtil(this);
         this.inventoryManager = new SimpleInventoryManager(this);
         this.configuration = new BaseConfiguration(this);
@@ -124,6 +127,11 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     @Override
     public UserManager getUserManager() {
         return this.sum;
+    }
+
+    @Override
+    public PlayerMatcher getPlayerMatcher() {
+        return this.playerMatcher;
     }
 
     public ConversationUtil getConversationUtil() {

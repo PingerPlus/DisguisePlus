@@ -100,7 +100,16 @@ public class DisguiseManagerImpl implements DisguiseManager {
         // Clear the properties of this player
         this.provider.clearProperties(player);
 
+        // Reset the player nickname
+        
+
         // Here we need to check for NickMatching
         // Condition
+        if (!this.dp.getPlayerMatcher().matches(player)) {
+            this.provider.sendServerPackets(player);
+            return;
+        }
+
+        // Apply the skin here
     }
 }
