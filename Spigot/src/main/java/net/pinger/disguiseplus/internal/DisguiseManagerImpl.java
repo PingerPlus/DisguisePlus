@@ -101,7 +101,6 @@ public class DisguiseManagerImpl implements DisguiseManager {
         this.provider.clearProperties(player);
 
         // Reset the player nickname
-        
 
         // Here we need to check for NickMatching
         // Condition
@@ -111,5 +110,6 @@ public class DisguiseManagerImpl implements DisguiseManager {
         }
 
         // Apply the skin here
+        this.applySkinFromName(player, player.getName());
     }
 }

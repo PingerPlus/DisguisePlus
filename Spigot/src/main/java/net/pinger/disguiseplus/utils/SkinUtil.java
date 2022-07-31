@@ -7,7 +7,7 @@ public class SkinUtil {
 
     /**
      * Returns a new {@link Skin} from the specified json object.
-     * This method is used when catching skins from {@link HttpUtil#CLOUD_URL}.
+     * This method is used when catching skins.
      *
      * @param object the json object
      * @return a new skin object

@@ -5,7 +5,7 @@ import org.bukkit.ChatColor;
 public class StringUtil {
 
     /**
-     * Checks if a this string contains chat colors.
+     * Checks if this string contains chat colors.
      *
      * @param s the colors
      * @return if it contains colors

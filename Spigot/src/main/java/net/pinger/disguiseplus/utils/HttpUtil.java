@@ -2,8 +2,6 @@ package net.pinger.disguiseplus.utils;
 
 import net.pinger.disguiseplus.SkinPack;
 
-import java.util.UUID;
-
 public class HttpUtil {
 
     /**
