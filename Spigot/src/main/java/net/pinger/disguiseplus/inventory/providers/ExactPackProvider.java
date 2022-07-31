@@ -1,14 +1,14 @@
 package net.pinger.disguiseplus.inventory.providers;
 
-import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.Skin;
 import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.DisguisePlusAPI;
+import net.pinger.disguiseplus.SkinPack;
 import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
 import net.pinger.disguiseplus.prompts.ConfirmDeletePackPrompt;
-import net.pinger.disguiseplus.SkinPack;
+import net.pinger.disguiseplus.user.User;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -34,6 +34,7 @@ public class ExactPackProvider implements IntelligentProvider {
     public void initialize(Player player, InventoryContents contents) {
         // Pagination
         InventoryPagination page = contents.getPagination();
+        User user = this.dp.getUserManager().getUser(player);
 
         // Get the skins
         List<Skin> skins = this.pack.getSkins();
@@ -47,6 +48,9 @@ public class ExactPackProvider implements IntelligentProvider {
                 // Here perform action
                 // For every skin
                 DisguisePlusAPI.getDisguiseManager().applySkin(player, skin);
+
+                // Send the confirmation message
+                user.sendMessage("player.skin-set", this.pack.getName());
             });
         }
 

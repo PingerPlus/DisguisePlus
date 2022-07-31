@@ -4,12 +4,10 @@ import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.Skin;
 import net.pinger.disguise.exception.UserNotFoundException;
 import net.pinger.disguise.packet.PacketProvider;
-import net.pinger.disguise.server.MinecraftServer;
 import net.pinger.disguiseplus.DisguiseManager;
 import net.pinger.disguiseplus.DisguisePlus;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nonnull;
 import java.util.UUID;

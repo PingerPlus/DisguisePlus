@@ -1,6 +1,5 @@
 package net.pinger.disguiseplus;
 
-import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jonahseguin.drink.CommandService;
@@ -19,14 +18,13 @@ import net.pinger.disguiseplus.listeners.LoginListener;
 import net.pinger.disguiseplus.user.UserManager;
 import net.pinger.disguiseplus.utils.ConversationUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class DisguisePlus extends JavaPlugin implements Disguise {
 
@@ -49,13 +47,11 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     @Override
     public void onEnable() {
-
         // Make sure that we created all instances
         // Of the api, before we connect to the api
         DisguisePlusAPI.setDisguise(this);
 
-        // Make sure to register the custom provider
-//        DateTimeZone.setProvider(new UTCProvider());
+        // Check if the provider failed to load
         if (DisguiseAPI.getProvider() == null) {
             getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
             getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
@@ -69,10 +65,12 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         // Load the config
         this.addDefaultConfig();
 
+        this.sum = new UserManagerImpl(this);
+        Bukkit.getPluginManager().registerEvents(new LoginListener(this), this);
+
         this.conversationUtil = new ConversationUtil(this);
         this.inventoryManager = new SimpleInventoryManager(this);
         this.configuration = new BaseConfiguration(this);
-        this.sum = new UserManagerImpl(this);
         this.skinFactory = new SkinFactoryImpl(this, getConfig().getBoolean("downloadBaseSkins"));
         this.disguiseManager = new DisguiseManagerImpl(this, DisguiseAPI.getProvider());
 
@@ -82,8 +80,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         CommandService service = Drink.get(this);
         service.register(new DisguisePlusExecutor(this), "dp");
         service.registerCommands();
-
-        Bukkit.getPluginManager().registerEvents(new LoginListener(this), this);
     }
 
     private void addDefaultConfig() {
@@ -109,10 +105,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         if (this.skinFactory != null) {
             this.skinFactory.saveSkins();
         }
-
-//        if (this.sum != null) {
-//            // Save the information for users
-//        }
     }
 
     public static Logger getOutput() {
