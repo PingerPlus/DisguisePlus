@@ -2,7 +2,6 @@ package net.pinger.disguiseplus.prompts;
 
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.SkinFactory;
-import net.pinger.disguiseplus.internal.SkinPackImpl;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;

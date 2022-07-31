@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 public class CreateSkinNamePrompt extends StringPrompt {
 
     private final DisguisePlus dp;
-    private final net.pinger.disguiseplus.SkinPack pack;
+    private final SkinPack pack;
 
     public CreateSkinNamePrompt(DisguisePlus dp, SkinPack pack) {
         this.dp = dp;

@@ -1,7 +1,6 @@
 package net.pinger.disguiseplus.prompts;
 
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.internal.SkinFactoryImpl;
 import net.pinger.disguiseplus.SkinPack;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.conversations.ConversationContext;
@@ -9,12 +8,13 @@ import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ConfirmDeletePackPrompt extends StringPrompt {
 
     private final DisguisePlus dp;
-    private final net.pinger.disguiseplus.SkinPack pack;
+    private final SkinPack pack;
 
     public ConfirmDeletePackPrompt(DisguisePlus dp, SkinPack pack) {
         this.dp = dp;
@@ -22,7 +22,7 @@ public class ConfirmDeletePackPrompt extends StringPrompt {
     }
 
     @Override
-    public String getPromptText(ConversationContext conversationContext) {
+    public String getPromptText(@Nonnull ConversationContext conversationContext) {
         return this.dp.getConfiguration().of("skin-packs.confirm-delete");
     }
 
