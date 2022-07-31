@@ -1,5 +1,6 @@
 package net.pinger.disguiseplus.internal.user;
 
+import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.user.User;
 import net.pinger.disguiseplus.user.UserManager;
@@ -17,7 +18,17 @@ public class UserManagerImpl implements UserManager {
         this.dp = dp;
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            this.createPlayer(p.getUniqueId());
+            UserImpl user = new UserImpl(this.dp, p.getUniqueId());
+            user.setDefaultName(p.getName());
+
+            // Add it to the map
+            this.users.put(p.getUniqueId(), user);
+
+            // Send update packets for this player
+            // This might need to happen
+            // When we need to reset
+            // The player name
+            DisguiseAPI.getProvider().sendServerPackets(p);
         }
     }
 

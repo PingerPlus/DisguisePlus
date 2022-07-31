@@ -6,13 +6,19 @@ import net.pinger.disguise.exception.UserNotFoundException;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguiseplus.DisguiseManager;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 public class DisguiseManagerImpl implements DisguiseManager {
+
+    private Method playerProfileMethod;
+    private Field playerNameField;
 
     protected final DisguisePlus dp;
     private final PacketProvider provider;
@@ -61,8 +67,8 @@ public class DisguiseManagerImpl implements DisguiseManager {
             // Apply the skin
             // As last task
             this.applySkin(player, skin);
-        } catch (UserNotFoundException e) {
-            return;
+        } catch (UserNotFoundException ignored) {
+
         }
     }
 
@@ -76,6 +82,25 @@ public class DisguiseManagerImpl implements DisguiseManager {
             // Apply the wanted skin
             this.applySkin(player, response.get());
         });
+    }
+
+    @Override
+    public void setNickname(Player player, @Nonnull String nickname) {
+        if (nickname.length() > 16 || nickname.length() < 3) {
+            throw new IllegalArgumentException("A nickname must be between 3 and 16 characters");
+        }
+
+        this.updatePlayerNickname(player, nickname);
+        this.provider.sendServerPackets(player);
+    }
+
+    @Override
+    public void resetNickname(Player player) {
+        User user = this.dp.getUserManager().getUser(player);
+
+        // Reset the nickname by setting
+        // It to the default name
+        this.setNickname(player, user.getDefaultName());
     }
 
     @Override
@@ -101,6 +126,7 @@ public class DisguiseManagerImpl implements DisguiseManager {
         this.provider.clearProperties(player);
 
         // Reset the player nickname
+        this.resetNickname(player);
 
         // Here we need to check for NickMatching
         // Condition
@@ -111,5 +137,31 @@ public class DisguiseManagerImpl implements DisguiseManager {
 
         // Apply the skin here
         this.applySkinFromName(player, player.getName());
+    }
+
+    private void updatePlayerNickname(Player player, @Nonnull String nickname) {
+        try {
+            // Set the profile method
+            if (this.playerProfileMethod == null) {
+                this.playerProfileMethod = player.getClass().getMethod("getProfile");
+            }
+
+            // Get the GameProfile object
+            // And update the name field
+            Object gameProfile = this.playerProfileMethod.invoke(player);
+
+            if (this.playerNameField == null) {
+                this.playerNameField = gameProfile.getClass().getDeclaredField("name");
+            }
+
+            this.playerNameField.setAccessible(true);
+            this.playerNameField.set(gameProfile, nickname);
+
+            // Change for the API
+            player.setDisplayName(nickname);
+            player.setPlayerListName(nickname);
+        } catch (Exception e) {
+            DisguisePlus.getOutput().info("Failed to update player nickname", e);
+        }
     }
 }

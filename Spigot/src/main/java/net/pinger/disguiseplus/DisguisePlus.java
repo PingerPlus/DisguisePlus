@@ -9,6 +9,8 @@ import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguiseplus.adapter.SkinPackAdapter;
 import net.pinger.disguiseplus.executors.DisguisePlusExecutor;
+import net.pinger.disguiseplus.executors.NicknameExecutor;
+import net.pinger.disguiseplus.executors.ResetNicknameExecutor;
 import net.pinger.disguiseplus.file.configuration.BaseConfiguration;
 import net.pinger.disguiseplus.internal.DisguiseManagerImpl;
 import net.pinger.disguiseplus.internal.PlayerMatcherImpl;
@@ -16,9 +18,11 @@ import net.pinger.disguiseplus.internal.SkinFactoryImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
 import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
 import net.pinger.disguiseplus.listeners.LoginListener;
+import net.pinger.disguiseplus.user.User;
 import net.pinger.disguiseplus.user.UserManager;
 import net.pinger.disguiseplus.utils.ConversationUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +86,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
         CommandService service = Drink.get(this);
         service.register(new DisguisePlusExecutor(this), "dp");
+        service.register(new NicknameExecutor(this), "nick", "nickname");
+        service.register(new ResetNicknameExecutor(this), "unnick", "resetnick", "unnickname");
         service.registerCommands();
     }
 
@@ -101,6 +107,13 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     @Override
     public void onDisable() {
+        // Reset nicknames for all players
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            User user = this.getUserManager().getUser(player);
+            getOutput().info(user.getDefaultName());
+            this.getManager().resetNickname(player);
+        }
+
         if (this.conversationUtil != null) {
             this.conversationUtil.cancelAllConversations();
         }

@@ -48,6 +48,25 @@ public interface DisguiseManager {
     void applySkinFromUrl(Player player, @Nonnull String url);
 
     /**
+     * This method sets the nickname of the specified player
+     * instantly.
+     *
+     * @param player the player to set the nickname to
+     * @param nickname the nickname
+     */
+
+    void setNickname(Player player, @Nonnull String nickname);
+
+    /**
+     * This method resets the nickname of the player
+     * to their default one
+     *
+     * @param player the player to reset the nickname for
+     */
+
+    void resetNickname(Player player);
+
+    /**
      * This method disguises the specified {@link Player}.
      *
      * @param player the player to disguise
