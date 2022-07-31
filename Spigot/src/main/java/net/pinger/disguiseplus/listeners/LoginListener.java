@@ -32,11 +32,8 @@ public class LoginListener implements Listener {
         UserManagerImpl manager = ((UserManagerImpl) this.dp.getUserManager());
         manager.createPlayer(event.getUniqueId());
 
-        // Get the user again
-        UserImpl s = (UserImpl) manager.getUser(event.getUniqueId());
-
-//        // Here we will load the user data
-//        s.retrieveInformation();
+        // Load user data here
+        // When SQL gets reintroduced
     }
 
     @EventHandler
@@ -44,11 +41,11 @@ public class LoginListener implements Listener {
         UserImpl s = (UserImpl) this.dp.getUserManager()
                 .getUser(event.getPlayer().getUniqueId());
 
-//        // Save the data
-//        s.saveInformation();
-
         // Remove the player from the users
         ((UserManagerImpl) this.dp.getUserManager()).removePlayer(event.getPlayer());
+
+        // Save the data of the player here
+        // When SQL gets reintroduced
     }
 
 }
