@@ -92,6 +92,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         service.register(new DisguiseExecutor(this), "d", "disguise");
         service.register(new ResetDisguiseExecutor(this), "und", "undisguise");
         service.register(new RepeatDisguiseExecutor(this), "rd", "redisguise");
+        service.register(new SkinExecutor(this), "skin", "setskin");
+        service.register(new ResetSkinExecutor(this), "resetskin", "unskin");
         service.registerCommands();
     }
 

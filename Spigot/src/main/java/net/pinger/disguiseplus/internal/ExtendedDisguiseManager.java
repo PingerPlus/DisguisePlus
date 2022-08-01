@@ -49,7 +49,7 @@ public class ExtendedDisguiseManager extends DisguiseManagerImpl {
             return;
         }
 
-        user.sendMessage("player.success-name", playerName);
+        user.sendMessage("player.success-skin-name", playerName);
     }
 
     @Override
