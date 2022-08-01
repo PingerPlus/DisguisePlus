@@ -17,19 +17,13 @@ public class HttpUtil {
     public static final String CATEGORY_URL = "https://raw.githubusercontent.com/ITSPINGER/Skins/master/SkinPacks/categories.json";
 
     /**
-     * The base url of the skinspacks
+     * The base url of the skin packs
      */
 
     private static final String SKINPACK = "https://raw.githubusercontent.com/ITSPINGER/Skins/master/SkinPacks/%s/%s/data.json";
 
     /**
-     * This field represents the value of the mineskin app
-     */
-
-    private final static String MINESKIN_URL = "https://api.mineskin.org/generate/url?url=%s";
-
-    /**
-     * Retunrs a new string which represents a formatted url pointing to the uuid of this player
+     * Returns a new string which represents a formatted url pointing to the uuid of this player
      * within the mojang servers.
      *
      * @param s the name of the player
@@ -51,17 +45,4 @@ public class HttpUtil {
     public static String toSkinPack(String category, String name) {
         return String.format(SKINPACK, category, name).replace(" ", "%20");
     }
-
-    /**
-     * This method returns a new mineskin url used in for requesting new skins.
-     *
-     * @param url the url of the image
-     * @return the url of the request
-     */
-
-    public static String toMineskin(String url) {
-        return String.format(MINESKIN_URL, url);
-    }
-
-
 }
