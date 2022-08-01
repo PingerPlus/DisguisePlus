@@ -115,8 +115,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     public void onDisable() {
         // Reset nicknames for all players
         for (Player player : Bukkit.getOnlinePlayers()) {
-            User user = this.getUserManager().getUser(player);
-            getOutput().info(user.getDefaultName());
             this.getManager().resetNickname(player);
         }
 
