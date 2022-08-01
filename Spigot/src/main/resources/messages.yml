@@ -27,7 +27,7 @@ player:
   failed-nick-reset: "&cFailed to remove nickname because it is not already set."
   nickname-reset: "&aYour nickname has been reset successfully."
   success-disguise: "&aYou have been disguised. Do /rd to redisguise. \nType /und to undisguise"
-  failed-disguise: "Failed to disguise as you already have a nick or a skin set"
+  failed-disguise: "&cFailed to disguise as you already have a nick or a skin set"
   currently-disguised: "&cYou may not use this command while disguised."
   not-disguised: "&cYou are currently not disguised."
   already-disguised: "&cYou are already disguised. Do /rd to redisguise."
