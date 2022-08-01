@@ -22,7 +22,7 @@ public class DisguiseManagerImpl implements DisguiseManager {
     private Field playerNameField;
 
     protected final DisguisePlus dp;
-    private final PacketProvider provider;
+    protected final PacketProvider provider;
 
     public DisguiseManagerImpl(DisguisePlus dp, PacketProvider provider) {
         this.dp = dp;

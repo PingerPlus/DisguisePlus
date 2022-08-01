@@ -109,7 +109,8 @@ public class ExtendedDisguiseManager extends DisguiseManagerImpl {
             return;
         }
 
-        super.resetNickname(player);
+        super.updatePlayerNickname(player, user.getDefaultName());
+        this.provider.sendServerPackets(player);
         user.sendMessage("player.nickname-reset");
         user.removeStatistic(NickStatistic.class);
     }
@@ -154,9 +155,23 @@ public class ExtendedDisguiseManager extends DisguiseManagerImpl {
             return;
         }
 
-        super.undisguise(player);
+        // Clear the properties of this player
+        this.provider.clearProperties(player);
+
+        // Reset the player nickname
+        this.updatePlayerNickname(player, user.getDefaultName());
         user.sendMessage("player.success-undisguise");
         user.removeStatistic(DisguiseStatistic.class);
+
+        // Here we need to check for NickMatching
+        // Condition
+        if (!this.dp.getPlayerMatcher().matches(player)) {
+            this.provider.sendServerPackets(player);
+            return;
+        }
+
+        // Apply the skin here
+        super.applySkinFromName(player, player.getName());
     }
 
 }

@@ -8,10 +8,7 @@ import com.tchristofferson.configupdater.ConfigUpdater;
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguiseplus.adapter.SkinPackAdapter;
-import net.pinger.disguiseplus.executors.DisguiseExecutor;
-import net.pinger.disguiseplus.executors.DisguisePlusExecutor;
-import net.pinger.disguiseplus.executors.NicknameExecutor;
-import net.pinger.disguiseplus.executors.ResetNicknameExecutor;
+import net.pinger.disguiseplus.executors.*;
 import net.pinger.disguiseplus.file.configuration.BaseConfiguration;
 import net.pinger.disguiseplus.internal.DisguiseManagerImpl;
 import net.pinger.disguiseplus.internal.ExtendedDisguiseManager;
@@ -93,6 +90,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         service.register(new NicknameExecutor(this), "nick", "nickname");
         service.register(new ResetNicknameExecutor(this), "unnick", "resetnick", "unnickname");
         service.register(new DisguiseExecutor(this), "d", "disguise");
+        service.register(new ResetDisguiseExecutor(this), "und", "undisguise");
+        service.register(new RepeatDisguiseExecutor(this), "rd", "redisguise");
         service.registerCommands();
     }
 
