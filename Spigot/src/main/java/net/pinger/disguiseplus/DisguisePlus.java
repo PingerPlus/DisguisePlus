@@ -6,6 +6,7 @@ import com.jonahseguin.drink.CommandService;
 import com.jonahseguin.drink.Drink;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import net.pinger.disguise.DisguiseAPI;
+import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguiseplus.adapter.SkinPackAdapter;
 import net.pinger.disguiseplus.executors.*;
@@ -56,8 +57,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         // Of the api, before we connect to the api
         DisguisePlusAPI.setDisguise(this);
 
-        // Check if the provider failed to load
-        if (DisguiseAPI.getProvider() == null) {
+        PacketProvider provider = DisguiseAPI.getProvider();
+        if (provider == null) {
             getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
             getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
             getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
@@ -79,8 +80,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.inventoryManager = new SimpleInventoryManager(this);
         this.configuration = new BaseConfiguration(this);
         this.skinFactory = new SkinFactoryImpl(this, getConfig().getBoolean("downloadBaseSkins"));
-        this.disguiseManager = new DisguiseManagerImpl(this, DisguiseAPI.getProvider());
-        this.extendedDisguiseManager = new ExtendedDisguiseManager(this, DisguiseAPI.getProvider());
+        this.disguiseManager = new DisguiseManagerImpl(this, provider);
+        this.extendedDisguiseManager = new ExtendedDisguiseManager(this, provider);
 
         // Download skins
         this.skinFactory.downloadSkins();
