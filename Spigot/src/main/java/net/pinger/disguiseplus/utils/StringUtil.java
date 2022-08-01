@@ -1,26 +1,14 @@
 package net.pinger.disguiseplus.utils;
 
-import org.bukkit.ChatColor;
-
 import java.security.SecureRandom;
+import java.util.Locale;
 import java.util.Random;
 
 public class StringUtil {
 
     private static final Random RANDOM = new SecureRandom();
-    private static final String CONSONANTS = "BCDFGHJKLMNPQRSTUVWXYZ";
-    private static final String VOWELS = "AEIOU";
-
-    /**
-     * Checks if this string contains chat colors.
-     *
-     * @param s the colors
-     * @return if it contains colors
-     */
-
-    public static boolean containsColor(String s) {
-        return !ChatColor.stripColor(s).equalsIgnoreCase(s);
-    }
+    private static final String CONSONANTS = "BCDFGHJKLMNPQRSTUVWXYZ".toLowerCase(Locale.ROOT);
+    private static final String VOWELS = "AEIOU".toLowerCase(Locale.ROOT);
 
     /**
      * Returns a random {@link String} with the length of 5 - 7 characters.
