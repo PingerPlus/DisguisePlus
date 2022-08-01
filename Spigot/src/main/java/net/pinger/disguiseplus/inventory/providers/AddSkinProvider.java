@@ -3,7 +3,7 @@ package net.pinger.disguiseplus.inventory.providers;
 import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
+import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.prompts.CreateSkinImagePrompt;
 import net.pinger.disguiseplus.prompts.CreateSkinNamePrompt;
 import net.pinger.disguiseplus.SkinPack;
@@ -49,7 +49,7 @@ public class AddSkinProvider implements IntelligentProvider {
                 .build();
 
         contents.setItem(1, 3, IntelligentItem.createNew(name, e -> {
-            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateSkinNamePrompt(this.dp, this.pack), 25);
+            this.dp.getConversation().createConversation((Player) e.getWhoClicked(), new CreateSkinNamePrompt(this.dp, this.pack), 25);
         }));
 
         // Allows us to catch a skin
@@ -62,9 +62,9 @@ public class AddSkinProvider implements IntelligentProvider {
                 .build();
 
         contents.setItem(1, 5, IntelligentItem.createNew(url, e -> {
-            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateSkinImagePrompt(this.dp, this.pack), 25);
+            this.dp.getConversation().createConversation((Player) e.getWhoClicked(), new CreateSkinImagePrompt(this.dp, this.pack), 25);
         }));
 
-        SimpleInventoryManager.addReturnButton(3, 4, contents);
+        InventoryManager.addReturnButton(3, 4, contents);
     }
 }

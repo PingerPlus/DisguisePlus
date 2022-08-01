@@ -5,7 +5,7 @@ import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.SkinFactory;
 import net.pinger.disguiseplus.SkinPack;
-import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
+import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.prompts.CreateCategoryPrompt;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -96,11 +96,11 @@ public class SkinPacksProvider implements IntelligentProvider {
                 .build();
 
         contents.setItem(5, 1, IntelligentItem.createNew(cat, e -> {
-            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreateCategoryPrompt(this.dp), 25);
+            this.dp.getConversation().createConversation((Player) e.getWhoClicked(), new CreateCategoryPrompt(this.dp), 25);
         }));
 
-        SimpleInventoryManager.addReturnButton(5, 4, contents);
-        SimpleInventoryManager.addPageButtons(5, contents);
+        InventoryManager.addReturnButton(5, 4, contents);
+        InventoryManager.addPageButtons(5, contents);
     }
 
     private ItemStack getItemFromPack(SkinPack pack) {

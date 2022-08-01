@@ -6,7 +6,7 @@ import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.DisguisePlusAPI;
 import net.pinger.disguiseplus.SkinPack;
-import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
+import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.prompts.ConfirmDeletePackPrompt;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.ChatColor;
@@ -86,11 +86,11 @@ public class ExactPackProvider implements IntelligentProvider {
                 .build();
 
         contents.setItem(5, 7, IntelligentItem.createNew(dl, e -> {
-            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new ConfirmDeletePackPrompt(this.dp, this.pack));
+            this.dp.getConversation().createConversation((Player) e.getWhoClicked(), new ConfirmDeletePackPrompt(this.dp, this.pack));
         }));
 
-        SimpleInventoryManager.addReturnButton(5, 4, contents);
-        SimpleInventoryManager.addPageButtons(5, contents);
+        InventoryManager.addReturnButton(5, 4, contents);
+        InventoryManager.addPageButtons(5, contents);
     }
 
     private ItemStack getSkinPack(Skin skin, int index) {

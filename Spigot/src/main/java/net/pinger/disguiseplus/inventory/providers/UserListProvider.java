@@ -2,7 +2,7 @@ package net.pinger.disguiseplus.inventory.providers;
 
 import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
+import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -55,8 +55,8 @@ public class UserListProvider implements IntelligentProvider {
         page.setItemsPerPage(36);
         page.addToIterator(contents.newIterator(IteratorType.HORIZONTAL, 0, 0));
 
-        SimpleInventoryManager.addReturnButton(5, 4, contents);
-        SimpleInventoryManager.addPageButtons(5, contents);
+        InventoryManager.addReturnButton(5, 4, contents);
+        InventoryManager.addPageButtons(5, contents);
     }
 
     private ItemStack getItemStack(User user) {

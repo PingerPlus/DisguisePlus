@@ -17,13 +17,13 @@ import org.intelligent.inventories.contents.InventoryPagination;
 import org.intelligent.inventories.item.IntelligentItem;
 import org.intelligent.inventories.manager.IntelligentManager;
 
-public class SimpleInventoryManager {
+public class InventoryManager {
 
     // Disguise instance
     private final DisguisePlus disguise;
     private final IntelligentManager inventoryManager;
 
-    public SimpleInventoryManager(DisguisePlus disguise) {
+    public InventoryManager(DisguisePlus disguise) {
         this.disguise = disguise;
 
         // Initializing the IM

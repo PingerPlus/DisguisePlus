@@ -16,9 +16,8 @@ import net.pinger.disguiseplus.internal.ExtendedDisguiseManager;
 import net.pinger.disguiseplus.internal.PlayerMatcherImpl;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
-import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
+import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.listeners.PlayerListener;
-import net.pinger.disguiseplus.user.User;
 import net.pinger.disguiseplus.user.UserManager;
 import net.pinger.disguiseplus.utils.ConversationUtil;
 import org.bukkit.Bukkit;
@@ -42,22 +41,44 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             .create();
 
     private BaseConfiguration configuration;
-    private SkinFactoryImpl skinFactory;
-    private ConversationUtil conversationUtil;
-    private SimpleInventoryManager inventoryManager;
+    private SkinFactory skinFactory;
+    private ConversationUtil conversation;
+    private InventoryManager inventoryManager;
     private PlayerMatcher playerMatcher;
     private SkullManager skullManager;
     private ExtendedDisguiseManager extendedDisguiseManager;
     private DisguiseManager disguiseManager;
-    private UserManagerImpl sum;
+    private UserManager userManager;
 
     @Override
     public void onEnable() {
-        // Make sure that we created all instances
-        // Of the api, before we connect to the api
+        // Create a dependency to this instance
         DisguisePlusAPI.setDisguise(this);
 
+        // Get the default provider for this server
         PacketProvider provider = DisguiseAPI.getProvider();
+
+        // Load the config and register default events
+        this.addDefaultConfig();
+        boolean baseSkins = getConfig().getBoolean("downloadBaseSkins");
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+
+        // Load all modules here
+        // Without downloading the skins
+        this.userManager = new UserManagerImpl(this);
+        this.configuration = new BaseConfiguration(this);
+        this.conversation = new ConversationUtil(this);
+        this.inventoryManager = new InventoryManager(this);
+        this.skullManager = new SkullManager();
+        this.playerMatcher = new PlayerMatcherImpl();
+        this.disguiseManager = new DisguiseManagerImpl(this, provider);
+        this.extendedDisguiseManager = new ExtendedDisguiseManager(this, provider);
+        this.skinFactory = new SkinFactoryImpl(this, baseSkins);
+
+        // Check here if there is any need for downloading skins
+        // If the provider was not found, it would just be a waste of time
+        // To download skins, because this plugin doesn't have its functionality
+        // Without the DisguiseAPI
         if (provider == null) {
             getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
             getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
@@ -68,24 +89,11 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             return;
         }
 
-        // Load the config
-        this.addDefaultConfig();
-
-        this.sum = new UserManagerImpl(this);
-        Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
-
-        this.skullManager = new SkullManager();
-        this.playerMatcher = new PlayerMatcherImpl();
-        this.conversationUtil = new ConversationUtil(this);
-        this.inventoryManager = new SimpleInventoryManager(this);
-        this.configuration = new BaseConfiguration(this);
-        this.skinFactory = new SkinFactoryImpl(this, getConfig().getBoolean("downloadBaseSkins"));
-        this.disguiseManager = new DisguiseManagerImpl(this, provider);
-        this.extendedDisguiseManager = new ExtendedDisguiseManager(this, provider);
-
-        // Download skins
+        // Download skins at last
+        // And register default commands after that
         this.skinFactory.downloadSkins();
 
+        // Register all commands here
         CommandService service = Drink.get(this);
         service.register(new DisguisePlusExecutor(this), "dp");
         service.register(new NicknameExecutor(this), "nick", "nickname");
@@ -119,8 +127,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             this.getManager().resetNickname(player);
         }
 
-        if (this.conversationUtil != null) {
-            this.conversationUtil.cancelAllConversations();
+        if (this.conversation != null) {
+            this.conversation.cancelAllConversations();
         }
 
         if (this.skinFactory != null) {
@@ -144,7 +152,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     @Override
     public UserManager getUserManager() {
-        return this.sum;
+        return this.userManager;
     }
 
     public ExtendedDisguiseManager getExtendedManager() {
@@ -156,11 +164,11 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         return this.playerMatcher;
     }
 
-    public ConversationUtil getConversationUtil() {
-        return conversationUtil;
+    public ConversationUtil getConversation() {
+        return conversation;
     }
 
-    public SimpleInventoryManager getInventoryManager() {
+    public InventoryManager getInventoryManager() {
         return inventoryManager;
     }
 

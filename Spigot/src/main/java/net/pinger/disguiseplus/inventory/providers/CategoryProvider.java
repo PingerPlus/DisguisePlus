@@ -3,7 +3,7 @@ package net.pinger.disguiseplus.inventory.providers;
 import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.inventory.SimpleInventoryManager;
+import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.prompts.CreatePackPrompt;
 import net.pinger.disguiseplus.SkinFactory;
 import net.pinger.disguiseplus.SkinPack;
@@ -75,7 +75,7 @@ public class CategoryProvider implements IntelligentProvider {
                 .build();
 
         contents.setItem(5, 1, IntelligentItem.createNew(cp, e -> {
-            this.dp.getConversationUtil().createConversation((Player) e.getWhoClicked(), new CreatePackPrompt(this.dp, this.category), 25);
+            this.dp.getConversation().createConversation((Player) e.getWhoClicked(), new CreatePackPrompt(this.dp, this.category), 25);
         }));
 
         // Deleting the skin pack item
@@ -91,8 +91,8 @@ public class CategoryProvider implements IntelligentProvider {
             this.dp.getInventoryManager().getSkinPacksProvider().open(e.getWhoClicked());
         }));
 
-        SimpleInventoryManager.addReturnButton(5, 4, contents);
-        SimpleInventoryManager.addPageButtons(5, contents);
+        InventoryManager.addReturnButton(5, 4, contents);
+        InventoryManager.addPageButtons(5, contents);
     }
 
     private ItemStack getSkinPack(SkinPack pack) {
