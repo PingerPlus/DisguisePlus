@@ -1,20 +1,18 @@
 package net.pinger.disguiseplus.utils;
 
-import com.google.common.collect.Lists;
 import net.pinger.disguiseplus.DisguisePlus;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConversationUtil {
 
+    private final List<Conversation> conversations = new ArrayList<>();
     private final ConversationFactory factory;
-
-    // List of all conversations
-    private final List<Conversation> conversations = Lists.newArrayList();
 
     public ConversationUtil(DisguisePlus disguisePlus) {
         this.factory = new ConversationFactory(disguisePlus);

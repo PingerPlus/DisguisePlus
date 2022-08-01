@@ -25,8 +25,6 @@ public class InventoryManager {
 
     public InventoryManager(DisguisePlus disguise) {
         this.disguise = disguise;
-
-        // Initializing the IM
         this.inventoryManager = new IntelligentManager(disguise);
     }
 
@@ -73,15 +71,6 @@ public class InventoryManager {
                 .setTitle(String.format(ChatColor.DARK_GRAY + "%s > Add Skin", pack.getName()))
                 .setSize(4, 9)
                 .setParent(this.getExactPackProvider(pack))
-                .build();
-    }
-
-    public IntelligentInventory getUserListProvider() {
-        return IntelligentInventoryBuilder.newBuilder()
-                .setProvider(new UserListProvider(this.disguise))
-                .setManager(this.inventoryManager)
-                .setTitle(ChatColor.DARK_GRAY + "User List")
-                .setParent(this.getDisguisePlusProvider())
                 .build();
     }
 

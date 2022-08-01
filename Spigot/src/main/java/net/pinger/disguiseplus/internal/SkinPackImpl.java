@@ -17,10 +17,6 @@ public class SkinPackImpl implements SkinPack {
     private final List<Skin> skins;
     private final boolean custom;
 
-    public SkinPackImpl(File base, String category, String name, List<Skin> skins) {
-        this(base, category, name, skins, true);
-    }
-
     public SkinPackImpl(File base, String category, String name, List<Skin> skins, boolean custom) {
         this.base = base;
         this.category = category;
