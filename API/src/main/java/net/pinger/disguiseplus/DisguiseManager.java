@@ -38,6 +38,14 @@ public interface DisguiseManager {
     void applySkinFromName(Player player, @Nonnull String playerName);
 
     /**
+     * This method resets the skin for this player.
+     *
+     * @param player the player to reset the skin
+     */
+
+    void resetSkin(Player player);
+
+    /**
      * This method applies a skin fetched from the image to the specified {@link Player}.
      * The skin is fetched using mineskin's REST API.
      *

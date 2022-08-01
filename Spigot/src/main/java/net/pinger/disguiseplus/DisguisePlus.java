@@ -8,11 +8,13 @@ import com.tchristofferson.configupdater.ConfigUpdater;
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguiseplus.adapter.SkinPackAdapter;
+import net.pinger.disguiseplus.executors.DisguiseExecutor;
 import net.pinger.disguiseplus.executors.DisguisePlusExecutor;
 import net.pinger.disguiseplus.executors.NicknameExecutor;
 import net.pinger.disguiseplus.executors.ResetNicknameExecutor;
 import net.pinger.disguiseplus.file.configuration.BaseConfiguration;
 import net.pinger.disguiseplus.internal.DisguiseManagerImpl;
+import net.pinger.disguiseplus.internal.ExtendedDisguiseManager;
 import net.pinger.disguiseplus.internal.PlayerMatcherImpl;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
@@ -47,6 +49,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private SimpleInventoryManager inventoryManager;
     private PlayerMatcher playerMatcher;
     private SkullManager skullManager;
+    private ExtendedDisguiseManager extendedDisguiseManager;
     private DisguiseManager disguiseManager;
     private UserManagerImpl sum;
 
@@ -80,6 +83,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.configuration = new BaseConfiguration(this);
         this.skinFactory = new SkinFactoryImpl(this, getConfig().getBoolean("downloadBaseSkins"));
         this.disguiseManager = new DisguiseManagerImpl(this, DisguiseAPI.getProvider());
+        this.extendedDisguiseManager = new ExtendedDisguiseManager(this, DisguiseAPI.getProvider());
 
         // Download skins
         this.skinFactory.downloadSkins();
@@ -88,6 +92,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         service.register(new DisguisePlusExecutor(this), "dp");
         service.register(new NicknameExecutor(this), "nick", "nickname");
         service.register(new ResetNicknameExecutor(this), "unnick", "resetnick", "unnickname");
+        service.register(new DisguiseExecutor(this), "d", "disguise");
         service.registerCommands();
     }
 
@@ -140,6 +145,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     @Override
     public UserManager getUserManager() {
         return this.sum;
+    }
+
+    public ExtendedDisguiseManager getExtendedManager() {
+        return extendedDisguiseManager;
     }
 
     @Override

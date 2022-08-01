@@ -20,10 +20,17 @@ player:
   skin-set: "&aSuccessfully applied a skin from pack &e%s"
   success-skin-name: "&aSuccessfully applied the skin from name &e%s."
   success-skin-url: "&aSuccessfully applied the skin from the url."
+  failed-skin-reset: "&aFailed to remove skin because it is not already set."
+  skin-reset: "&aYour skin has been reset successfully."
   success-name: "&aSuccessfully changed your nickname to &e%s."
-  invalid-nick: "&cThis nickname is invalid. It must be at least %s to %s characters."
+  invalid-nick: "&cFailed to set a nickname."
+  failed-nick-reset: "&cFailed to remove nickname because it is not already set."
   nickname-reset: "&aYour nickname has been reset successfully."
+  success-disguise: "&aYou have been disguised. Do /rd to redisguise. \nType /und to undisguise"
+  failed-disguise: "Failed to disguise as you already have a nick or a skin set"
   currently-disguised: "&cYou may not use this command while disguised."
+  not-disguised: "&cYou are currently not disguised"
+  success-undisguise: "&aYou have been undisguised."
 
 database:
   specify-username: "&aSpecify the database username."

@@ -1,6 +1,7 @@
 package net.pinger.disguiseplus.user;
 
 import net.pinger.disguise.Skin;
+import net.pinger.disguiseplus.statistic.Statistic;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
@@ -57,6 +58,24 @@ public interface User {
 
     @Nullable
     String getChangedName();
+
+    /**
+     * This method adds a specific statistic
+     * to this user.
+     *
+     * @param statistic the statistic to add
+     */
+
+    void addStatistic(Statistic statistic);
+
+    /**
+     * This method removes a specific statistic
+     * from this user.
+     *
+     * @param statistic the statistic to remove
+     */
+
+    void removeStatistic(Class<? extends Statistic> statistic);
 
     /**
      * Checks if this player is disguised.

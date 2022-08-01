@@ -2,6 +2,10 @@ package net.pinger.disguiseplus.internal.user;
 
 import net.pinger.disguise.Skin;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.statistic.DisguiseStatistic;
+import net.pinger.disguiseplus.statistic.NickStatistic;
+import net.pinger.disguiseplus.statistic.SkinStatistic;
+import net.pinger.disguiseplus.statistic.Statistic;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,6 +18,10 @@ public class UserImpl implements User {
 
     private final DisguisePlus dp;
     private final UUID id;
+
+    private SkinStatistic skinStatistic;
+    private DisguiseStatistic disguiseStatistic;
+    private NickStatistic nickStatistic;
 
     // The default name of this player when joining the server
     private String defaultName;
@@ -60,7 +68,6 @@ public class UserImpl implements User {
     @Nonnull
     @Override
     public Skin getCurrentSkin() {
-
         // Just return null then
         return null;
     }
@@ -108,14 +115,49 @@ public class UserImpl implements User {
         return null;
     }
 
+    @Override
+    public void addStatistic(Statistic statistic) {
+        if (statistic instanceof SkinStatistic) {
+            this.skinStatistic = (SkinStatistic) statistic;
+            return;
+        }
+
+        if (statistic instanceof NickStatistic) {
+            this.nickStatistic = (NickStatistic) statistic;
+            return;
+        }
+
+        if (statistic instanceof DisguiseStatistic) {
+            this.disguiseStatistic = (DisguiseStatistic) statistic;
+        }
+    }
+
+    @Override
+    public void removeStatistic(Class<? extends Statistic> statistic) {
+        if (statistic.isAssignableFrom(DisguiseStatistic.class)) {
+            this.disguiseStatistic = null;
+            return;
+        }
+
+        if (statistic.isAssignableFrom(SkinStatistic.class)) {
+            this.skinStatistic = null;
+            return;
+        }
+
+        if (statistic.isAssignableFrom(NickStatistic.class)) {
+            this.nickStatistic = null;
+        }
+    }
+
     /**
      * Checks if this player is disguised.
      *
      * @return whether this player is disguised
      */
+
     @Override
     public boolean isDisguised() {
-        return false;
+        return this.disguiseStatistic != null;
     }
 
     /**
@@ -129,7 +171,7 @@ public class UserImpl implements User {
 
     @Override
     public boolean hasNickname() {
-        return false;
+        return this.nickStatistic != null;
     }
 
     /**
@@ -141,7 +183,7 @@ public class UserImpl implements User {
 
     @Override
     public boolean hasSkinApplied() {
-        return false;
+        return this.skinStatistic != null;
     }
 
     /**

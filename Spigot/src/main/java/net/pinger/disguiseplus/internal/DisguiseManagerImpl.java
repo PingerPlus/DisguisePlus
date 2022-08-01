@@ -7,6 +7,7 @@ import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguiseplus.DisguiseManager;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.user.User;
+import net.pinger.disguiseplus.utils.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -73,6 +74,21 @@ public class DisguiseManagerImpl implements DisguiseManager {
     }
 
     @Override
+    public void resetSkin(Player player) {
+        // First clear the properties of this player
+        this.provider.clearProperties(player);
+
+        // Check for name matching
+        if (!this.dp.getPlayerMatcher().matches(player)) {
+            this.provider.sendServerPackets(player);
+            return;
+        }
+
+        // Apply the skin here
+        this.applySkinFromName(player, player.getName());
+    }
+
+    @Override
     public void applySkinFromUrl(Player player, @Nonnull String url) {
         DisguiseAPI.getSkinManager().getFromImage(url, response -> {
             if (!response.success()) {
@@ -105,9 +121,10 @@ public class DisguiseManagerImpl implements DisguiseManager {
 
     @Override
     public void disguise(Player player) {
-        // Try to get a random skin
+        // Try to get a random skin and nick
         // From the factory
         Skin randomSkin = this.dp.getSkinFactory().getRandomSkin();
+        String nickname = StringUtil.randomize();
 
         // Check if the random skin is null
         // And if so apply the default value
@@ -117,6 +134,7 @@ public class DisguiseManagerImpl implements DisguiseManager {
         }
 
         // Now apply the skin to the player
+        this.updatePlayerNickname(player, nickname);
         this.applySkin(player, randomSkin);
     }
 
@@ -139,7 +157,7 @@ public class DisguiseManagerImpl implements DisguiseManager {
         this.applySkinFromName(player, player.getName());
     }
 
-    private void updatePlayerNickname(Player player, @Nonnull String nickname) {
+    protected void updatePlayerNickname(Player player, @Nonnull String nickname) {
         try {
             // Set the profile method
             if (this.playerProfileMethod == null) {
