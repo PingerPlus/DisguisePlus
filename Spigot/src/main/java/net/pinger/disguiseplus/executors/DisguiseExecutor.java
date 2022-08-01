@@ -4,7 +4,6 @@ import com.jonahseguin.drink.annotation.Command;
 import com.jonahseguin.drink.annotation.Require;
 import com.jonahseguin.drink.annotation.Sender;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.user.User;
 import org.bukkit.entity.Player;
 
 public class DisguiseExecutor {
@@ -18,11 +17,7 @@ public class DisguiseExecutor {
     @Command(name = "", desc = "Use this command to disguise yourself. It changes both your nickname and skin")
     @Require("permission.dp.disguise")
     public void disguise(@Sender Player sender) {
-        this.disguisePlus.getManager().disguise(sender);
-
-        // Send the confirmation message
-        User user = this.disguisePlus.getUserManager().getUser(sender);
-        user.sendMessage("player.success-disguise");
+        this.disguisePlus.getExtendedManager().disguise(sender);
     }
 
 }
