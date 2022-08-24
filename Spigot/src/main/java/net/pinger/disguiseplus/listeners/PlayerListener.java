@@ -3,6 +3,7 @@ package net.pinger.disguiseplus.listeners;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.internal.user.UserImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;

@@ -15,7 +15,7 @@ public class ResetDisguiseExecutor {
     }
 
     @Command(name = "", desc = "Remove disguise from yourself")
-    @Require("permision.dp.undisguise")
+    @Require("permission.dp.undisguise")
     public void undisguise(@Sender Player sender) {
         this.disguisePlus.getExtendedManager().undisguise(sender);
     }

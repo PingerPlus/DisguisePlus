@@ -111,8 +111,9 @@ public class UserImpl implements User {
     @Nullable
     @Override
     public String getChangedName() {
-        // Just return null
-        return null;
+        return this.disguiseStatistic == null ?
+                this.nickStatistic == null ? null : this.nickStatistic.getNickname()
+                : this.disguiseStatistic.getNickname();
     }
 
     @Override

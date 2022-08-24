@@ -18,6 +18,7 @@ import net.pinger.disguiseplus.internal.SkinFactoryImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
 import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.listeners.PlayerListener;
+import net.pinger.disguiseplus.placeholders.DisguisePlusExpansion;
 import net.pinger.disguiseplus.user.UserManager;
 import net.pinger.disguiseplus.utils.ConversationUtil;
 import org.bukkit.Bukkit;
@@ -49,6 +50,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private ExtendedDisguiseManager extendedDisguiseManager;
     private DisguiseManager disguiseManager;
     private UserManager userManager;
+    private PlayerPrefix playerPrefix;
 
     @Override
     public void onEnable() {
@@ -61,7 +63,11 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         // Load the config and register default events
         this.addDefaultConfig();
         boolean baseSkins = getConfig().getBoolean("downloadBaseSkins");
-        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+
+        // Check if the PlaceholderAPI is enabled
+        if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new DisguisePlusExpansion(this).register();
+        }
 
         // Load all modules here
         // Without downloading the skins
@@ -74,6 +80,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.disguiseManager = new DisguiseManagerImpl(this, provider);
         this.extendedDisguiseManager = new ExtendedDisguiseManager(this, provider);
         this.skinFactory = new SkinFactoryImpl(this, baseSkins);
+        this.playerPrefix = new PlayerPrefix(getConfig().getConfigurationSection("display.prefix"));
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
         // Check here if there is any need for downloading skins
         // If the provider was not found, it would just be a waste of time
@@ -127,13 +135,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             this.getManager().resetNickname(player);
         }
 
-        if (this.conversation != null) {
-            this.conversation.cancelAllConversations();
-        }
-
-        if (this.skinFactory != null) {
-            this.skinFactory.saveSkins();
-        }
+        this.conversation.cancelAllConversations();
+        this.skinFactory.saveSkins();
     }
 
     public static Logger getOutput() {
@@ -162,6 +165,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     @Override
     public PlayerMatcher getPlayerMatcher() {
         return this.playerMatcher;
+    }
+
+    public PlayerPrefix getPlayerPrefix() {
+        return playerPrefix;
     }
 
     public ConversationUtil getConversation() {

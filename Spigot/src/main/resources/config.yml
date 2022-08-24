@@ -4,8 +4,23 @@
 # If online-mode is set to false, the plugin will not try to find the default skin of the player
 online-mode: true
 
-
 # Whether the plugin should download default Skin Packs
 # If set to false, they will not be included
 # Also will not cache them even if they are stored within the local files
 downloadBaseSkins: true
+
+# This is a service responsible for different types of placeholders
+# It is useful for handling ranks, for example, when a user wants their rank to hide on disguise
+display:
+  # The prefix is equivalent to what the %dp_prefix% value will show
+  # -- Depending on whether the user is currently disguised or not,
+  # -- the prefix will either be the value in disguised, or default, respectively
+  # -----------------------------------------------------------------------------
+  # Both of these values support colors using the '&' character.
+  # -----------------------------------------------------------------------------
+  prefix:
+    # Value shown when the player is not disguised
+    default: "%vault_rank%"
+
+    # Value shown when the player is disguised
+    disguised: ""
