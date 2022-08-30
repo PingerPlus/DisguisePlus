@@ -5,6 +5,7 @@ import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.SkinPack;
 import net.pinger.disguiseplus.inventory.providers.*;
+import net.pinger.disguiseplus.rank.Rank;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,6 +17,8 @@ import org.intelligent.inventories.contents.InventoryContents;
 import org.intelligent.inventories.contents.InventoryPagination;
 import org.intelligent.inventories.item.IntelligentItem;
 import org.intelligent.inventories.manager.IntelligentManager;
+
+import java.util.List;
 
 public class InventoryManager {
 
@@ -71,6 +74,14 @@ public class InventoryManager {
                 .setTitle(String.format(ChatColor.DARK_GRAY + "%s > Add Skin", pack.getName()))
                 .setSize(4, 9)
                 .setParent(this.getExactPackProvider(pack))
+                .build();
+    }
+
+    public IntelligentInventory getRankInventory(List<Rank> ranks) {
+        return IntelligentInventoryBuilder.newBuilder()
+                .setProvider(new RankChooseProvider(this.disguise, ranks))
+                .setManager(this.inventoryManager)
+                .setTitle(ChatColor.DARK_GRAY + "Disguise > Choose Rank")
                 .build();
     }
 

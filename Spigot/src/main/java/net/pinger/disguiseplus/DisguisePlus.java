@@ -15,10 +15,12 @@ import net.pinger.disguiseplus.internal.DisguiseManagerImpl;
 import net.pinger.disguiseplus.internal.ExtendedDisguiseManager;
 import net.pinger.disguiseplus.internal.PlayerMatcherImpl;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
+import net.pinger.disguiseplus.internal.rank.RankManagerImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
 import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.listeners.PlayerListener;
 import net.pinger.disguiseplus.placeholders.DisguisePlusExpansion;
+import net.pinger.disguiseplus.rank.RankManager;
 import net.pinger.disguiseplus.user.UserManager;
 import net.pinger.disguiseplus.utils.ConversationUtil;
 import org.bukkit.Bukkit;
@@ -51,6 +53,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private DisguiseManager disguiseManager;
     private UserManager userManager;
     private PlayerPrefix playerPrefix;
+    private RankManager rankManager;
 
     @Override
     public void onEnable() {
@@ -81,6 +84,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.extendedDisguiseManager = new ExtendedDisguiseManager(this, provider);
         this.skinFactory = new SkinFactoryImpl(this, baseSkins);
         this.playerPrefix = new PlayerPrefix(getConfig().getConfigurationSection("display.prefix"));
+        this.rankManager = new RankManagerImpl(getConfig());
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
         // Check here if there is any need for downloading skins
@@ -165,6 +169,11 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     @Override
     public PlayerMatcher getPlayerMatcher() {
         return this.playerMatcher;
+    }
+
+    @Override
+    public RankManager getRankManager() {
+        return this.rankManager;
     }
 
     public PlayerPrefix getPlayerPrefix() {

@@ -1,5 +1,6 @@
 package net.pinger.disguiseplus;
 
+import net.pinger.disguiseplus.rank.RankManager;
 import net.pinger.disguiseplus.user.UserManager;
 
 public interface Disguise {
@@ -22,4 +23,6 @@ public interface Disguise {
      */
 
     PlayerMatcher getPlayerMatcher();
+
+    RankManager getRankManager();
 }

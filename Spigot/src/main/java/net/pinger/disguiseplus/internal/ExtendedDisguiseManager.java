@@ -5,6 +5,7 @@ import net.pinger.disguise.Skin;
 import net.pinger.disguise.exception.UserNotFoundException;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.rank.Rank;
 import net.pinger.disguiseplus.statistic.DisguiseStatistic;
 import net.pinger.disguiseplus.statistic.NickStatistic;
 import net.pinger.disguiseplus.statistic.SkinStatistic;
@@ -14,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 public class ExtendedDisguiseManager extends DisguiseManagerImpl {
 
@@ -162,6 +164,9 @@ public class ExtendedDisguiseManager extends DisguiseManagerImpl {
         this.updatePlayerNickname(player, user.getDefaultName());
         user.sendMessage("player.success-undisguise");
         user.removeStatistic(DisguiseStatistic.class);
+
+        // Remove the rank
+        user.setRank(null);
 
         // Here we need to check for NickMatching
         // Condition

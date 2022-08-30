@@ -4,8 +4,11 @@ import com.jonahseguin.drink.annotation.Command;
 import com.jonahseguin.drink.annotation.Require;
 import com.jonahseguin.drink.annotation.Sender;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.rank.Rank;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class DisguiseExecutor {
 
@@ -25,6 +28,16 @@ public class DisguiseExecutor {
         if (user.isDisguised()) {
             user.sendMessage("player.already-disguised");
             return;
+        }
+
+        if (this.disguisePlus.getRankManager().isEnabled()) {
+            // Check for player permission
+            List<Rank> ranks = this.disguisePlus.getRankManager().getAvailableRanks(sender);
+            if (ranks != null && !ranks.isEmpty()) {
+                // Do the rank inventory
+                this.disguisePlus.getInventoryManager().getRankInventory(ranks).open(sender);
+                return;
+            }
         }
 
         this.disguisePlus.getExtendedManager().disguise(sender);

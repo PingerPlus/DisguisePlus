@@ -24,3 +24,36 @@ display:
 
     # Value shown when the player is disguised
     disguised: ""
+
+# This is a new rank feature offered by DisguisePlus.
+#
+# - It offers the ability for players to select a rank which will be displayed when using the "%dp_rank%" placeholder
+# -- The main permission inside 'ranks.permission' section is the essential permission player needs to have in order to
+# -- have the ability to choose a rank
+# --- If you want to disable this feature set the enabled value to false
+#
+#
+# If you want a rank to not have any permission, you should set it to 'permission: ""'. This means that the string
+# should be empty, and any player will have the ability to access this rank.
+ranks:
+  # Whether this feature is enabled
+  enabled: true
+  # This is the permission the players will need in order to have the choose ranks inventory opened
+  permission: "permission.dp.ranks"
+
+  # Below all ranks that you want created defined below this line
+  rank:
+    # The name of this rank will be mvp
+    mvp:
+      # The permission needed to access this rank is permission.dp.rank.mvp
+      # You can change this permission to whatever
+      permission: "permission.dp.rank.mvp"
+      # The display name of the rank, with colors of course
+      display: "&a[MVP]&r "
+    # The name of this rank will be mvp+
+    mvp+:
+      # The permission needed to access this rank is permission.dp.rank.mvp+
+      # You can change this permission to whatever
+      permission: "permission.dp.rank.mvp+"
+      # The display name of the rank, with colors of course
+      display: "&a[MVP+]&r "

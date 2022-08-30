@@ -52,6 +52,10 @@ public class DisguisePlusExpansion extends PlaceholderExpansion {
             return this.disguisePlus.getPlayerPrefix().toPrefix(user);
         }
 
+        if (params.equalsIgnoreCase("rank")) {
+            return user.getCurrentRank() == null ? "" : user.getCurrentRank().getDisplayName();
+        }
+
         return "";
     }
 }

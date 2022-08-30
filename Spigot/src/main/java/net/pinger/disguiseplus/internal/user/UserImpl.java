@@ -2,6 +2,7 @@ package net.pinger.disguiseplus.internal.user;
 
 import net.pinger.disguise.Skin;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.rank.Rank;
 import net.pinger.disguiseplus.statistic.DisguiseStatistic;
 import net.pinger.disguiseplus.statistic.NickStatistic;
 import net.pinger.disguiseplus.statistic.SkinStatistic;
@@ -19,6 +20,7 @@ public class UserImpl implements User {
     private final DisguisePlus dp;
     private final UUID id;
 
+    private Rank currentRank = null;
     private SkinStatistic skinStatistic;
     private DisguiseStatistic disguiseStatistic;
     private NickStatistic nickStatistic;
@@ -114,6 +116,16 @@ public class UserImpl implements User {
         return this.disguiseStatistic == null ?
                 this.nickStatistic == null ? null : this.nickStatistic.getNickname()
                 : this.disguiseStatistic.getNickname();
+    }
+
+    @Override
+    public Rank getCurrentRank() {
+        return this.currentRank;
+    }
+
+    @Override
+    public void setRank(Rank rank) {
+        this.currentRank = rank;
     }
 
     @Override

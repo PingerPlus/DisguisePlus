@@ -1,6 +1,7 @@
 package net.pinger.disguiseplus.user;
 
 import net.pinger.disguise.Skin;
+import net.pinger.disguiseplus.rank.Rank;
 import net.pinger.disguiseplus.statistic.Statistic;
 import org.bukkit.entity.Player;
 
@@ -58,6 +59,22 @@ public interface User {
 
     @Nullable
     String getChangedName();
+
+    /**
+     * This method returns the current rank applied to this user.
+     *
+     * @return the rank
+     */
+
+    Rank getCurrentRank();
+
+    /**
+     * This method sets the rank of this player.
+     *
+     * @param rank the rank of this player
+     */
+
+    void setRank(Rank rank);
 
     /**
      * This method adds a specific statistic
