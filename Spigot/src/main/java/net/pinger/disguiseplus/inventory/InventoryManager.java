@@ -34,7 +34,7 @@ public class InventoryManager {
     public IntelligentInventory getDisguisePlusProvider() {
         return IntelligentInventoryBuilder.newBuilder()
                 .setProvider(new DisguisePlusProvider(this.disguise))
-                .setTitle(ChatColor.DARK_GRAY + "DisguisePlus 2.0.0")
+                .setTitle(ChatColor.DARK_GRAY + "DisguisePlus > " + this.disguise.getDescription().getVersion())
                 .setManager(this.inventoryManager)
                 .setSize(5, 9)
                 .build();

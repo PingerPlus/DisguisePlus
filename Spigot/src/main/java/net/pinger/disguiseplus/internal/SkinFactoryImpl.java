@@ -3,6 +3,7 @@ package net.pinger.disguiseplus.internal;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import net.pinger.disguise.Skin;
 import net.pinger.disguise.http.HttpRequest;
 import net.pinger.disguise.http.HttpResponse;
@@ -231,7 +232,7 @@ public class SkinFactoryImpl implements SkinFactory {
         // Attempt to download skins
         DisguisePlus.getOutput().info("Started the downloading skins process");
         DisguisePlus.getOutput().info(String.format("Option for downloading default skins: %s", this.downloadBaseSkins));
-        DisguisePlus.getOutput().info("This might take a few seconds if there are no local files saved");
+        DisguisePlus.getOutput().info("This might take a few seconds if no local files are saved");
         DisguisePlus.getOutput().info("Attempting to download skins from local files");
 
         try {
@@ -292,7 +293,7 @@ public class SkinFactoryImpl implements SkinFactory {
             return;
         }
 
-        DisguisePlus.getOutput().info("Attempting to download skins from the database");
+        DisguisePlus.getOutput().info("Attempting to download skins from the skin cloud");
 
         // Try to download from the database
         try {
@@ -386,7 +387,7 @@ public class SkinFactoryImpl implements SkinFactory {
                     }
 
                     // Add to the array
-                    packArray.add(skinPack.getName());
+                    packArray.add(new JsonPrimitive(skinPack.getName()));
                 }
 
                 categories.add(category.getKey(), packArray);

@@ -1,9 +1,16 @@
 package net.pinger.disguiseplus.listeners;
 
+import me.clip.placeholderapi.PlaceholderAPI;
+import me.neznamy.tab.api.TabAPI;
+import me.neznamy.tab.api.TabPlayer;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.event.PlayerDisguiseEvent;
+import net.pinger.disguiseplus.event.PlayerRemoveDisguiseEvent;
 import net.pinger.disguiseplus.internal.user.UserImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
-import org.bukkit.Material;
+import net.pinger.disguiseplus.tab.TabIntegration;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -47,6 +54,65 @@ public class PlayerListener implements Listener {
 
         // Save the data of the player here
         // When SQL gets reintroduced
+    }
+
+    @EventHandler
+    public void onDisguise(PlayerDisguiseEvent event) {
+        // Get the player
+        Player player = event.getPlayer();
+
+        // Check whether the integration is enabled
+        // If false, cancel
+        if (!this.dp.getTabIntegration().isEnabled())
+            return;
+
+        // Check if the tab plugin is enabled
+        if (!Bukkit.getPluginManager().isPluginEnabled("TAB")) {
+            return;
+        }
+
+        TabAPI api = TabAPI.getInstance();
+        TabIntegration tab = this.dp.getTabIntegration();
+
+        // Get player from player id
+        TabPlayer tabPlayer = api.getPlayer(player.getUniqueId());
+
+        // The string to parse
+        String parsed = tab.getPrefix();
+
+        // Parse the string here
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            parsed = PlaceholderAPI.setPlaceholders(player, parsed);
+        }
+
+        // Add to tab-list formatter and scoreboard manager
+        api.getTablistFormatManager().setPrefix(tabPlayer, parsed);
+        api.getTeamManager().setPrefix(tabPlayer, parsed);
+    }
+
+    @EventHandler
+    public void onRemoveDisguise(PlayerRemoveDisguiseEvent event) {
+        // Get the player
+        Player player = event.getPlayer();
+
+        // Check whether the integration is enabled
+        // If false, cancel
+        if (!this.dp.getTabIntegration().isEnabled())
+            return;
+
+        // Check if the tab plugin is enabled
+        if (!Bukkit.getPluginManager().isPluginEnabled("TAB")) {
+            return;
+        }
+
+        TabAPI api = TabAPI.getInstance();
+
+        // Get player from player id
+        TabPlayer tabPlayer = api.getPlayer(player.getUniqueId());
+
+        // Reset
+        api.getTablistFormatManager().resetPrefix(tabPlayer);
+        api.getTeamManager().resetPrefix(tabPlayer);
     }
 
 }

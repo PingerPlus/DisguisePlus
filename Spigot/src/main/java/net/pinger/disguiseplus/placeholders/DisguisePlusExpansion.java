@@ -3,7 +3,6 @@ package net.pinger.disguiseplus.placeholders;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.user.User;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,6 +43,10 @@ public class DisguisePlusExpansion extends PlaceholderExpansion {
         // Switch from the params
         if (params.equalsIgnoreCase("name")) {
             return user.getName();
+        }
+
+        if (params.equalsIgnoreCase("original_name")) {
+            return user.getDefaultName();
         }
 
         // Check if the user is requesting

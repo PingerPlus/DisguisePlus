@@ -5,6 +5,8 @@ import net.pinger.disguise.Skin;
 import net.pinger.disguise.exception.UserNotFoundException;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.event.PlayerDisguiseEvent;
+import net.pinger.disguiseplus.event.PlayerRemoveDisguiseEvent;
 import net.pinger.disguiseplus.rank.Rank;
 import net.pinger.disguiseplus.statistic.DisguiseStatistic;
 import net.pinger.disguiseplus.statistic.NickStatistic;
@@ -140,6 +142,9 @@ public class ExtendedDisguiseManager extends DisguiseManagerImpl {
             randomSkin = DisguiseAPI.getSkinManager().getFromMojang("ITSPINGER");
         }
 
+        // Call the disguise event
+        Bukkit.getPluginManager().callEvent(new PlayerDisguiseEvent(player));
+
         // Now apply the skin to the player
         super.updatePlayerNickname(player, nickname);
         this.applySkin(player, randomSkin);
@@ -159,6 +164,9 @@ public class ExtendedDisguiseManager extends DisguiseManagerImpl {
 
         // Clear the properties of this player
         this.provider.clearProperties(player);
+
+        // Call the undisguised event
+        Bukkit.getPluginManager().callEvent(new PlayerRemoveDisguiseEvent(player));
 
         // Reset the player nickname
         this.updatePlayerNickname(player, user.getDefaultName());

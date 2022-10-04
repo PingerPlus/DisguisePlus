@@ -19,8 +19,10 @@ import net.pinger.disguiseplus.internal.rank.RankManagerImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
 import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.listeners.PlayerListener;
+import net.pinger.disguiseplus.metrics.Metrics;
 import net.pinger.disguiseplus.placeholders.DisguisePlusExpansion;
 import net.pinger.disguiseplus.rank.RankManager;
+import net.pinger.disguiseplus.tab.TabIntegration;
 import net.pinger.disguiseplus.user.UserManager;
 import net.pinger.disguiseplus.utils.ConversationUtil;
 import org.bukkit.Bukkit;
@@ -54,6 +56,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private UserManager userManager;
     private PlayerPrefix playerPrefix;
     private RankManager rankManager;
+    private TabIntegration tabIntegration;
 
     @Override
     public void onEnable() {
@@ -85,6 +88,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.skinFactory = new SkinFactoryImpl(this, baseSkins);
         this.playerPrefix = new PlayerPrefix(getConfig().getConfigurationSection("display.prefix"));
         this.rankManager = new RankManagerImpl(getConfig());
+        this.tabIntegration = new TabIntegration(getConfig().getConfigurationSection("tab-integration"));
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
         // Check here if there is any need for downloading skins
@@ -113,9 +117,12 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         service.register(new DisguiseExecutor(this), "d", "disguise");
         service.register(new ResetDisguiseExecutor(this), "und", "undisguise");
         service.register(new RepeatDisguiseExecutor(this), "rd", "redisguise");
-        service.register(new SkinExecutor(this), "skin", "setskin");
+        service.register(new SkinExecutor(this), "setskin");
         service.register(new ResetSkinExecutor(this), "resetskin", "unskin");
         service.registerCommands();
+
+        // Create metrics
+        new Metrics(this, 11053);
     }
 
     private void addDefaultConfig() {
@@ -174,6 +181,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     @Override
     public RankManager getRankManager() {
         return this.rankManager;
+    }
+
+    public TabIntegration getTabIntegration() {
+        return tabIntegration;
     }
 
     public PlayerPrefix getPlayerPrefix() {

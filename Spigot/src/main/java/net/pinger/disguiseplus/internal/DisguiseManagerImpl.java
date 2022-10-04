@@ -6,6 +6,8 @@ import net.pinger.disguise.exception.UserNotFoundException;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguiseplus.DisguiseManager;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.event.PlayerDisguiseEvent;
+import net.pinger.disguiseplus.event.PlayerRemoveDisguiseEvent;
 import net.pinger.disguiseplus.user.User;
 import net.pinger.disguiseplus.utils.StringUtil;
 import org.bukkit.Bukkit;
@@ -133,6 +135,9 @@ public class DisguiseManagerImpl implements DisguiseManager {
             randomSkin = DisguiseAPI.getSkinManager().getFromMojang("ITSPINGER");
         }
 
+        // Call the player disguise event
+        Bukkit.getPluginManager().callEvent(new PlayerDisguiseEvent(player));
+
         // Now apply the skin to the player
         this.updatePlayerNickname(player, nickname);
         this.applySkin(player, randomSkin);
@@ -145,6 +150,9 @@ public class DisguiseManagerImpl implements DisguiseManager {
 
         // Reset the player nickname
         this.resetNickname(player);
+
+        // Call the undisguise event
+        Bukkit.getPluginManager().callEvent(new PlayerRemoveDisguiseEvent(player));
 
         // Here we need to check for NickMatching
         // Condition
