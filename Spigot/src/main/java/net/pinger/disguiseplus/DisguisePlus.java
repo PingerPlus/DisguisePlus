@@ -26,10 +26,8 @@ import net.pinger.disguiseplus.tab.TabIntegration;
 import net.pinger.disguiseplus.user.UserManager;
 import net.pinger.disguiseplus.utils.ConversationUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -195,7 +193,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     @Override
     public FeatureManager getFeatureManager() {
-        return null;
+        return this.featureManager;
     }
 
     public TabIntegration getTabIntegration() {
