@@ -25,4 +25,13 @@ public interface Disguise {
     PlayerMatcher getPlayerMatcher();
 
     RankManager getRankManager();
+
+    /**
+     * This method returns the {@link FeatureManager} instance
+     * used for saving different features.
+     *
+     * @return the features
+     */
+
+    FeatureManager getFeatureManager();
 }

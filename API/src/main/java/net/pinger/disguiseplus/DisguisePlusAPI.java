@@ -55,4 +55,15 @@ public class DisguisePlusAPI {
         return disguise.getPlayerMatcher();
     }
 
+    /**
+     * This method returns the {@link FeatureManager} instance
+     * used for saving different features.
+     *
+     * @return the features
+     */
+
+    public static FeatureManager getFeatureManager() {
+        return disguise.getFeatureManager();
+    }
+
 }
