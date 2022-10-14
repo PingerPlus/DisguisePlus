@@ -76,6 +76,20 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             new DisguisePlusExpansion(this).register();
         }
 
+        // Check here if there is any need for downloading skins
+        // If the provider was not found, it would just be a waste of time
+        // To download skins, because this plugin doesn't have its functionality
+        // Without the DisguiseAPI
+        if (provider == null) {
+            getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
+            getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
+            getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
+
+            // Disable the plugin
+            this.getPluginLoader().disablePlugin(this);
+            return;
+        }
+
         this.featureManager = new BukkitFeatureManager();
 
         // Load all modules here
@@ -93,20 +107,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.rankManager = new RankManagerImpl(this);
         this.tabIntegration = new TabIntegration(getConfig().getConfigurationSection("tab-integration"));
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-
-        // Check here if there is any need for downloading skins
-        // If the provider was not found, it would just be a waste of time
-        // To download skins, because this plugin doesn't have its functionality
-        // Without the DisguiseAPI
-        if (provider == null) {
-            getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
-            getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
-            getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
-
-            // Disable the plugin
-            this.getPluginLoader().disablePlugin(this);
-            return;
-        }
 
         // Load all the features
         this.featureManager.load();
