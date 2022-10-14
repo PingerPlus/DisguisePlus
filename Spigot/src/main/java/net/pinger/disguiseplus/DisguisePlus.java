@@ -47,6 +47,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             .setPrettyPrinting()
             .create();
 
+    private FeatureManager featureManager;
     private BaseConfiguration configuration;
     private SkinFactory skinFactory;
     private ConversationUtil conversation;
@@ -77,6 +78,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             new DisguisePlusExpansion(this).register();
         }
 
+        this.featureManager = new BukkitFeatureManager();
+
         // Load all modules here
         // Without downloading the skins
         this.userManager = new UserManagerImpl(this);
@@ -89,7 +92,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.extendedDisguiseManager = new ExtendedDisguiseManager(this, provider);
         this.skinFactory = new SkinFactoryImpl(this, baseSkins);
         this.playerPrefix = new PlayerPrefix(getConfig().getConfigurationSection("display.prefix"));
-        this.rankManager = new RankManagerImpl(getConfig());
+        this.rankManager = new RankManagerImpl(this);
         this.tabIntegration = new TabIntegration(getConfig().getConfigurationSection("tab-integration"));
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
@@ -106,6 +109,9 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             this.getPluginLoader().disablePlugin(this);
             return;
         }
+
+        // Load all the features
+        this.featureManager.load();
 
         // Download skins at last
         // And register default commands after that
@@ -185,6 +191,11 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     @Override
     public RankManager getRankManager() {
         return this.rankManager;
+    }
+
+    @Override
+    public FeatureManager getFeatureManager() {
+        return null;
     }
 
     public TabIntegration getTabIntegration() {

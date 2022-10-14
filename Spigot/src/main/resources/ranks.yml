@@ -1,0 +1,10 @@
+enabled: true
+defaultPermission: "permission.dp.ranks"
+
+ranks:
+  mvp:
+    permission: "permission.dp.rank.mvp"
+    display: "&a[MVP]&r "
+  mvp+:
+    permission: "permission.dp.rank.mvp+"
+    display: "&a[MVP+]&r "

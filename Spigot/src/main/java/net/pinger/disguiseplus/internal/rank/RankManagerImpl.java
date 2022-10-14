@@ -1,30 +1,32 @@
 package net.pinger.disguiseplus.internal.rank;
 
+import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.configuration.ExternalConfigurationAdapter;
 import net.pinger.disguiseplus.rank.Rank;
 import net.pinger.disguiseplus.rank.RankManager;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
-public class RankManagerImpl implements RankManager {
+public class RankManagerImpl extends ExternalConfigurationAdapter implements RankManager {
 
     private final List<Rank> ranks = new ArrayList<>();
     private final String permission;
     private final boolean enabled;
 
-    public RankManagerImpl(FileConfiguration configuration) {
+    public RankManagerImpl(DisguisePlus disguise) {
+        super(disguise, "ranks.yml");
+
         // Get whether this feature
-        this.permission = Objects.requireNonNull(configuration.getString("ranks.permission"), "The rank permission may not be null");
-        this.enabled = configuration.getBoolean("ranks.enabled");
+        this.permission = this.configuration.getString("defaultPermission", "");
+        this.enabled = this.configuration.getBoolean("enabled", false);
 
         // Loop through each rank
         // And create a default for each
-        ConfigurationSection section = configuration.getConfigurationSection("ranks.rank");
+        ConfigurationSection section = this.configuration.getConfigurationSection("ranks");
         for (Map.Entry<String, Object> value : section.getValues(false).entrySet()) {
             // Get the name of the rank
             String name = value.getKey();
