@@ -1,20 +1,31 @@
 package net.pinger.disguiseplus.tab;
 
+import net.pinger.disguiseplus.DisguiseFeature;
+import net.pinger.disguiseplus.DisguisePlus;
 import org.bukkit.configuration.ConfigurationSection;
 
-public class TabIntegration {
+public class TabIntegration extends DisguiseFeature {
 
-    private final boolean enabled;
-    private final String prefix;
+    private boolean enabled;
+    private String prefix;
 
-    public TabIntegration(boolean enabled, String prefix) {
-        this.enabled = enabled;
-        this.prefix = prefix;
+    public TabIntegration(DisguisePlus disguisePlus) {
+        super(disguisePlus);
     }
 
+    @Override
+    protected void load() {
+        ConfigurationSection section =
+                this.plugin.getConfig().getConfigurationSection("tab-integration");
 
-    public TabIntegration(ConfigurationSection section) {
-        this(section.getBoolean("enabled"), section.getString("disguise-prefix"));
+        // Set the values
+        this.enabled = section.getBoolean("enabled");
+        this.prefix = section.getString("disguise-prefix");
+    }
+
+    @Override
+    protected void reload() {
+        this.load();
     }
 
     /**

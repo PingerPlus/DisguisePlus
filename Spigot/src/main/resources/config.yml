@@ -29,7 +29,6 @@ display:
 # Use this if you want to have different player prefixes depending on if the player is disguised
 # or not.
 tab-integration:
-  # By default, false, to not cause unwanted behaviour.
   enabled: false
 
   # This will automatically set the prefix to whatever the value between the parentheses is

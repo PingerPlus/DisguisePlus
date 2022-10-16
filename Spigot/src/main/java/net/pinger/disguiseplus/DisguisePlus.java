@@ -105,7 +105,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.skinFactory = new SkinFactoryImpl(this, baseSkins);
         this.playerPrefix = new PlayerPrefix(getConfig().getConfigurationSection("display.prefix"));
         this.rankManager = new RankManagerImpl(this);
-        this.tabIntegration = new TabIntegration(getConfig().getConfigurationSection("tab-integration"));
+        this.tabIntegration = new TabIntegration(this);
+
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
         // Load all the features
