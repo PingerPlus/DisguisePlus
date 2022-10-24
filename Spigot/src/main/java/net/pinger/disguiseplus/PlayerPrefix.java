@@ -4,19 +4,13 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.configuration.ConfigurationSection;
 
-public class PlayerPrefix implements Prefixable<User> {
+public class PlayerPrefix extends DisguiseFeature implements Prefixable<User> {
 
-    private final String prefixDefault;
-    private final String prefixDisguised;
+    private String prefixDefault;
+    private String prefixDisguised;
 
-    public PlayerPrefix(String prefixDefault, String prefixDisguised) {
-        this.prefixDefault = prefixDefault;
-        this.prefixDisguised = prefixDisguised;
-    }
-
-    public PlayerPrefix(ConfigurationSection section) {
-        // Get both the default and disguised value
-        this(section.getString("default"), section.getString("disguised"));
+    public PlayerPrefix(DisguisePlus disguise) {
+        super(disguise);
     }
 
     public String getPrefixDefault() {
@@ -36,5 +30,20 @@ public class PlayerPrefix implements Prefixable<User> {
 
         // Otherwise, return the default prefix
         return PlaceholderAPI.setPlaceholders(user.transform(), getPrefixDefault());
+    }
+
+    @Override
+    protected void load() {
+        ConfigurationSection section =
+                this.plugin.getConfig().getConfigurationSection("display.prefix");
+
+        // Set the values
+        this.prefixDefault = section.getString("default");
+        this.prefixDisguised = section.getString("disguised");
+    }
+
+    @Override
+    protected void reload() {
+        this.load();
     }
 }

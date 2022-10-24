@@ -26,6 +26,6 @@ public class DisguisePlusExecutor {
     @Require(value = "permission.dp.reload")
     public void reload(@Sender CommandSender sender) {
         this.dp.getFeatureManager().reload();
-        sender.sendMessage(ChatColor.AQUA + "[Hynick] Reloaded configuration files.");
+        sender.sendMessage(ChatColor.AQUA + "[Disguise+] Reloaded configuration files.");
     }
 }

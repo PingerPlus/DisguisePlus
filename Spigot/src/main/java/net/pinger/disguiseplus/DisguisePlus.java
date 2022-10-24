@@ -81,9 +81,9 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         // To download skins, because this plugin doesn't have its functionality
         // Without the DisguiseAPI
         if (provider == null) {
-            getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
-            getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
-            getOutput().info("FAILED TO FIND A PACKET PROVIDER!!!");
+            getLogger().info("FAILED TO FIND A PACKET PROVIDER!!!");
+            getLogger().info("FAILED TO FIND A PACKET PROVIDER!!!");
+            getLogger().info("FAILED TO FIND A PACKET PROVIDER!!!");
 
             // Disable the plugin
             this.getPluginLoader().disablePlugin(this);
@@ -103,7 +103,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.disguiseManager = new DisguiseManagerImpl(this, provider);
         this.extendedDisguiseManager = new ExtendedDisguiseManager(this, provider);
         this.skinFactory = new SkinFactoryImpl(this, baseSkins);
-        this.playerPrefix = new PlayerPrefix(getConfig().getConfigurationSection("display.prefix"));
+        this.playerPrefix = new PlayerPrefix(this);
         this.rankManager = new RankManagerImpl(this);
         this.tabIntegration = new TabIntegration(this);
 
