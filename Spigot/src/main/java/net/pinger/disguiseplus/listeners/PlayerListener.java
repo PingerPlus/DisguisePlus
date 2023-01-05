@@ -66,16 +66,7 @@ public class PlayerListener implements Listener {
         if (!this.dp.getTabIntegration().isEnabled())
             return;
 
-        // Check if the tab plugin is enabled
-        if (!Bukkit.getPluginManager().isPluginEnabled("TAB")) {
-            return;
-        }
-
-        TabAPI api = TabAPI.getInstance();
         TabIntegration tab = this.dp.getTabIntegration();
-
-        // Get player from player id
-        TabPlayer tabPlayer = api.getPlayer(player.getUniqueId());
 
         // The string to parse
         String parsed = tab.getPrefix();
@@ -84,6 +75,18 @@ public class PlayerListener implements Listener {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             parsed = PlaceholderAPI.setPlaceholders(player, parsed);
         }
+
+        this.dp.getChat().setPlayerPrefix(player, parsed);
+
+        // Check if the tab plugin is enabled
+        if (!Bukkit.getPluginManager().isPluginEnabled("TAB")) {
+            return;
+        }
+
+        TabAPI api = TabAPI.getInstance();
+
+        // Get player from player id
+        TabPlayer tabPlayer = api.getPlayer(player.getUniqueId());
 
         // Add to tab-list formatter and scoreboard manager
         api.getTablistFormatManager().setPrefix(tabPlayer, parsed);
@@ -94,6 +97,9 @@ public class PlayerListener implements Listener {
     public void onRemoveDisguise(PlayerRemoveDisguiseEvent event) {
         // Get the player
         Player player = event.getPlayer();
+
+        // Reset the player prefix
+        this.dp.getChat().setPlayerPrefix(player, null);
 
         // Check whether the integration is enabled
         // If false, cancel

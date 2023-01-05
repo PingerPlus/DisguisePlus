@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.jonahseguin.drink.CommandService;
 import com.jonahseguin.drink.Drink;
 import com.tchristofferson.configupdater.ConfigUpdater;
+import me.clip.placeholderapi.libs.kyori.adventure.platform.facet.Facet;
+import net.milkbowl.vault.chat.Chat;
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.skull.SkullManager;
@@ -27,6 +29,7 @@ import net.pinger.disguiseplus.user.UserManager;
 import net.pinger.disguiseplus.utils.ConversationUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +61,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private PlayerPrefix playerPrefix;
     private RankManager rankManager;
     private TabIntegration tabIntegration;
+    private Chat chat;
 
     @Override
     public void onEnable() {
@@ -106,6 +110,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.playerPrefix = new PlayerPrefix(this);
         this.rankManager = new RankManagerImpl(this);
         this.tabIntegration = new TabIntegration(this);
+        this.setupEconomy();
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
@@ -130,6 +135,14 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
         // Create metrics
         new Metrics(this, 11053);
+    }
+
+    public void setupEconomy() {
+        RegisteredServiceProvider<Chat> rsp = this.getServer().getServicesManager().getRegistration(Chat.class);
+
+        if (rsp != null) {
+            this.chat = rsp.getProvider();
+        }
     }
 
     private void addDefaultConfig() {
@@ -219,5 +232,9 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     public SkullManager getSkullManager() {
         return skullManager;
+    }
+
+    public Chat getChat() {
+        return chat;
     }
 }

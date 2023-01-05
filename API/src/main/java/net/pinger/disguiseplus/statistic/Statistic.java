@@ -4,6 +4,10 @@ public abstract class Statistic {
 
     private boolean active = true;
 
+    protected Statistic() {
+
+    }
+
     /**
      * Returns whether this statistic
      * is still active.
