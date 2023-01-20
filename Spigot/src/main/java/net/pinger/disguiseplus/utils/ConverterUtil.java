@@ -19,8 +19,13 @@ public class ConverterUtil {
      */
 
     public static UUID fromString(String id) {
-        if (UUID_PATTERN.matcher(id).matches())
+        if (UUID_PATTERN.matcher(id).matches()) {
             return UUID.fromString(id);
+        }
+
+        if (id.length() < 32) {
+            throw new IllegalArgumentException("UUID must be of at least 32 characters long");
+        }
 
         id = id.substring(0, 8) + "-" +
                 id.substring(8, 12) + "-" +

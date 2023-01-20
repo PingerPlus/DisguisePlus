@@ -1,5 +1,5 @@
 name: DisguisePlus
-version: 2.2.1
+version: 2.3.0
 main: net.pinger.disguiseplus.DisguisePlus
 depend: [DisguiseAPI]
 softdepend: [PlaceholderAPI, TAB]

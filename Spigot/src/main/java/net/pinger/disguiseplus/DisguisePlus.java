@@ -5,13 +5,19 @@ import com.google.gson.GsonBuilder;
 import com.jonahseguin.drink.CommandService;
 import com.jonahseguin.drink.Drink;
 import com.tchristofferson.configupdater.ConfigUpdater;
-import me.clip.placeholderapi.libs.kyori.adventure.platform.facet.Facet;
 import net.milkbowl.vault.chat.Chat;
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguiseplus.adapter.SkinPackAdapter;
-import net.pinger.disguiseplus.executors.*;
+import net.pinger.disguiseplus.executors.DisguiseExecutor;
+import net.pinger.disguiseplus.executors.DisguisePlusExecutor;
+import net.pinger.disguiseplus.executors.NicknameExecutor;
+import net.pinger.disguiseplus.executors.RepeatDisguiseExecutor;
+import net.pinger.disguiseplus.executors.ResetDisguiseExecutor;
+import net.pinger.disguiseplus.executors.ResetNicknameExecutor;
+import net.pinger.disguiseplus.executors.ResetSkinExecutor;
+import net.pinger.disguiseplus.executors.SkinExecutor;
 import net.pinger.disguiseplus.file.configuration.BaseConfiguration;
 import net.pinger.disguiseplus.internal.DisguiseManagerImpl;
 import net.pinger.disguiseplus.internal.ExtendedDisguiseManager;
@@ -158,8 +164,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         getOutput().info("Successfully loaded the config.yml");
         this.reloadConfig();
     }
-
-
 
     @Override
     public void onDisable() {
