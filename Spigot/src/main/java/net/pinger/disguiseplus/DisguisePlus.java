@@ -18,7 +18,7 @@ import net.pinger.disguiseplus.executors.ResetDisguiseExecutor;
 import net.pinger.disguiseplus.executors.ResetNicknameExecutor;
 import net.pinger.disguiseplus.executors.ResetSkinExecutor;
 import net.pinger.disguiseplus.executors.SkinExecutor;
-import net.pinger.disguiseplus.file.configuration.BaseConfiguration;
+import net.pinger.disguiseplus.config.MessageConfiguration;
 import net.pinger.disguiseplus.internal.DisguiseManagerImpl;
 import net.pinger.disguiseplus.internal.ExtendedDisguiseManager;
 import net.pinger.disguiseplus.internal.PlayerMatcherImpl;
@@ -55,7 +55,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             .create();
 
     private FeatureManager featureManager;
-    private BaseConfiguration configuration;
+    private MessageConfiguration configuration;
     private SkinFactory skinFactory;
     private ConversationUtil conversation;
     private InventoryManager inventoryManager;
@@ -105,7 +105,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         // Load all modules here
         // Without downloading the skins
         this.userManager = new UserManagerImpl(this);
-        this.configuration = new BaseConfiguration(this);
+        this.configuration = new MessageConfiguration(this);
         this.conversation = new ConversationUtil(this);
         this.inventoryManager = new InventoryManager(this);
         this.skullManager = new SkullManager();
@@ -230,8 +230,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         return inventoryManager;
     }
 
-    public BaseConfiguration getConfiguration() {
-        return configuration;
+    public MessageConfiguration getConfiguration() {
+        return this.configuration;
     }
 
     public SkullManager getSkullManager() {

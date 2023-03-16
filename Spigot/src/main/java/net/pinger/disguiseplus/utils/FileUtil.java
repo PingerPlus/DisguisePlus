@@ -27,7 +27,7 @@ public class FileUtil {
             // Check if the child file is a directory
             // And if so do the recursion
             if (f.isDirectory()) {
-                deleteFile(f);
+                FileUtil.deleteFile(f);
                 continue;
             }
 
