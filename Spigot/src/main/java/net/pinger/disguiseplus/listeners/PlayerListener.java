@@ -61,6 +61,10 @@ public class PlayerListener implements Listener {
         // Get the player
         Player player = event.getPlayer();
 
+        if (this.dp.getChat() == null) {
+            return;
+        }
+
         // Check whether the integration is enabled
         // If false, cancel
         if (!this.dp.getTabIntegration().isEnabled())
@@ -98,6 +102,42 @@ public class PlayerListener implements Listener {
         // Get the player
         Player player = event.getPlayer();
 
+        if (this.dp.getChat() == null) {
+            return;
+        }
+
+        // Reset the player prefix
+        this.dp.getChat().setPlayerPrefix(player, null);
+
+        // Check whether the integration is enabled
+        // If false, cancel
+        if (!this.dp.getTabIntegration().isEnabled())
+            return;
+
+        // Check if the tab plugin is enabled
+        if (!Bukkit.getPluginManager().isPluginEnabled("TAB")) {
+            return;
+        }
+
+        TabAPI api = TabAPI.getInstance();
+
+        // Get player from player id
+        TabPlayer tabPlayer = api.getPlayer(player.getUniqueId());
+
+        // Reset
+        api.getTablistFormatManager().resetPrefix(tabPlayer);
+        api.getTeamManager().resetPrefix(tabPlayer);
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+
+        if (this.dp.getChat() == null) {
+            return;
+        }
+
+        // Reset the thing
         // Reset the player prefix
         this.dp.getChat().setPlayerPrefix(player, null);
 

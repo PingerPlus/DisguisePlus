@@ -37,12 +37,12 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
-    public User getUser(UUID id) {
+    public UserImpl getUser(UUID id) {
         return this.users.get(id);
     }
 
     @Override
-    public User getUser(Player player) {
+    public UserImpl getUser(Player player) {
         return this.users.get(player.getUniqueId());
     }
 

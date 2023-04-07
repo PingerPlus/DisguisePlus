@@ -29,6 +29,13 @@
                 <version>3.2.4</version>
                 <configuration>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <relocations>
+                        <relocation>
+                            <pattern>org.bstats</pattern>
+                            <!-- Replace this with your package! -->
+                            <shadedPattern>net.pinger.disguiseplus.metrics</shadedPattern>
+                        </relocation>
+                    </relocations>
                 </configuration>
                 <executions>
                     <execution>
@@ -78,6 +85,14 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- bStats -->
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.0.2</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- IntelligentInventories -->
         <dependency>
             <groupId>org.intelligent.inventories</groupId>
@@ -89,7 +104,7 @@
         <dependency>
             <groupId>com.jonahseguin</groupId>
             <artifactId>drink</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.5</version>
         </dependency>
 
         <!-- ConfigUpdater -->
