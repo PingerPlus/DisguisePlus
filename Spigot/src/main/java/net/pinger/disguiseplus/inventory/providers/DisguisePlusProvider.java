@@ -1,16 +1,16 @@
 package net.pinger.disguiseplus.inventory.providers;
 
+import io.pnger.gui.contents.GuiContents;
+import io.pnger.gui.item.GuiItem;
+import io.pnger.gui.provider.GuiProvider;
 import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.intelligent.inventories.contents.InventoryContents;
-import org.intelligent.inventories.item.IntelligentItem;
-import org.intelligent.inventories.provider.IntelligentProvider;
 
-public class DisguisePlusProvider implements IntelligentProvider {
+public class DisguisePlusProvider implements GuiProvider {
 
     private final DisguisePlus dp;
 
@@ -19,14 +19,14 @@ public class DisguisePlusProvider implements IntelligentProvider {
     }
 
     @Override
-    public void initialize(Player player, InventoryContents contents) {
+    public void initialize(Player player, GuiContents contents) {
         // Get skull for this player
         ItemStack skull = new ItemBuilder(this.dp.getSkullManager().getSkullFrom(player.getUniqueId()))
                 .name(ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD + "Users")
                 .lore(ChatColor.GRAY + "Coming soon...")
                 .build();
 
-        contents.setItem(1, 2, IntelligentItem.createNew(skull));
+        contents.setItem(1, 2, GuiItem.of(skull));
 
         // Settings
         ItemStack settings = new ItemBuilder(XMaterial.COMMAND_BLOCK)
@@ -34,11 +34,11 @@ public class DisguisePlusProvider implements IntelligentProvider {
                 .lore(ChatColor.GRAY + "Coming soon...")
                 .build();
 
-        contents.setItem(3, 4, IntelligentItem.createNew(settings));
+        contents.setItem(3, 4, GuiItem.of(settings));
     }
 
     @Override
-    public void update(Player player, InventoryContents contents) {
+    public void update(Player player, GuiContents contents) {
         int refresh = contents.getProperty("refresh", 0);
         contents.setProperty("refresh", refresh + 1);
 
@@ -54,7 +54,7 @@ public class DisguisePlusProvider implements IntelligentProvider {
                 .lore(ChatColor.GRAY + "Click to open skin packs.")
                 .build();
 
-        contents.setItem(1, 6, IntelligentItem.createNew(skinPack, e -> {
+        contents.setItem(1, 6, GuiItem.of(skinPack, e -> {
             this.dp.getInventoryManager().getSkinPacksProvider().open((Player) e.getWhoClicked());
         }));
     }

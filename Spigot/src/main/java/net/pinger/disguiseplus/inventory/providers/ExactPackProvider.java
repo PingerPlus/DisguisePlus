@@ -1,5 +1,10 @@
 package net.pinger.disguiseplus.inventory.providers;
 
+import io.pnger.gui.contents.GuiContents;
+import io.pnger.gui.item.GuiItem;
+import io.pnger.gui.pagination.GuiPagination;
+import io.pnger.gui.provider.GuiProvider;
+import io.pnger.gui.slot.GuiIteratorType;
 import net.pinger.disguise.Skin;
 import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguise.item.XMaterial;
@@ -12,15 +17,9 @@ import net.pinger.disguiseplus.user.User;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.intelligent.inventories.contents.InventoryContents;
-import org.intelligent.inventories.contents.InventoryPagination;
-import org.intelligent.inventories.contents.IteratorType;
-import org.intelligent.inventories.item.IntelligentItem;
-import org.intelligent.inventories.provider.IntelligentProvider;
-
 import java.util.List;
 
-public class ExactPackProvider implements IntelligentProvider {
+public class ExactPackProvider implements GuiProvider {
 
     private final SkinPack pack;
     private final DisguisePlus dp;
@@ -31,20 +30,19 @@ public class ExactPackProvider implements IntelligentProvider {
     }
 
     @Override
-    public void initialize(Player player, InventoryContents contents) {
-        // Pagination
-        InventoryPagination page = contents.getPagination();
+    public void initialize(Player player, GuiContents contents) {
+        GuiPagination page = contents.getPagination();
         User user = this.dp.getUserManager().getUser(player);
 
         // Get the skins
         List<Skin> skins = this.pack.getSkins();
-        IntelligentItem[] items = new IntelligentItem[skins.size()];
+        GuiItem[] items = new GuiItem[skins.size()];
 
         for (int i = 0; i < items.length; i++) {
             // Get the pack
             Skin skin = skins.get(i);
 
-            items[i] = IntelligentItem.createNew(this.getSkinPack(skin, (i + 1)), e -> {
+            items[i] = GuiItem.of(this.getSkinPack(skin, (i + 1)), e -> {
                 // Here perform action
                 // For every skin
                 DisguisePlusAPI.getDisguiseManager().applySkin(player, skin);
@@ -54,13 +52,12 @@ public class ExactPackProvider implements IntelligentProvider {
             });
         }
 
-        page.setItemsPerPage(36);
-        page.setItems(items);
-        page.addToIterator(contents.newIterator(IteratorType.HORIZONTAL, 0, 0));
+        page.setItems(36, items);
+        page.addToIterator(contents.newIterator(GuiIteratorType.HORIZONTAL, 0, 0));
     }
 
     @Override
-    public void update(Player player, InventoryContents contents) {
+    public void update(Player player, GuiContents contents) {
         int refresh = contents.getProperty("refresh", 0);
         contents.setProperty("refresh", refresh + 1);
 
@@ -75,7 +72,7 @@ public class ExactPackProvider implements IntelligentProvider {
                 .lore(ChatColor.GRAY + "Click to add a new skin")
                 .build();
 
-        contents.setItem(5, 1, IntelligentItem.createNew(cre, e -> {
+        contents.setItem(5, 1, GuiItem.of(cre, e -> {
             this.dp.getInventoryManager().getAddSkinProvider(this.pack).open((Player) e.getWhoClicked());
         }));
 
@@ -85,7 +82,7 @@ public class ExactPackProvider implements IntelligentProvider {
                 .lore(ChatColor.GRAY + "Click to delete this pack")
                 .build();
 
-        contents.setItem(5, 7, IntelligentItem.createNew(dl, e -> {
+        contents.setItem(5, 7, GuiItem.of(dl, e -> {
             this.dp.getConversation().createConversation((Player) e.getWhoClicked(), new ConfirmDeletePackPrompt(this.dp, this.pack));
         }));
 

@@ -1,5 +1,9 @@
 package net.pinger.disguiseplus.inventory.providers;
 
+import io.pnger.gui.GuiInventory;
+import io.pnger.gui.contents.GuiContents;
+import io.pnger.gui.item.GuiItem;
+import io.pnger.gui.provider.GuiProvider;
 import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
@@ -10,11 +14,8 @@ import net.pinger.disguiseplus.SkinPack;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.intelligent.inventories.contents.InventoryContents;
-import org.intelligent.inventories.item.IntelligentItem;
-import org.intelligent.inventories.provider.IntelligentProvider;
 
-public class AddSkinProvider implements IntelligentProvider {
+public class AddSkinProvider implements GuiProvider {
 
     private final DisguisePlus dp;
     private final SkinPack pack;
@@ -25,12 +26,12 @@ public class AddSkinProvider implements IntelligentProvider {
     }
 
     @Override
-    public void initialize(Player player, InventoryContents contents) {
+    public void initialize(Player player, GuiContents contents) {
 
     }
 
     @Override
-    public void update(Player player, InventoryContents contents) {
+    public void update(Player player, GuiContents contents) {
         int refresh = contents.getProperty("refresh", 0);
         contents.setProperty("refresh", refresh + 1);
 
@@ -48,7 +49,7 @@ public class AddSkinProvider implements IntelligentProvider {
                 .flag()
                 .build();
 
-        contents.setItem(1, 3, IntelligentItem.createNew(name, e -> {
+        contents.setItem(1, 3, GuiItem.of(name, e -> {
             this.dp.getConversation().createConversation((Player) e.getWhoClicked(), new CreateSkinNamePrompt(this.dp, this.pack), 25);
         }));
 
@@ -61,7 +62,7 @@ public class AddSkinProvider implements IntelligentProvider {
                 .flag()
                 .build();
 
-        contents.setItem(1, 5, IntelligentItem.createNew(url, e -> {
+        contents.setItem(1, 5, GuiItem.of(url, e -> {
             this.dp.getConversation().createConversation((Player) e.getWhoClicked(), new CreateSkinImagePrompt(this.dp, this.pack), 25);
         }));
 

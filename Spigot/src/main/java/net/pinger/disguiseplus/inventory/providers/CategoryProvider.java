@@ -1,5 +1,10 @@
 package net.pinger.disguiseplus.inventory.providers;
 
+import io.pnger.gui.contents.GuiContents;
+import io.pnger.gui.item.GuiItem;
+import io.pnger.gui.pagination.GuiPagination;
+import io.pnger.gui.provider.GuiProvider;
+import io.pnger.gui.slot.GuiIteratorType;
 import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
@@ -10,15 +15,10 @@ import net.pinger.disguiseplus.SkinPack;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.intelligent.inventories.contents.InventoryContents;
-import org.intelligent.inventories.contents.InventoryPagination;
-import org.intelligent.inventories.contents.IteratorType;
-import org.intelligent.inventories.item.IntelligentItem;
-import org.intelligent.inventories.provider.IntelligentProvider;
 
 import java.util.List;
 
-public class CategoryProvider implements IntelligentProvider {
+public class CategoryProvider implements GuiProvider {
 
     private final String category;
     private final DisguisePlus dp;
@@ -29,12 +29,12 @@ public class CategoryProvider implements IntelligentProvider {
     }
 
     @Override
-    public void initialize(Player player, InventoryContents contents) {
+    public void initialize(Player player, GuiContents contents) {
 
     }
 
     @Override
-    public void update(Player player, InventoryContents contents) {
+    public void update(Player player, GuiContents contents) {
         int refresh = contents.getProperty("refresh", 0);
         contents.setProperty("refresh", refresh + 1);
 
@@ -44,27 +44,26 @@ public class CategoryProvider implements IntelligentProvider {
             return;
 
         // Pagination
-        InventoryPagination page = contents.getPagination();
+        GuiPagination page = contents.getPagination();
         SkinFactory factory = this.dp.getSkinFactory();
 
         // Get the skins
         List<? extends SkinPack> packs = factory.getSkinPacks(this.category);
-        IntelligentItem[] items = new IntelligentItem[packs.size()];
+        GuiItem[] items = new GuiItem[packs.size()];
 
         for (int i = 0; i < items.length; i++) {
             // Get the pack
             SkinPack pack = packs.get(i);
 
             // Add the pack to the inventory
-            items[i] = IntelligentItem.createNew(this.getSkinPack(pack), e -> {
+            items[i] = GuiItem.of(this.getSkinPack(pack), e -> {
                 this.dp.getInventoryManager().getExactPackProvider(pack).open((Player) e.getWhoClicked());
             });
         }
 
         // Add the items to the inventory
-        page.setItemsPerPage(36);
-        page.setItems(items);
-        page.addToIterator(contents.newIterator(IteratorType.HORIZONTAL, 0, 0));
+        page.setItems(36, items);
+        page.addToIterator(contents.newIterator(GuiIteratorType.HORIZONTAL, 0, 0));
 
         // Item Responsible
         // For creating new inventories
@@ -74,7 +73,7 @@ public class CategoryProvider implements IntelligentProvider {
                 .lore(ChatColor.GRAY + "Click to create a new skin pack")
                 .build();
 
-        contents.setItem(5, 1, IntelligentItem.createNew(cp, e -> {
+        contents.setItem(5, 1, GuiItem.of(cp, e -> {
             this.dp.getConversation().createConversation((Player) e.getWhoClicked(), new CreatePackPrompt(this.dp, this.category), 25);
         }));
 
@@ -84,7 +83,7 @@ public class CategoryProvider implements IntelligentProvider {
                 .lore(ChatColor.GRAY + "Click to delete this category")
                 .build();
 
-        contents.setItem(5, 7, IntelligentItem.createNew(dp, e -> {
+        contents.setItem(5, 7, GuiItem.of(dp, e -> {
             this.dp.getSkinFactory().deleteCategory(this.category);
 
             // Open the parent inventory
