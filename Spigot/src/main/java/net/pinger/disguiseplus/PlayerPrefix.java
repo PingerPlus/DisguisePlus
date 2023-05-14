@@ -1,6 +1,5 @@
 package net.pinger.disguiseplus;
 
-import com.mojang.authlib.GameProfile;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.configuration.ConfigurationSection;

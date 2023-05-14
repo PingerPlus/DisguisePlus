@@ -74,9 +74,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         // Create a dependency to this instance
         DisguisePlusAPI.setDisguise(this);
 
-        // Get the default provider for this server
-        PacketProvider provider = DisguiseAPI.getProvider();
-
         // Load the config and register default events
         this.addDefaultConfig();
         boolean baseSkins = getConfig().getBoolean("downloadBaseSkins");
@@ -85,6 +82,9 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new DisguisePlusExpansion(this).register();
         }
+
+        // Get the default provider for this server
+        PacketProvider provider = DisguiseAPI.getProvider();
 
         // Check here if there is any need for downloading skins
         // If the provider was not found, it would just be a waste of time
