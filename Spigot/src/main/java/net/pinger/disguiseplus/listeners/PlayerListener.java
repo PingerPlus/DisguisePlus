@@ -28,32 +28,19 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent event) {
         // Player of the event
-        UserImpl s = (UserImpl) this.dp.getUserManager()
-                .getUser(event.getPlayer().getUniqueId());
-
-        // Set the name
+        UserImpl s = this.dp.getUserManager().getUser(event.getPlayer().getUniqueId());
         s.setDefaultName(event.getPlayer().getName());
     }
 
     @EventHandler
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
-        UserManagerImpl manager = ((UserManagerImpl) this.dp.getUserManager());
+        UserManagerImpl manager = this.dp.getUserManager();
         manager.createPlayer(event.getUniqueId());
-
-        // Load user data here
-        // When SQL gets reintroduced
     }
 
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
-        UserImpl s = (UserImpl) this.dp.getUserManager()
-                .getUser(event.getPlayer().getUniqueId());
-
-        // Remove the player from the users
-        ((UserManagerImpl) this.dp.getUserManager()).removePlayer(event.getPlayer());
-
-        // Save the data of the player here
-        // When SQL gets reintroduced
+        this.dp.getUserManager().removePlayer(event.getPlayer());
     }
 
     @EventHandler
@@ -67,8 +54,9 @@ public class PlayerListener implements Listener {
 
         // Check whether the integration is enabled
         // If false, cancel
-        if (!this.dp.getTabIntegration().isEnabled())
+        if (!this.dp.getTabIntegration().isEnabled()) {
             return;
+        }
 
         TabIntegration tab = this.dp.getTabIntegration();
 

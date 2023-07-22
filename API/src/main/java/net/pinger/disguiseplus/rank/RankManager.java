@@ -1,5 +1,6 @@
 package net.pinger.disguiseplus.rank;
 
+import net.pinger.disguiseplus.user.User;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -22,6 +23,6 @@ public interface RankManager {
      * @return list of ranks
      */
 
-    List<Rank> getAvailableRanks(Player player);
+    List<Rank> getAvailableRanks(User player);
 
 }

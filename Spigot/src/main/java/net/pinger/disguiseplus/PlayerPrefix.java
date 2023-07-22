@@ -34,8 +34,7 @@ public class PlayerPrefix extends DisguiseFeature implements Prefixable<User> {
 
     @Override
     protected void load() {
-        ConfigurationSection section =
-                this.plugin.getConfig().getConfigurationSection("display.prefix");
+        ConfigurationSection section = this.plugin.getConfig().getConfigurationSection("display.prefix");
 
         // Set the values
         this.prefixDefault = section.getString("default");

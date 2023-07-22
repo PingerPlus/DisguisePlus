@@ -8,16 +8,16 @@ import org.bukkit.entity.Player;
 
 public class ResetSkinExecutor {
 
-    private final DisguisePlus disguisePlus;
+    private final DisguisePlus dp;
 
-    public ResetSkinExecutor(DisguisePlus disguisePlus) {
-        this.disguisePlus = disguisePlus;
+    public ResetSkinExecutor(DisguisePlus dp) {
+        this.dp = dp;
     }
 
     @Command(name = "", desc = "Reset skin for yourself")
     @Require("permission.dp.skin")
     public void resetSkin(@Sender Player sender) {
-        this.disguisePlus.getExtendedManager().resetSkin(sender);
+        this.dp.getExtendedManager().resetSkin(sender);
     }
 
 }

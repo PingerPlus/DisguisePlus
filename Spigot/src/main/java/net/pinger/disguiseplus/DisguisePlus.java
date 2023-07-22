@@ -4,33 +4,28 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jonahseguin.drink.CommandService;
 import com.jonahseguin.drink.Drink;
+import com.jonahseguin.drink.annotation.Sender;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import net.milkbowl.vault.chat.Chat;
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.packet.PacketProvider;
 import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguiseplus.adapter.SkinPackAdapter;
-import net.pinger.disguiseplus.executors.DisguiseExecutor;
-import net.pinger.disguiseplus.executors.DisguisePlusExecutor;
-import net.pinger.disguiseplus.executors.NicknameExecutor;
-import net.pinger.disguiseplus.executors.RepeatDisguiseExecutor;
-import net.pinger.disguiseplus.executors.ResetDisguiseExecutor;
-import net.pinger.disguiseplus.executors.ResetNicknameExecutor;
-import net.pinger.disguiseplus.executors.ResetSkinExecutor;
-import net.pinger.disguiseplus.executors.SkinExecutor;
 import net.pinger.disguiseplus.config.MessageConfiguration;
+import net.pinger.disguiseplus.executors.*;
+import net.pinger.disguiseplus.executors.drink.DisguiseUserProvider;
 import net.pinger.disguiseplus.internal.DisguiseManagerImpl;
 import net.pinger.disguiseplus.internal.ExtendedDisguiseManager;
 import net.pinger.disguiseplus.internal.PlayerMatcherImpl;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
 import net.pinger.disguiseplus.internal.rank.RankManagerImpl;
+import net.pinger.disguiseplus.internal.user.UserImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
 import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.listeners.PlayerListener;
 import net.pinger.disguiseplus.placeholders.DisguisePlusExpansion;
 import net.pinger.disguiseplus.rank.RankManager;
 import net.pinger.disguiseplus.tab.TabIntegration;
-import net.pinger.disguiseplus.user.UserManager;
 import net.pinger.disguiseplus.utils.ConversationUtil;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -63,7 +58,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private SkullManager skullManager;
     private ExtendedDisguiseManager extendedDisguiseManager;
     private DisguiseManager disguiseManager;
-    private UserManager userManager;
+    private UserManagerImpl userManager;
     private PlayerPrefix playerPrefix;
     private RankManager rankManager;
     private TabIntegration tabIntegration;
@@ -129,6 +124,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
         // Register all commands here
         CommandService service = Drink.get(this);
+        service.bind(UserImpl.class).annotatedWith(Sender.class).toProvider(new DisguiseUserProvider(this));
         service.register(new DisguisePlusExecutor(this), "dp");
         service.register(new NicknameExecutor(this), "nick", "nickname");
         service.register(new ResetNicknameExecutor(this), "unnick", "resetnick", "unnickname");
@@ -191,7 +187,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     }
 
     @Override
-    public UserManager getUserManager() {
+    public UserManagerImpl getUserManager() {
         return this.userManager;
     }
 
@@ -215,19 +211,19 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     }
 
     public TabIntegration getTabIntegration() {
-        return tabIntegration;
+        return this.tabIntegration;
     }
 
     public PlayerPrefix getPlayerPrefix() {
-        return playerPrefix;
+        return this.playerPrefix;
     }
 
     public ConversationUtil getConversation() {
-        return conversation;
+        return this.conversation;
     }
 
     public InventoryManager getInventoryManager() {
-        return inventoryManager;
+        return this.inventoryManager;
     }
 
     public MessageConfiguration getConfiguration() {
@@ -235,10 +231,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     }
 
     public SkullManager getSkullManager() {
-        return skullManager;
+        return this.skullManager;
     }
 
     public Chat getChat() {
-        return chat;
+        return this.chat;
     }
 }

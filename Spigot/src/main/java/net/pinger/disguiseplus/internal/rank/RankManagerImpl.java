@@ -4,6 +4,7 @@ import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.configuration.ExternalConfigurationAdapter;
 import net.pinger.disguiseplus.rank.Rank;
 import net.pinger.disguiseplus.rank.RankManager;
+import net.pinger.disguiseplus.user.User;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -52,29 +53,30 @@ public class RankManagerImpl extends ExternalConfigurationAdapter implements Ran
     }
 
     @Override
-    public List<Rank> getAvailableRanks(Player player) {
+    public List<Rank> getAvailableRanks(User user) {
+        Player player = user.transform();
+        List<Rank> available = new ArrayList<>();
+
+        // If the player doesn't have permission to load the inventory
+        // We want to return null, to say that no rank is loaded
         if (!player.hasPermission(this.permission)) {
             return null;
         }
 
-        List<Rank> permissible = new ArrayList<>();
+        // We can simplify loop through all ranks in the manager
+        // And see if the player has permission to use it
+        // If so, we add it to the available list
         for (Rank rank : this.ranks) {
-            if (rank.getPermission() == null) {
-                continue;
-            }
+            String perm = rank.getPermission();
 
-            if (rank.getPermission().isEmpty()) {
-                permissible.add(rank);
-                continue;
+            // If the rank permission is empty
+            // Or if the player has the permission of the rank
+            // We add it
+            if (perm.isEmpty() || player.hasPermission(perm)) {
+                available.add(rank);
             }
-
-            if (!player.hasPermission(rank.getPermission())) {
-                continue;
-            }
-
-            permissible.add(rank);
         }
 
-        return permissible;
+        return available;
     }
 }

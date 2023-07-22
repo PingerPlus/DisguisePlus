@@ -8,16 +8,16 @@ import org.bukkit.entity.Player;
 
 public class ResetNicknameExecutor {
 
-    private final DisguisePlus disguisePlus;
+    private final DisguisePlus dp;
 
-    public ResetNicknameExecutor(DisguisePlus disguisePlus) {
-        this.disguisePlus = disguisePlus;
+    public ResetNicknameExecutor(DisguisePlus dp) {
+        this.dp = dp;
     }
 
     @Command(name = "", desc = "Reset the nickname for yourself")
     @Require("permission.dp.nickname")
     public void resetNickname(@Sender Player sender) {
-        this.disguisePlus.getExtendedManager().resetNickname(sender);
+        this.dp.getExtendedManager().resetNickname(sender);
     }
 
 }

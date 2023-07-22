@@ -186,7 +186,6 @@ public class DisguiseManagerImpl implements DisguiseManager {
             // Change for the API
             player.setDisplayName(nickname);
             player.setPlayerListName(nickname);
-            player.setCustomName(nickname);
         } catch (Exception e) {
             DisguisePlus.getOutput().info("Failed to update player nickname", e);
         }

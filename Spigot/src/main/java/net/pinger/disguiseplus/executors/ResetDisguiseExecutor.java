@@ -8,16 +8,16 @@ import org.bukkit.entity.Player;
 
 public class ResetDisguiseExecutor {
 
-    private final DisguisePlus disguisePlus;
+    private final DisguisePlus dp;
 
-    public ResetDisguiseExecutor(DisguisePlus disguisePlus) {
-        this.disguisePlus = disguisePlus;
+    public ResetDisguiseExecutor(DisguisePlus dp) {
+        this.dp = dp;
     }
 
     @Command(name = "", desc = "Remove disguise from yourself")
     @Require("permission.dp.undisguise")
     public void undisguise(@Sender Player sender) {
-        this.disguisePlus.getExtendedManager().undisguise(sender);
+        this.dp.getExtendedManager().undisguise(sender);
     }
 
 }

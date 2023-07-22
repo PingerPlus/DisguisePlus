@@ -12,8 +12,8 @@ public class DisguisePlusExecutor {
 
     private final DisguisePlus dp;
 
-    public DisguisePlusExecutor(DisguisePlus disguisePlus) {
-        this.dp = disguisePlus;
+    public DisguisePlusExecutor(DisguisePlus dp) {
+        this.dp = dp;
     }
 
     @Command(name = "", desc = "Configure the Disguise+ plugin.")

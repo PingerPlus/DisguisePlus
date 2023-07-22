@@ -8,16 +8,16 @@ import org.bukkit.entity.Player;
 
 public class SkinExecutor {
 
-    private final DisguisePlus disguisePlus;
+    private final DisguisePlus dp;
 
-    public SkinExecutor(DisguisePlus disguisePlus) {
-        this.disguisePlus = disguisePlus;
+    public SkinExecutor(DisguisePlus dp) {
+        this.dp = dp;
     }
 
     @Command(name = "", desc = "Set a skin by giving a player name", usage = "<playerName>")
     @Require("permission.dp.skin")
     public void setSkin(@Sender Player sender, String playerName) {
-        this.disguisePlus.getExtendedManager().applySkinFromName(sender, playerName);
+        this.dp.getExtendedManager().applySkinFromName(sender, playerName);
     }
 
 }
