@@ -1,6 +1,7 @@
 package net.pinger.disguiseplus.internal.user;
 
-import net.pinger.disguise.Skin;
+import net.pinger.disguise.DisguiseAPI;
+import net.pinger.disguise.DisguisePlayer;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.rank.Rank;
 import net.pinger.disguiseplus.statistic.DisguiseStatistic;
@@ -12,7 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class UserImpl implements User {
@@ -25,26 +25,9 @@ public class UserImpl implements User {
     private DisguiseStatistic disguiseStatistic;
     private NickStatistic nickStatistic;
 
-    // The default name of this player when joining the server
-    private String defaultName;
-
     UserImpl(DisguisePlus dp, UUID id) {
         this.dp = dp;
         this.id = id;
-    }
-
-    /**
-     * This is a method which sets the default name of this user.
-     * We must ensure that this method can only get run once at the user join.
-     *
-     * @param defaultName the name
-     */
-
-    public void setDefaultName(String defaultName) {
-        if (this.defaultName != null)
-            return;
-
-        this.defaultName = defaultName;
     }
 
     /**
@@ -59,63 +42,15 @@ public class UserImpl implements User {
         return this.id;
     }
 
-    /**
-     * Returns the current skin this player is wearing.
-     * <p>
-     * This method will never be null, regardless if the player is using a default skin or not.
-     *
-     * @return the current skin
-     */
-
-    @Nonnull
-    @Override
-    public Skin getCurrentSkin() {
-        // Just return null then
-        return null;
-    }
-
-    /**
-     * This method returns the default name of the player is the user is not disguised,
-     * otherwise it returns the {@link #getChangedName()}
-     *
-     * @return the changed name
-     */
-
     @Nonnull
     @Override
     public String getName() {
         if (this.isDisguised() || this.hasNickname()) {
-            return this.getChangedName();
+            return this.transform().getName();
         }
 
-        return this.getDefaultName();
-    }
-
-    /**
-     * Returns the default name of this user which is defined by the id of this player.
-     *
-     * @return the default name
-     */
-
-    @Nonnull
-    @Override
-    public String getDefaultName() {
-        return this.defaultName;
-    }
-
-    /**
-     * Returns the current display name of this player.
-     * This method may be null, depending on if the player has used the disguise or nick command.
-     *
-     * @return the changed name
-     */
-
-    @Nullable
-    @Override
-    public String getChangedName() {
-        return this.disguiseStatistic == null ?
-                this.nickStatistic == null ? null : this.nickStatistic.getNickname()
-                : this.disguiseStatistic.getNickname();
+        DisguisePlayer player = DisguiseAPI.getDisguisePlayer(this.id);
+        return player.getDefaultName();
     }
 
     @Override

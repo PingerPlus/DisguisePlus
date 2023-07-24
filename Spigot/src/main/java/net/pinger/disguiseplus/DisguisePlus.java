@@ -8,14 +8,14 @@ import com.jonahseguin.drink.annotation.Sender;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import net.milkbowl.vault.chat.Chat;
 import net.pinger.disguise.DisguiseAPI;
-import net.pinger.disguise.packet.PacketProvider;
+import net.pinger.disguise.DisguiseProvider;
+import net.pinger.disguise.registration.RegistrySystem;
 import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguiseplus.adapter.SkinPackAdapter;
 import net.pinger.disguiseplus.config.MessageConfiguration;
 import net.pinger.disguiseplus.executors.*;
 import net.pinger.disguiseplus.executors.drink.DisguiseUserProvider;
 import net.pinger.disguiseplus.internal.DisguiseManagerImpl;
-import net.pinger.disguiseplus.internal.ExtendedDisguiseManager;
 import net.pinger.disguiseplus.internal.PlayerMatcherImpl;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
 import net.pinger.disguiseplus.internal.rank.RankManagerImpl;
@@ -49,6 +49,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             .setPrettyPrinting()
             .create();
 
+    private DisguiseProvider provider;
     private FeatureManager featureManager;
     private MessageConfiguration configuration;
     private SkinFactory skinFactory;
@@ -56,7 +57,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private InventoryManager inventoryManager;
     private PlayerMatcher playerMatcher;
     private SkullManager skullManager;
-    private ExtendedDisguiseManager extendedDisguiseManager;
     private DisguiseManager disguiseManager;
     private UserManagerImpl userManager;
     private PlayerPrefix playerPrefix;
@@ -78,24 +78,18 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             new DisguisePlusExpansion(this).register();
         }
 
-        // Get the default provider for this server
-        PacketProvider provider = DisguiseAPI.getProvider();
-
         // Check here if there is any need for downloading skins
         // If the provider was not found, it would just be a waste of time
         // To download skins, because this plugin doesn't have its functionality
         // Without the DisguiseAPI
-        if (provider == null) {
-            getLogger().info("FAILED TO FIND A PACKET PROVIDER!!!");
-            getLogger().info("FAILED TO FIND A PACKET PROVIDER!!!");
-            getLogger().info("FAILED TO FIND A PACKET PROVIDER!!!");
-
-            // Disable the plugin
+        if (!DisguiseAPI.isEnabled()) {
+            this.getLogger().info("Disabling since DisguiseAPI is disabled");
             this.getPluginLoader().disablePlugin(this);
             return;
         }
 
         this.featureManager = new BukkitFeatureManager();
+        this.provider = DisguiseAPI.createProvider(RegistrySystem.DEFAULT_REGISTRATION);
 
         // Load all modules here
         // Without downloading the skins
@@ -105,8 +99,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.inventoryManager = new InventoryManager(this);
         this.skullManager = new SkullManager();
         this.playerMatcher = new PlayerMatcherImpl();
-        this.disguiseManager = new DisguiseManagerImpl(this, provider);
-        this.extendedDisguiseManager = new ExtendedDisguiseManager(this, provider);
+        this.disguiseManager = new DisguiseManagerImpl(this);
         this.skinFactory = new SkinFactoryImpl(this, baseSkins);
         this.playerPrefix = new PlayerPrefix(this);
         this.rankManager = new RankManagerImpl(this);
@@ -165,7 +158,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     public void onDisable() {
         // Reset nicknames for all players
         for (Player player : Bukkit.getOnlinePlayers()) {
-            this.getManager().resetNickname(player);
+            // See if we need this, due to DisguiseAPI already doing this...
+            this.getProvider().resetPlayerName(player);
         }
 
         this.conversation.cancelAllConversations();
@@ -174,6 +168,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     public static Logger getOutput() {
         return logger;
+    }
+
+    public DisguiseProvider getProvider() {
+        return this.provider;
     }
 
     @Override
@@ -189,10 +187,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     @Override
     public UserManagerImpl getUserManager() {
         return this.userManager;
-    }
-
-    public ExtendedDisguiseManager getExtendedManager() {
-        return extendedDisguiseManager;
     }
 
     @Override

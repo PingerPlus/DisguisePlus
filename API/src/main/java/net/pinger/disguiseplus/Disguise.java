@@ -7,11 +7,7 @@ public interface Disguise {
 
     SkinFactory getSkinFactory();
 
-    //
-
     DisguiseManager getManager();
-
-    //
 
     UserManager getUserManager();
 

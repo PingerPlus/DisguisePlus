@@ -1,12 +1,10 @@
 package net.pinger.disguiseplus.user;
 
-import net.pinger.disguise.Skin;
 import net.pinger.disguiseplus.rank.Rank;
 import net.pinger.disguiseplus.statistic.Statistic;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.UUID;
 
 public interface User {
@@ -21,17 +19,6 @@ public interface User {
     UUID getId();
 
     /**
-     * Returns the current skin this player is wearing.
-     * <p>
-     * This method may be nullable, since we don't cache the default skin of the player.
-     *
-     * @return the current skin
-     */
-
-    @Nullable
-    Skin getCurrentSkin();
-
-    /**
      * This method returns the name of the user.
      * It is equal to the current name of the player.
      *
@@ -40,25 +27,6 @@ public interface User {
 
     @Nonnull
     String getName();
-
-    /**
-     * Returns the default name of this user which is defined by the id of this player.
-     *
-     * @return the default name
-     */
-
-    @Nonnull
-    String getDefaultName();
-
-    /**
-     * Returns the current display name of this player.
-     * This method may be null, depending on if the player has used the disguise or nick command.
-     *
-     * @return the changed name
-     */
-
-    @Nullable
-    String getChangedName();
 
     /**
      * This method returns the current rank applied to this user.

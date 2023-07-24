@@ -6,8 +6,6 @@ import com.jonahseguin.drink.annotation.Sender;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.internal.user.UserImpl;
 import net.pinger.disguiseplus.rank.Rank;
-import net.pinger.disguiseplus.user.User;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -29,17 +27,23 @@ public class RepeatDisguiseExecutor {
             return;
         }
 
+        // Check if they have either nick or skin?
+        if (sender.hasSkinApplied() || sender.hasNickname()) {
+            sender.sendMessage("player.failed-disguise");
+            return;
+        }
+
         if (this.dp.getRankManager().isEnabled()) {
             // Check for player permission
             List<Rank> ranks = this.dp.getRankManager().getAvailableRanks(sender);
             if (ranks != null && !ranks.isEmpty()) {
                 // Do the rank inventory
-                this.dp.getInventoryManager().getRankInventory(ranks).open(sender);
+                this.dp.getInventoryManager().getRankInventory(ranks).open(sender.transform());
                 return;
             }
         }
 
-        this.dp.getExtendedManager().disguise(sender.transform());
+        this.dp.getManager().disguise(sender);
     }
 
 }

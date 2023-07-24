@@ -19,7 +19,6 @@ public class UserManagerImpl implements UserManager {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             UserImpl user = new UserImpl(this.dp, p.getUniqueId());
-            user.setDefaultName(p.getName());
 
             // Add it to the map
             this.users.put(p.getUniqueId(), user);
@@ -58,8 +57,9 @@ public class UserManagerImpl implements UserManager {
         for (Player p : Bukkit.getOnlinePlayers()) {
             User s = this.getUser(p.getUniqueId());
 
-            if (s != null)
+            if (s != null) {
                 users.add(s);
+            }
         }
 
         return users;

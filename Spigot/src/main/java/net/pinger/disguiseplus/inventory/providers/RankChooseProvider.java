@@ -43,7 +43,7 @@ public class RankChooseProvider implements GuiProvider {
                 user.setRank(rank);
 
                 // Call disguise
-                this.disguisePlus.getExtendedManager().disguise(player);
+                this.disguisePlus.getManager().disguise(user);
             });
         }
 

@@ -6,7 +6,6 @@ import me.neznamy.tab.api.TabPlayer;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.event.PlayerDisguiseEvent;
 import net.pinger.disguiseplus.event.PlayerRemoveDisguiseEvent;
-import net.pinger.disguiseplus.internal.user.UserImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
 import net.pinger.disguiseplus.tab.TabIntegration;
 import org.bukkit.Bukkit;
@@ -14,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListener implements Listener {
@@ -23,13 +21,6 @@ public class PlayerListener implements Listener {
 
     public PlayerListener(DisguisePlus dp) {
         this.dp = dp;
-    }
-
-    @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent event) {
-        // Player of the event
-        UserImpl s = this.dp.getUserManager().getUser(event.getPlayer().getUniqueId());
-        s.setDefaultName(event.getPlayer().getName());
     }
 
     @EventHandler
