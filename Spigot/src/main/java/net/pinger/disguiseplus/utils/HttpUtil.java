@@ -23,18 +23,6 @@ public class HttpUtil {
     private static final String SKINPACK = "https://raw.githubusercontent.com/ITSPINGER/Skins/master/SkinPacks/%s/%s/data.json";
 
     /**
-     * Returns a new string which represents a formatted url pointing to the uuid of this player
-     * within the mojang servers.
-     *
-     * @param s the name of the player
-     * @return the url
-     */
-
-    public static String toMojangUrl(String s) {
-        return String.format(MOJANG_NAME_URL, s);
-    }
-
-    /**
      * This method creates a URL link for a specific {@link SkinPack}.
      *
      * @param category the category of the pack

@@ -23,6 +23,7 @@ import net.pinger.disguiseplus.internal.user.UserImpl;
 import net.pinger.disguiseplus.internal.user.UserManagerImpl;
 import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.listeners.PlayerListener;
+import net.pinger.disguiseplus.locale.Message;
 import net.pinger.disguiseplus.placeholders.DisguisePlusExpansion;
 import net.pinger.disguiseplus.rank.RankManager;
 import net.pinger.disguiseplus.skin.SkinFactory;

@@ -5,7 +5,6 @@ import java.util.Locale;
 import java.util.Random;
 
 public class StringUtil {
-
     private static final Random RANDOM = new SecureRandom();
     private static final String CONSONANTS = "BCDFGHJKLMNPQRSTUVWXYZ".toLowerCase(Locale.ROOT);
     private static final String VOWELS = "AEIOU".toLowerCase(Locale.ROOT);
@@ -39,7 +38,6 @@ public class StringUtil {
         // Build the string at the end
         return builder.toString();
     }
-
 
     public static String value(String x) {
         if (x != null && !x.isEmpty())
