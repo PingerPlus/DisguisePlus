@@ -1,23 +1,27 @@
 package net.pinger.disguiseplus.internal;
 
 import com.google.gson.JsonArray;
-import net.pinger.disguise.Skin;
-import net.pinger.disguiseplus.SkinPack;
+import com.google.gson.JsonObject;
+import java.nio.file.Path;
+import net.pinger.disguise.DisguiseAPI;
+import net.pinger.disguise.skin.Skin;
+import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.skin.SkinPack;
 
 import javax.annotation.Nonnull;
-import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 public class SkinPackImpl implements SkinPack {
-
-    private File base;
     private final String category, name;
     private final List<Skin> skins;
     private final boolean custom;
 
-    public SkinPackImpl(File base, String category, String name, List<Skin> skins, boolean custom) {
+    private Path base;
+
+    public SkinPackImpl(Path base, String category, String name, List<Skin> skins, boolean custom) {
         this.base = base;
         this.category = category;
         this.name = name;
@@ -41,14 +45,15 @@ public class SkinPackImpl implements SkinPack {
     }
 
     @Override
-    public File getFile() {
+    public Path getFile() {
         return this.base;
     }
 
     @Override
-    public void setFile(File file) {
-        if (this.base != null)
+    public void setFile(Path file) {
+        if (this.base != null) {
             return;
+        }
 
         this.base = file;
     }
@@ -69,17 +74,16 @@ public class SkinPackImpl implements SkinPack {
     }
 
     @Override
-    public Iterator<Skin> iterator() {
+    public @NotNull Iterator<Skin> iterator() {
         return this.skins.iterator();
     }
 
     @Override
     public JsonArray toJsonArray() {
-        JsonArray array = new JsonArray();
-
-        for (Skin s : this.skins) {
-            // Add to the array
-            array.add(s.toJsonObject());
+        final JsonArray array = new JsonArray();
+        for (final Skin skin : this.skins) {
+            final String json = DisguisePlus.GSON.toJson(skin, Skin.class);
+            array.add(DisguiseAPI.GSON.fromJson(json, JsonObject.class));
         }
 
         return array;
@@ -87,26 +91,21 @@ public class SkinPackImpl implements SkinPack {
 
     @Override
     public boolean equals(Object o) {
-        // Check if these objects are equal
-        // In terms of the reference
-        if (this == o)
+        if (this == o) {
             return true;
+        }
 
-        // Check if the second object is null
-        // Or the classes aren't equal
-        if (o == null || getClass() != o.getClass())
+        if (o == null || this.getClass() != o.getClass()) {
             return false;
+        }
 
-        // Cast the class to the implementation
         SkinPackImpl skins = (SkinPackImpl) o;
-
-        // Compare categories and names
-        return Objects.equals(category, skins.category) && Objects.equals(name, skins.name);
+        return Objects.equals(this.category, skins.category) && Objects.equals(this.name, skins.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(category, name);
+        return Objects.hash(this.category, this.name);
     }
 
     @Override

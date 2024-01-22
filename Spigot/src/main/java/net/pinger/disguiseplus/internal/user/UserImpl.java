@@ -153,10 +153,7 @@ public class UserImpl implements User {
 
     @Override
     public void sendMessage(String key) {
-        if (this.transform() == null)
-            return;
-
-        if (!this.dp.getConfiguration().has(key)) {
+        if (this.transform() == null || !this.dp.getConfiguration().has(key)) {
             return;
         }
 
@@ -177,10 +174,7 @@ public class UserImpl implements User {
 
     @Override
     public void sendMessage(String key, Object... format) {
-        if (this.transform() == null)
-            return;
-
-        if (!this.dp.getConfiguration().has(key)) {
+        if (this.transform() == null || !this.dp.getConfiguration().has(key)) {
             return;
         }
 
@@ -198,11 +192,7 @@ public class UserImpl implements User {
 
     @Override
     public void sendRawMessage(String key) {
-        if (this.transform() == null) {
-            return;
-        }
-
-        if (!this.dp.getConfiguration().has(key)) {
+        if (this.transform() == null || !this.dp.getConfiguration().has(key)) {
             return;
         }
 
@@ -223,11 +213,7 @@ public class UserImpl implements User {
 
     @Override
     public void sendRawMessage(String key, Object... format) {
-        if (this.transform() == null) {
-            return;
-        }
-
-        if (!this.dp.getConfiguration().has(key)) {
+        if (this.transform() == null || !this.dp.getConfiguration().has(key)) {
             return;
         }
 

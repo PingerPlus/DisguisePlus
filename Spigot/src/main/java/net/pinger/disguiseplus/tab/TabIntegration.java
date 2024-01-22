@@ -16,10 +16,10 @@ public class TabIntegration extends DisguiseFeature {
     @Override
     protected void load() {
         ConfigurationSection section =
-                this.plugin.getConfig().getConfigurationSection("tab-integration");
+                this.plugin.getConfig().getConfigurationSection("tab");
 
         // Set the values
-        this.enabled = section.getBoolean("enabled");
+        this.enabled = section.getBoolean("enabled", true);
         this.prefix = section.getString("disguise-prefix");
     }
 

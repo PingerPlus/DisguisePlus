@@ -1,10 +1,12 @@
 package net.pinger.disguiseplus.exception;
 
+import net.pinger.disguiseplus.skin.SkinFactory;
+
 /**
  * This is an exception which gets thrown upon failing to download skins
  * from either the server or the local files.
  *
- * @see net.pinger.disguiseplus.SkinFactory
+ * @see SkinFactory
  * @author Pinger
  * @since 2.0
  */

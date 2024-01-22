@@ -4,35 +4,41 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import net.pinger.disguise.Skin;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Comparator;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import net.pinger.disguise.http.HttpRequest;
 import net.pinger.disguise.http.HttpResponse;
 import net.pinger.disguise.http.request.HttpGetRequest;
+import net.pinger.disguise.skin.Skin;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.SkinFactory;
-import net.pinger.disguiseplus.SkinPack;
+import net.pinger.disguiseplus.skin.SkinFactory;
+import net.pinger.disguiseplus.skin.SkinPack;
 import net.pinger.disguiseplus.exception.DownloadFailedException;
 import net.pinger.disguiseplus.exception.SaveFailedException;
-import net.pinger.disguiseplus.utils.FileUtil;
 import net.pinger.disguiseplus.utils.HttpUtil;
-import net.pinger.disguiseplus.utils.SkinUtil;
 
 import javax.annotation.Nullable;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class SkinFactoryImpl implements SkinFactory {
-
-    // Used information
     private final List<SkinPack> skinPacks = new ArrayList<>();
     private final Map<String, List<SkinPack>> categorySkins = new TreeMap<>();
-
-    // Files
-    private final File file;
-    private final File categoriesFile;
+    private final Path categoriesDirectory;
+    private final Path categoriesFile;
     private final boolean downloadBaseSkins;
 
     public SkinFactoryImpl(DisguisePlus dp, boolean downloadBaseSkins) {
@@ -40,8 +46,8 @@ public class SkinFactoryImpl implements SkinFactory {
         this.downloadBaseSkins = downloadBaseSkins;
 
         // Update the file based on the main
-        this.file = new File(dp.getDataFolder(), "categories");
-        this.categoriesFile = new File(this.file, "categories.json");
+        this.categoriesDirectory = Paths.get(dp.getDataFolder().getAbsolutePath(), "categories");
+        this.categoriesFile = this.categoriesDirectory.resolve("categories.json");
     }
 
     @Override
@@ -51,61 +57,53 @@ public class SkinFactoryImpl implements SkinFactory {
 
     @Override
     public void deleteCategory(String category) {
-        List<SkinPack> skinPacks = this.categorySkins.get(category);
+        final List<SkinPack> skinPacks = this.categorySkins.remove(category);
+        if (skinPacks.isEmpty()) {
+            return;
+        }
 
-        // Get all the skins packs and also delete
-        for (Iterator<SkinPack> iterator = skinPacks.iterator(); iterator.hasNext();) {
-            SkinPack pack = iterator.next();
-
-            // Remove from the iterator
-            iterator.remove();
-
-            // Delete the skin from here
-            if (pack.getFile() == null || !pack.getFile().exists()) {
+        for (final SkinPack pack : skinPacks) {
+            final Path packFile = pack.getFile();
+            if (packFile == null || !Files.exists(packFile)) {
                 continue;
             }
 
             // Delete the skin pack
             // If the file exists
-            FileUtil.deleteFile(pack.getFile().getParentFile());
+            try (final Stream<Path> paths = Files.walk(pack.getFile())) {
+                final List<Path> toDelete = paths.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+                for (final Path path : toDelete) {
+                    Files.deleteIfExists(path);
+                }
+            } catch (IOException e) {
+                DisguisePlus.getOutput().info("Failed to delete category ", e);
+            }
         }
-
-        // Delete the category at last
-        this.categorySkins.remove(category);
     }
 
     @Override
     public SkinPack createSkinPack(String category, String name, List<Skin> skins, boolean custom) {
-        // Edge case
-        // Where we do not create new skin packs
-        // If already the same name exists in the given category
-        if (getSkinPack(category, name) != null) {
+        if (this.getSkinPack(category, name) != null) {
             return null;
         }
 
         // Create the new implementation instance
-        SkinPack pack = new SkinPackImpl(null, category, name, skins, custom);
-
-        // We do not cache skin packs when they are not custom
-        // And the downloadBaseSkins is set to false
+        final SkinPack pack = new SkinPackImpl(null, category, name, skins, custom);
         if (!custom && !this.downloadBaseSkins) {
             return pack;
         }
 
         // Add to skin packs
         this.skinPacks.add(pack);
+        this.categorySkins.compute(category, ($, cat) -> {
+            if (cat == null) {
+                return new ArrayList<>(Collections.singletonList(pack));
+            }
 
-        // Add the skin pack to the categories and skin packs if possible
-        if (this.categorySkins.containsKey(category)) {
-            // Add the pack
-            this.categorySkins.get(category).add(pack);
+            cat.add(pack);
+            return cat;
+        });
 
-            // Return the initialized
-            return pack;
-        }
-
-        // Create the category
-        this.categorySkins.put(category, new ArrayList<>(Collections.singletonList(pack)));
         return pack;
     }
 
@@ -133,21 +131,29 @@ public class SkinFactoryImpl implements SkinFactory {
         this.skinPacks.remove(pack);
 
         // Delete the skin from here
-        if (pack.getFile() == null || !pack.getFile().exists()) {
+        if (pack.getFile() == null || !Files.exists(pack.getFile())) {
             return;
         }
 
         // Delete the skin pack
         // If the file exists
-        FileUtil.deleteFile(pack.getFile().getParentFile());
+        try (final Stream<Path> paths = Files.walk(pack.getFile())) {
+            final List<Path> toDelete = paths.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+            for (final Path path : toDelete) {
+                Files.deleteIfExists(path);
+            }
+        } catch (IOException e) {
+            DisguisePlus.getOutput().info("Failed to delete skin pack ", e);
+        }
     }
 
     @Nullable
     @Override
     public SkinPack getSkinPack(String name) {
         for (SkinPack pack : this.getSkinPacks()) {
-            if (pack.getName().equalsIgnoreCase(name))
+            if (pack.getName().equalsIgnoreCase(name)) {
                 return pack;
+            }
         }
 
         return null;
@@ -157,8 +163,9 @@ public class SkinFactoryImpl implements SkinFactory {
     @Override
     public SkinPack getSkinPack(String category, String name) {
         for (SkinPack pack : this.getSkinPacks(category)) {
-            if (pack.getName().equalsIgnoreCase(name))
+            if (pack.getName().equalsIgnoreCase(name)) {
                 return pack;
+            }
         }
 
         return null;
@@ -171,49 +178,35 @@ public class SkinFactoryImpl implements SkinFactory {
 
     @Override
     public List<? extends SkinPack> getSkinPacks() {
-        return this.skinPacks.isEmpty() ? new ArrayList<>() : this.skinPacks;
+        return this.categorySkins.values().stream().flatMap(List::stream).collect(Collectors.toList());
     }
 
     @Override
     public Skin getRandomSkin() {
-        // Get random skin pack first
-        int packIndex = new Random().nextInt(this.skinPacks.size());
-        SkinPack pack = this.skinPacks.get(packIndex);
-
-        // We're avoiding IndexOutOfBoundException here
-        // By waiting for index
+        final int packIndex = new Random().nextInt(this.skinPacks.size());
+        final SkinPack pack = this.skinPacks.get(packIndex);
         if (pack.getSkins().isEmpty()) {
             return null;
         }
 
-        // Load the index
-        int skinIndex = new Random().nextInt(pack.getSkins().size());
+        final int skinIndex = new Random().nextInt(pack.getSkins().size());
         return pack.getSkins().get(skinIndex);
     }
 
     @Override
     public Skin getRandomSkin(String category) {
-        List<SkinPack> packs = this.categorySkins.get(category);
-
+        final List<SkinPack> packs = this.categorySkins.get(category);
         if (packs == null || packs.isEmpty()) {
             return null;
         }
 
-        int index = new Random().nextInt(packs.size());
-        SkinPack pack = packs.get(index);
-
-        // Check if the pack has any skins
-        // We have to check this for the NullPointerException
+        final int index = new Random().nextInt(packs.size());
+        final SkinPack pack = packs.get(index);
         if (pack.getSkins().isEmpty()) {
             return null;
         }
 
-        // Get the second
-        // Random index
-        int secondIndex = new Random().nextInt(pack.getSkins().size());
-
-        // Return that
-        // Second skin pack
+        final int secondIndex = new Random().nextInt(pack.getSkins().size());
         return pack.getSkins().get(secondIndex);
     }
 
@@ -224,8 +217,6 @@ public class SkinFactoryImpl implements SkinFactory {
 
     @Override
     public void downloadSkins() throws DownloadFailedException {
-        // When downloading
-        // We must clear the current skin files
         this.skinPacks.clear();
         this.categorySkins.clear();
 
@@ -235,154 +226,117 @@ public class SkinFactoryImpl implements SkinFactory {
         DisguisePlus.getOutput().info("This might take a few seconds if no local files are saved");
         DisguisePlus.getOutput().info("Attempting to download skins from local files");
 
-        try {
-            // Always download local skins first
-            if (categoriesFile.exists() && categoriesFile.length() >= 1) {
-                try (FileReader reader = new FileReader(this.categoriesFile)) {
-                    // Get a jsonObject from the reader
-                    // Read all categories here
-                    JsonObject categories = DisguisePlus.GSON.fromJson(reader, JsonObject.class);
+        CompletableFuture.runAsync(() -> {
+            try {
+                if (Files.exists(this.categoriesFile)) {
+                    try (BufferedReader reader = Files.newBufferedReader(this.categoriesFile)) {
+                        final JsonObject categories = DisguisePlus.GSON.fromJson(reader, JsonObject.class);
 
-                    // Loop through all categories
-                    for (Map.Entry<String, JsonElement> category : categories.entrySet()) {
-                        // Get the category directory
-                        File categoryDir = new File(getFile(), category.getKey());
+                        for (final Map.Entry<String, JsonElement> category : categories.entrySet()) {
+                            final Path categoryDir = this.categoriesDirectory.resolve(category.getKey());
+                            for (final JsonElement pack : category.getValue().getAsJsonArray()) {
+                                final Path packDir = categoryDir.resolve(pack.getAsString());
+                                final Path packFile = packDir.resolve("pack.json");
+                                if (!Files.exists(packFile)) {
+                                    continue;
+                                }
 
-                        // Loop through all skin packs
-                        for (JsonElement pack : category.getValue().getAsJsonArray()) {
-                            // Get the pack directory
-                            File packDir = new File(categoryDir, pack.getAsString());
-
-                            // Get the json file
-                            File packFile = new File(packDir, "pack.json");
-
-                            // Avoid an exception by skipping this
-                            if (!packFile.exists()) {
-                                continue;
-                            }
-
-                            // Create the file reader
-                            try (FileReader packReader = new FileReader(packFile)) {
-                                SkinPack skinPack = DisguisePlus.GSON.fromJson(packReader, SkinPack.class);
-
-                                // Set the file which we can use
-                                // To later delete the skin pack if needed
-                                skinPack.setFile(packFile);
+                                // Create the file reader
+                                try (BufferedReader fileReader = Files.newBufferedReader(packFile)) {
+                                    final SkinPack skinPack = DisguisePlus.GSON.fromJson(fileReader, SkinPack.class);
+                                    skinPack.setFile(packFile);
+                                }
                             }
                         }
                     }
                 }
+            } catch (Exception e) {
+                throw new DownloadFailedException("Failed to download skins from local files", e);
             }
-        } catch (Exception e) {
-            throw new DownloadFailedException("Failed to download skins from local files", e);
-        }
 
-        int skinPacks = this.skinPacks.size();
-        int totalSkins = this.skinPacks.stream().mapToInt(pack -> pack.getSkins().size()).sum();
+            int skinPacks = this.skinPacks.size();
+            int totalSkins = this.skinPacks.stream().mapToInt(pack -> pack.getSkins().size()).sum();
 
-        // Output for different occasions
-        if (skinPacks > 0 && totalSkins > 0) {
-            DisguisePlus.getOutput().info(String.format("Downloaded %s skins from %s different skin packs", totalSkins, skinPacks));
-        } else {
-            DisguisePlus.getOutput().info("No skins were found within the local cache");
-        }
+            // Output for different occasions
+            if (skinPacks > 0 && totalSkins > 0) {
+                DisguisePlus.getOutput().info(String.format("Downloaded %s skins from %s different skin packs", totalSkins, skinPacks));
+            } else {
+                DisguisePlus.getOutput().info("No skins were found within the local cache");
+            }
 
-        // Check if we should even try to download from the internet
-        if (!this.downloadBaseSkins) {
-            DisguisePlus.getOutput().info("Skipping downloading from the database since the config option is turned off");
-            return;
-        }
+            // Check if we should even try to download from the internet
+            if (!this.downloadBaseSkins) {
+                DisguisePlus.getOutput().info("Skipping downloading from the database since the config option is turned off");
+                return;
+            }
 
-        DisguisePlus.getOutput().info("Attempting to download skins from the skin cloud");
+            DisguisePlus.getOutput().info("Attempting to download skins from the skin cloud");
 
-        // Try to download from the database
-        try {
-            // Establish the connection
-            HttpRequest request = new HttpGetRequest(HttpUtil.CATEGORY_URL);
-            HttpResponse response = request.connect();
+            // Try to download from the database
+            try {
+                final HttpRequest request = new HttpGetRequest(HttpUtil.CATEGORY_URL);
+                final HttpResponse response = request.connect();
 
-            // This is essentially the categories.json file
-            JsonObject categories = DisguisePlus.GSON.fromJson(response.getResponse(), JsonObject.class);
+                JsonObject categories = DisguisePlus.GSON.fromJson(response.getResponse(), JsonObject.class);
+                for (final Map.Entry<String, JsonElement> category : categories.entrySet()) {
+                    final String categoryName = category.getKey();
+                    for (final JsonElement pack : category.getValue().getAsJsonArray()) {
+                        final String packName = pack.getAsString();
+                        if (this.getSkinPack(category.getKey(), pack.getAsString()) != null) {
+                            continue;
+                        }
 
-            // Loop through all categories
-            for (Map.Entry<String, JsonElement> category : categories.entrySet()) {
-                // Get the category name
-                String categoryName = category.getKey();
+                        final List<Skin> skins = new ArrayList<>();
 
-                // Loop through all skin packs
-                for (JsonElement pack : category.getValue().getAsJsonArray()) {
-                    // Get the pack name
-                    String packName = pack.getAsString();
+                        // We need to create a new request
+                        // In order to get the exact file
+                        final HttpRequest packRequest = new HttpGetRequest(HttpUtil.toSkinPack(categoryName, packName));
+                        final HttpResponse packResponse = packRequest.connect();
 
-                    // Check if the item
-                    // Is not already loaded
-                    if (this.getSkinPack(category.getKey(), pack.getAsString()) != null)
-                        continue;
+                        // Load the array of skins
+                        final JsonArray array = DisguisePlus.GSON.fromJson(packResponse.getResponse(), JsonArray.class);
+                        for (final JsonElement object : array) {
+                            skins.add(DisguisePlus.GSON.fromJson(object, Skin.class));
+                        }
 
-                    // Create a new list of skins
-                    List<Skin> skins = new ArrayList<>();
-
-                    // We need to create a new request
-                    // In order to get the exact file
-                    HttpRequest packRequest = new HttpGetRequest(HttpUtil.toSkinPack(categoryName, packName));
-                    HttpResponse packResponse = packRequest.connect();
-
-                    // Load the array of skins
-                    JsonArray array = DisguisePlus.GSON.fromJson(packResponse.getResponse(), JsonArray.class);
-
-                    // Looping through each skin
-                    for (JsonElement object : array) {
-                        skins.add(SkinUtil.getFromJson(object.getAsJsonObject()));
+                        // Save the skin
+                        this.createSkinPack(categoryName, packName, skins, false);
                     }
-
-                    // Save the skin
-                    this.createSkinPack(categoryName, packName, skins, false);
                 }
+            } catch (Exception e) {
+                throw new DownloadFailedException("Failed to download skins from the database", e);
             }
-        } catch (Exception e) {
-            throw new DownloadFailedException("Failed to download skins from the database", e);
-        }
 
-        skinPacks = this.skinPacks.size();
-        totalSkins = this.skinPacks.stream().mapToInt(pack -> pack.getSkins().size()).sum() - totalSkins;
+            skinPacks = this.skinPacks.size();
+            totalSkins = this.skinPacks.stream().mapToInt(pack -> pack.getSkins().size()).sum() - totalSkins;
 
-        // Output for different occasions
-        if (skinPacks > 0 && totalSkins > 0) {
-            DisguisePlus.getOutput().info(String.format("Fetched %s skins from %s different skin packs from the database", totalSkins, skinPacks));
-        } else {
-            DisguisePlus.getOutput().info("No new skins were found within the database");
-        }
+            // Output for different occasions
+            if (skinPacks > 0 && totalSkins > 0) {
+                DisguisePlus.getOutput().info(String.format("Fetched %s skins from %s different skin packs from the database", totalSkins, skinPacks));
+            } else {
+                DisguisePlus.getOutput().info("No new skins were found within the database");
+            }
+        });
     }
 
     @Override
     public void saveSkins() throws SaveFailedException {
-        // Starting the process
         DisguisePlus.getOutput().info("Attempting to save skins locally.");
 
         try {
-            // Object that will later be converted
-            // Or rather saved in the categories.json file
-            JsonObject categories = new JsonObject();
-
-            // Loop through each category
-            for (Map.Entry<String, List<SkinPack>> category : this.categorySkins.entrySet()) {
-                // Make a json array for each category
-                JsonArray packArray = new JsonArray();
+            final JsonObject categories = new JsonObject();
+            for (final Map.Entry<String, List<SkinPack>> category : this.categorySkins.entrySet()) {
+                final JsonArray packArray = new JsonArray();
 
                 // Get the category directory
-                File categoryDir = new File(getFile(), category.getKey());
-
-                // Loop through each skin category
-                for (SkinPack skinPack : category.getValue()) {
-                    // Get the pack directory
-                    File packDir = new File(categoryDir, skinPack.getName());
-                    packDir.mkdirs();
+                final Path categoryDir = this.categoriesDirectory.resolve(category.getKey());
+                for (final SkinPack skinPack : category.getValue()) {
+                    final Path packDir = categoryDir.resolve(skinPack.getName());
+                    Files.createDirectories(packDir);
 
                     // Get the json file
-                    File packFile = new File(packDir, "pack.json");
-
-                    // Save the files
-                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(packFile))) {
+                    final Path packFile = packDir.resolve("pack.json");
+                    try (final BufferedWriter writer = Files.newBufferedWriter(packFile)) {
                         writer.write(DisguisePlus.GSON.toJson(skinPack, SkinPack.class));
                     }
 
@@ -394,7 +348,7 @@ public class SkinFactoryImpl implements SkinFactory {
             }
 
             // Save the categories.json file
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(getCategoriesFile()))) {
+            try (final BufferedWriter writer = Files.newBufferedWriter(this.categoriesFile)) {
                 writer.write(DisguisePlus.GSON.toJson(categories));
             }
         } catch (Exception e) {
@@ -402,15 +356,5 @@ public class SkinFactoryImpl implements SkinFactory {
         }
 
         DisguisePlus.getOutput().info("Successfully saved skins locally");
-    }
-
-    @Override
-    public File getFile() {
-        return this.file;
-    }
-
-    @Override
-    public File getCategoriesFile() {
-        return this.categoriesFile;
     }
 }

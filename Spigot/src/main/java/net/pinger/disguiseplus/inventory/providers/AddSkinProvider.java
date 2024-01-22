@@ -1,16 +1,15 @@
 package net.pinger.disguiseplus.inventory.providers;
 
-import io.pnger.gui.GuiInventory;
 import io.pnger.gui.contents.GuiContents;
 import io.pnger.gui.item.GuiItem;
 import io.pnger.gui.provider.GuiProvider;
 import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.skin.SkinPack;
 import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.prompts.CreateSkinImagePrompt;
 import net.pinger.disguiseplus.prompts.CreateSkinNamePrompt;
-import net.pinger.disguiseplus.SkinPack;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

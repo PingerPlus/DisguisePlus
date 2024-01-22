@@ -1,10 +1,15 @@
 package net.pinger.disguiseplus.adapter;
 
-import com.google.gson.*;
-import net.pinger.disguise.Skin;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import net.pinger.disguise.skin.Skin;
 import net.pinger.disguiseplus.DisguisePlusAPI;
-import net.pinger.disguiseplus.SkinPack;
-import net.pinger.disguiseplus.utils.SkinUtil;
+import net.pinger.disguiseplus.skin.SkinPack;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -17,26 +22,24 @@ public class SkinPackAdapter implements JsonSerializer<SkinPack>, JsonDeserializ
      *
      * @param jsonElement the jsonElement to transform
      * @param type the type of the {@link SkinPack}
-     * @param jsonDeserializationContext the deserialization context
+     * @param context the deserialization context
      * @return the new {@link SkinPack}
      * @throws JsonParseException if an error occurred while retrieving values
      */
 
     @Override
-    public SkinPack deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        // Get the object as json
-        JsonObject object = jsonElement.getAsJsonObject();
+    public SkinPack deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
+        final JsonObject object = jsonElement.getAsJsonObject();
 
         // Get default values such as custom, name, strategy, skins
-        boolean custom = object.has("custom") && object.get("custom").getAsBoolean();
-        String name = object.get("name").getAsString();
-        String category = object.get("category").getAsString();
+        final boolean custom = object.has("custom") && object.get("custom").getAsBoolean();
+        final String name = object.get("name").getAsString();
+        final String category = object.get("category").getAsString();
 
         // Extract skins from the array
-        List<Skin> skins = new ArrayList<>();
-        for (JsonElement element : object.getAsJsonArray("skins")) {
-            // Add the skins from the file
-            skins.add(SkinUtil.getFromJson(element.getAsJsonObject()));
+        final List<Skin> skins = new ArrayList<>();
+        for (final JsonElement element : object.getAsJsonArray("skins")) {
+            skins.add(context.deserialize(element.getAsJsonObject(), Skin.class));
         }
 
         return DisguisePlusAPI.getSkinFactory().createSkinPack(category, name, skins, custom);
@@ -70,7 +73,7 @@ public class SkinPackAdapter implements JsonSerializer<SkinPack>, JsonDeserializ
 
     @Override
     public JsonElement serialize(SkinPack skins, Type type, JsonSerializationContext jsonSerializationContext) {
-        JsonObject object = new JsonObject();
+        final JsonObject object = new JsonObject();
 
         // Add default properties
         object.addProperty("custom", skins.isCustomSkinPack());

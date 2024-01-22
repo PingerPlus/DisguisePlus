@@ -9,7 +9,7 @@ import io.pnger.gui.pagination.GuiPagination;
 import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.SkinPack;
+import net.pinger.disguiseplus.skin.SkinPack;
 import net.pinger.disguiseplus.inventory.providers.*;
 import net.pinger.disguiseplus.rank.Rank;
 import org.bukkit.ChatColor;

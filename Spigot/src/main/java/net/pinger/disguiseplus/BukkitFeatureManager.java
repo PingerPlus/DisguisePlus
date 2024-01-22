@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BukkitFeatureManager implements FeatureManager {
-
     private final Set<DisguiseFeature> featuresList = new HashSet<>();
 
     @Override
@@ -15,14 +14,14 @@ public class BukkitFeatureManager implements FeatureManager {
 
     @Override
     public void load() {
-        for (DisguiseFeature feature : this.featuresList) {
+        for (final DisguiseFeature feature : this.featuresList) {
             feature.load();
         }
     }
 
     @Override
     public void reload() {
-        for (DisguiseFeature feature : this.featuresList) {
+        for (final DisguiseFeature feature : this.featuresList) {
             feature.reload();
         }
     }

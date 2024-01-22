@@ -1,9 +1,9 @@
-package net.pinger.disguiseplus;
+package net.pinger.disguiseplus.skin;
 
 import com.google.gson.JsonArray;
-import net.pinger.disguise.Skin;
+import java.nio.file.Path;
+import net.pinger.disguise.skin.Skin;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -23,9 +23,9 @@ public interface SkinPack extends Iterable<Skin>, Comparable<SkinPack> {
 
     boolean isCustomSkinPack();
 
-    File getFile();
+    Path getFile();
 
-    void setFile(File file);
+    void setFile(Path file);
 
     /**
      * This method returns the unique name of this

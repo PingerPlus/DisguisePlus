@@ -32,8 +32,8 @@ import java.io.*;
 import java.util.Map;
 
 public abstract class ExternalConfigurationAdapter extends DisguiseFeature {
-
     private final File file;
+
     protected YamlConfiguration configuration;
 
     public ExternalConfigurationAdapter(JavaPlugin plugin, String name)  {
@@ -55,19 +55,15 @@ public abstract class ExternalConfigurationAdapter extends DisguiseFeature {
 
         // Load resource by this name
         // And add the configuration section
-        InputStream inputStream = plugin.getResource(name);
-
-        // Throw IllegalArgumentException
-        // If this file cannot be found
+        final InputStream inputStream = plugin.getResource(name);
         if (inputStream == null) {
             throw new IllegalArgumentException("File resource cannot be found (" + name + ")");
         }
 
         // Try to read from the input stream
         // And add to the file
-        try (Reader reader = new InputStreamReader(inputStream)) {
-            // Load the configuration
-            YamlConfiguration keyed = YamlConfiguration.loadConfiguration(reader);
+        try (final Reader reader = new InputStreamReader(inputStream)) {
+            final YamlConfiguration keyed = YamlConfiguration.loadConfiguration(reader);
 
             // If we shouldn't copy the defaults, return here
             // Copy the defaults
@@ -79,9 +75,6 @@ public abstract class ExternalConfigurationAdapter extends DisguiseFeature {
                 this.configuration.addDefault(entries.getKey(), entries.getValue());
             }
 
-            // Now for the last step
-            // We have to save the configuration we made
-            // From the object
             this.configuration.save(this.file);
         } catch (IOException e) {
             plugin.getLogger().info("Failed to create a file with name " + name);
@@ -89,9 +82,7 @@ public abstract class ExternalConfigurationAdapter extends DisguiseFeature {
     }
 
     @Override
-    protected void load() {
-
-    }
+    protected void load() {}
 
     @Override
     protected void reload() {

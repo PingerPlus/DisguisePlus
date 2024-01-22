@@ -2,7 +2,7 @@ package net.pinger.disguiseplus.internal;
 
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.DisguiseProvider;
-import net.pinger.disguise.Skin;
+import net.pinger.disguise.skin.Skin;
 import net.pinger.disguiseplus.DisguiseManager;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.event.PlayerDisguiseEvent;

@@ -1,11 +1,11 @@
-package net.pinger.disguiseplus;
+package net.pinger.disguiseplus.skin;
 
-import net.pinger.disguise.Skin;
+import net.pinger.disguise.skin.Skin;
+import net.pinger.disguiseplus.Disguise;
 import net.pinger.disguiseplus.exception.DownloadFailedException;
 import net.pinger.disguiseplus.exception.SaveFailedException;
 
 import javax.annotation.Nullable;
-import java.io.File;
 import java.util.List;
 import java.util.Set;
 
@@ -242,8 +242,4 @@ public interface SkinFactory {
      */
 
     void saveSkins() throws SaveFailedException;
-
-    File getFile();
-
-    File getCategoriesFile();
 }

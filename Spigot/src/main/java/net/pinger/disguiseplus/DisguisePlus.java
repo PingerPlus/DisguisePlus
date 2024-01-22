@@ -6,17 +6,17 @@ import com.jonahseguin.drink.CommandService;
 import com.jonahseguin.drink.Drink;
 import com.jonahseguin.drink.annotation.Sender;
 import com.tchristofferson.configupdater.ConfigUpdater;
-import net.milkbowl.vault.chat.Chat;
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.DisguiseProvider;
+import net.pinger.disguise.gson.GsonSkinAdapter;
 import net.pinger.disguise.registration.RegistrySystem;
+import net.pinger.disguise.skin.Skin;
 import net.pinger.disguise.skull.SkullManager;
 import net.pinger.disguiseplus.adapter.SkinPackAdapter;
 import net.pinger.disguiseplus.config.MessageConfiguration;
 import net.pinger.disguiseplus.executors.*;
 import net.pinger.disguiseplus.executors.drink.DisguiseUserProvider;
 import net.pinger.disguiseplus.internal.DisguiseManagerImpl;
-import net.pinger.disguiseplus.internal.PlayerMatcherImpl;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
 import net.pinger.disguiseplus.internal.rank.RankManagerImpl;
 import net.pinger.disguiseplus.internal.user.UserImpl;
@@ -25,12 +25,13 @@ import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.listeners.PlayerListener;
 import net.pinger.disguiseplus.placeholders.DisguisePlusExpansion;
 import net.pinger.disguiseplus.rank.RankManager;
-import net.pinger.disguiseplus.tab.TabIntegration;
+import net.pinger.disguiseplus.skin.SkinFactory;
+import net.pinger.disguiseplus.skin.SkinPack;
 import net.pinger.disguiseplus.utils.ConversationUtil;
+import net.pinger.disguiseplus.vault.VaultManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,12 +40,12 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class DisguisePlus extends JavaPlugin implements Disguise {
-
     private static final Logger logger = LoggerFactory.getLogger("DisguisePlus");
 
     // Gson
     public static Gson GSON = new GsonBuilder()
             .registerTypeHierarchyAdapter(SkinPack.class, new SkinPackAdapter())
+            .registerTypeHierarchyAdapter(Skin.class, new GsonSkinAdapter())
             .enableComplexMapKeySerialization()
             .setPrettyPrinting()
             .create();
@@ -55,18 +56,15 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private SkinFactory skinFactory;
     private ConversationUtil conversation;
     private InventoryManager inventoryManager;
-    private PlayerMatcher playerMatcher;
     private SkullManager skullManager;
     private DisguiseManager disguiseManager;
     private UserManagerImpl userManager;
     private PlayerPrefix playerPrefix;
     private RankManager rankManager;
-    private TabIntegration tabIntegration;
-    private Chat chat;
+    private VaultManager vaultManager;
 
     @Override
     public void onEnable() {
-        // Create a dependency to this instance
         DisguisePlusAPI.setDisguise(this);
 
         // Load the config and register default events
@@ -98,13 +96,11 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.conversation = new ConversationUtil(this);
         this.inventoryManager = new InventoryManager(this);
         this.skullManager = new SkullManager();
-        this.playerMatcher = new PlayerMatcherImpl();
         this.disguiseManager = new DisguiseManagerImpl(this);
         this.skinFactory = new SkinFactoryImpl(this, baseSkins);
         this.playerPrefix = new PlayerPrefix(this);
         this.rankManager = new RankManagerImpl(this);
-        this.tabIntegration = new TabIntegration(this);
-        this.setupEconomy();
+        this.vaultManager = new VaultManager(this);
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
@@ -119,7 +115,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         CommandService service = Drink.get(this);
         service.bind(UserImpl.class).annotatedWith(Sender.class).toProvider(new DisguiseUserProvider(this));
         service.register(new DisguisePlusExecutor(this), "dp");
-        service.register(new NicknameExecutor(this), "nick", "nickname");
+        service.register(new NicknameExecutor(this),  "nickname", "setnick");
         service.register(new ResetNicknameExecutor(this), "unnick", "resetnick", "unnickname");
         service.register(new DisguiseExecutor(this), "d", "disguise");
         service.register(new ResetDisguiseExecutor(this), "und", "undisguise");
@@ -130,14 +126,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
         // Create metrics
         new Metrics(this, 11053);
-    }
-
-    public void setupEconomy() {
-        RegisteredServiceProvider<Chat> rsp = this.getServer().getServicesManager().getRegistration(Chat.class);
-
-        if (rsp != null) {
-            this.chat = rsp.getProvider();
-        }
     }
 
     private void addDefaultConfig() {
@@ -156,9 +144,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     @Override
     public void onDisable() {
-        // Reset nicknames for all players
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            // See if we need this, due to DisguiseAPI already doing this...
+        for (final Player player : Bukkit.getOnlinePlayers()) {
             this.getProvider().resetPlayerName(player);
         }
 
@@ -190,11 +176,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     }
 
     @Override
-    public PlayerMatcher getPlayerMatcher() {
-        return this.playerMatcher;
-    }
-
-    @Override
     public RankManager getRankManager() {
         return this.rankManager;
     }
@@ -202,10 +183,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     @Override
     public FeatureManager getFeatureManager() {
         return this.featureManager;
-    }
-
-    public TabIntegration getTabIntegration() {
-        return this.tabIntegration;
     }
 
     public PlayerPrefix getPlayerPrefix() {
@@ -228,7 +205,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         return this.skullManager;
     }
 
-    public Chat getChat() {
-        return this.chat;
+    public VaultManager getVaultManager() {
+        return vaultManager;
     }
 }

@@ -1,7 +1,8 @@
 package net.pinger.disguiseplus;
 
-public class DisguisePlusAPI {
+import net.pinger.disguiseplus.skin.SkinFactory;
 
+public class DisguisePlusAPI {
     private static Disguise disguise;
 
     /**
@@ -43,16 +44,6 @@ public class DisguisePlusAPI {
 
     public static DisguiseManager getDisguiseManager() {
         return disguise.getManager();
-    }
-
-    /**
-     * Returns the {@link PlayerMatcher} instance.
-     *
-     * @return the player matcher
-     */
-
-    public static PlayerMatcher getPlayerMatcher() {
-        return disguise.getPlayerMatcher();
     }
 
     /**

@@ -1,6 +1,6 @@
 package net.pinger.disguiseplus.utils;
 
-import net.pinger.disguiseplus.SkinPack;
+import net.pinger.disguiseplus.skin.SkinPack;
 
 public class HttpUtil {
 

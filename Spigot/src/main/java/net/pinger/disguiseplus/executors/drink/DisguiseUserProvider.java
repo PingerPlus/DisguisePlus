@@ -12,7 +12,6 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 public class DisguiseUserProvider extends DrinkProvider<UserImpl> {
-
     private final DisguisePlus dp;
 
     public DisguiseUserProvider(DisguisePlus dp) {
@@ -36,10 +35,7 @@ public class DisguiseUserProvider extends DrinkProvider<UserImpl> {
             throw new CommandExitMessage("Sender must be a player.");
         }
 
-        UserImpl player = this.dp.getUserManager().getUser(arg.getSenderAsPlayer().getUniqueId());
-
-        // If the player with the provided id is null
-        // Throw an error, since we can't recognize them
+        final UserImpl player = this.dp.getUserManager().getUser(arg.getSenderAsPlayer().getUniqueId());
         if (player == null) {
             throw new CommandExitMessage("No player with name " + arg.getSenderAsPlayer().getName());
         }

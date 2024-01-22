@@ -4,7 +4,7 @@ import com.jonahseguin.drink.annotation.Command;
 import com.jonahseguin.drink.annotation.Require;
 import com.jonahseguin.drink.annotation.Sender;
 import net.pinger.disguise.DisguiseAPI;
-import net.pinger.disguise.Skin;
+import net.pinger.disguise.skin.Skin;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.internal.user.UserImpl;
 import net.pinger.disguiseplus.statistic.SkinStatistic;
