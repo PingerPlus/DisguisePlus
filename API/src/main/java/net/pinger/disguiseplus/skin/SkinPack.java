@@ -17,6 +17,10 @@ import java.util.List;
 
 public interface SkinPack extends Iterable<Skin>, Comparable<SkinPack> {
 
+    default boolean hasSkins() {
+        return !this.getSkins().isEmpty();
+    }
+
     void addSkin(Skin skin);
 
     void removeSkin(Skin skin);

@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
+import net.pinger.disguiseplus.utils.RandomUtil;
 
 public class SkinFactoryImpl implements SkinFactory {
     private final List<SkinPack> skinPacks = new ArrayList<>();
@@ -183,14 +184,8 @@ public class SkinFactoryImpl implements SkinFactory {
 
     @Override
     public Skin getRandomSkin() {
-        final int packIndex = new Random().nextInt(this.skinPacks.size());
-        final SkinPack pack = this.skinPacks.get(packIndex);
-        if (pack.getSkins().isEmpty()) {
-            return null;
-        }
-
-        final int skinIndex = new Random().nextInt(pack.getSkins().size());
-        return pack.getSkins().get(skinIndex);
+        final SkinPack pack = RandomUtil.getRandomElement(this.skinPacks, SkinPack::hasSkins);
+        return RandomUtil.getRandomElement(pack.getSkins());
     }
 
     @Override
@@ -200,14 +195,8 @@ public class SkinFactoryImpl implements SkinFactory {
             return null;
         }
 
-        final int index = new Random().nextInt(packs.size());
-        final SkinPack pack = packs.get(index);
-        if (pack.getSkins().isEmpty()) {
-            return null;
-        }
-
-        final int secondIndex = new Random().nextInt(pack.getSkins().size());
-        return pack.getSkins().get(secondIndex);
+        final SkinPack pack = RandomUtil.getRandomElement(packs, SkinPack::hasSkins);
+        return RandomUtil.getRandomElement(pack.getSkins());
     }
 
     @Override

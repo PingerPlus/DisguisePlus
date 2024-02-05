@@ -45,24 +45,6 @@ public interface User {
     void setRank(Rank rank);
 
     /**
-     * This method adds a specific statistic
-     * to this user.
-     *
-     * @param statistic the statistic to add
-     */
-
-    void addStatistic(Statistic statistic);
-
-    /**
-     * This method removes a specific statistic
-     * from this user.
-     *
-     * @param statistic the statistic to remove
-     */
-
-    void removeStatistic(Class<? extends Statistic> statistic);
-
-    /**
      * Checks if this player is disguised.
      *
      * @return whether this player is disguised
@@ -95,7 +77,6 @@ public interface User {
      *
      * @return the player
      */
-
 
     Player transform();
 

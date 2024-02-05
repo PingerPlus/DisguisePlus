@@ -1,7 +1,6 @@
 package net.pinger.disguiseplus.rank;
 
 public class Rank {
-
     private final String name;
     private final String displayName;
     private final String permission;
@@ -10,6 +9,10 @@ public class Rank {
         this.name = name;
         this.displayName = displayName;
         this.permission = permission;
+    }
+
+    public static Rank of(String name, String displayName, String permission) {
+        return new Rank(name, displayName, permission);
     }
 
     public String getName() {

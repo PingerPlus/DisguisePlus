@@ -13,11 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class VaultManager {
-
     private final DisguisePlus plus;
-    private final boolean vaultEnabled;
     private final boolean autoRank;
-    private final boolean tabEnabled;
 
     private Chat chat;
     private TabAPI tab;
@@ -25,36 +22,30 @@ public class VaultManager {
     public VaultManager(DisguisePlus plus) {
         this.plus = plus;
         this.autoRank = this.plus.getConfig().getBoolean("tab.autoRank", true);
-        this.tabEnabled = Bukkit.getPluginManager().isPluginEnabled("TAB");
-        this.vaultEnabled = Bukkit.getPluginManager().isPluginEnabled("Vault");
 
-        // If vault is enabled, grab the api
-        if (this.vaultEnabled) {
+        final boolean tabEnabled = Bukkit.getPluginManager().isPluginEnabled("TAB");
+        final boolean vaultEnabled = Bukkit.getPluginManager().isPluginEnabled("Vault");
+        if (vaultEnabled) {
             RegisteredServiceProvider<Chat> reg = plus.getServer().getServicesManager().getRegistration(Chat.class);
             if (reg != null) {
                 this.chat = reg.getProvider();
             }
         }
 
-        if (this.tabEnabled) {
+        if (tabEnabled) {
             this.tab = TabAPI.getInstance();
-
-            // Add tab listener
             this.tab.getEventBus().register(PlayerLoadEvent.class, e -> this.onPlayerLoad(e.getPlayer()));
         }
     }
 
     public void onPlayerLoad(TabPlayer tp) {
-        Player player = Bukkit.getPlayer(tp.getUniqueId());
-        User dp = this.plus.getUserManager().getUser(player.getUniqueId());
-
-        // If for any reason the player is null
-        if (dp == null) {
+        final Player player = Bukkit.getPlayer(tp.getUniqueId());
+        final User user = this.plus.getUserManager().getUser(player.getUniqueId());
+        if (user == null) {
             return;
         }
 
-        // The string to parse
-        Rank rank = dp.getCurrentRank();
+        final Rank rank = user.getCurrentRank();
         if (rank == null) {
             return;
         }
@@ -69,17 +60,12 @@ public class VaultManager {
     }
 
     public void setPrefix(Player player, Rank rank) {
-        if (!this.vaultEnabled && !this.tabEnabled) {
-            return;
-        }
-
         if (this.chat != null) {
             this.chat.setPlayerPrefix(player, rank.getDisplayName());
         }
 
         if (this.tab != null) {
             TabPlayer tp = this.tab.getPlayer(player.getUniqueId());
-
             if (tp == null || !tp.isLoaded()) {
                 return;
             }
@@ -95,10 +81,6 @@ public class VaultManager {
     }
 
     public void resetPrefix(Player player) {
-        if (!this.vaultEnabled && !this.tabEnabled) {
-            return;
-        }
-
         if (this.chat != null) {
             this.chat.setPlayerPrefix(player, null);
         }

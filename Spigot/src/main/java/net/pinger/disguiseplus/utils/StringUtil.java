@@ -38,11 +38,4 @@ public class StringUtil {
         // Build the string at the end
         return builder.toString();
     }
-
-    public static String value(String x) {
-        if (x != null && !x.isEmpty())
-            return x;
-
-        return "Not set";
-    }
 }

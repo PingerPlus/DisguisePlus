@@ -13,10 +13,6 @@ import net.pinger.disguiseplus.skin.SkinFactory;
 
 public class DownloadFailedException extends RuntimeException {
 
-	public DownloadFailedException(String message) {
-		super(message);
-	}
-
 	public DownloadFailedException(String message, Throwable throwable) {
 		super(message, throwable);
 	}

@@ -13,7 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class DisguiseManagerImpl implements DisguiseManager {
-
     protected final DisguisePlus dp;
     protected final DisguiseProvider provider;
 
