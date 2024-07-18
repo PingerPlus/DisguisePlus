@@ -7,7 +7,6 @@ import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.skin.Skin;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.internal.user.UserImpl;
-import net.pinger.disguiseplus.statistic.SkinStatistic;
 import org.bukkit.Bukkit;
 
 public class SkinExecutor {
@@ -36,14 +35,15 @@ public class SkinExecutor {
                 // If the found skin is null, we do not want to continue the action
                 // But rather send an error message
                 if (skin == null) {
+                    System.out.println("WTf");
                     user.sendMessage("skins.error-name", playerName);
                     return;
                 }
 
                 this.dp.getProvider().updatePlayer(user.transform(), skin);
-                user.addStatistic(new SkinStatistic(skin));
                 user.sendMessage("player.success-skin-name", playerName);
             } catch (Exception e) {
+                e.printStackTrace();
                 user.sendMessage("skins.error-name", playerName);
             }
         });

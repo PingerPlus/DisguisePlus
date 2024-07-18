@@ -26,11 +26,11 @@ public class DisguiseExecutor {
             return;
         }
 
-        // Check if they have either nick or skin?
-        if (user.hasSkinApplied() || user.hasNickname()) {
-            user.sendMessage("player.failed-disguise");
-            return;
-        }
+        //// Check if they have either nick or skin?
+        //if (user.hasSkinApplied() || user.hasNickname()) {
+        //    user.sendMessage("player.failed-disguise");
+        //    return;
+        //}
 
         if (this.dp.getRankManager().isEnabled()) {
             // Check for player permission

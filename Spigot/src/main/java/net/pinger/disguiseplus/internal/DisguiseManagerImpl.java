@@ -6,7 +6,6 @@ import net.pinger.disguise.skin.Skin;
 import net.pinger.disguiseplus.DisguiseManager;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.event.PlayerDisguiseEvent;
-import net.pinger.disguiseplus.statistic.DisguiseStatistic;
 import net.pinger.disguiseplus.user.User;
 import net.pinger.disguiseplus.utils.StringUtil;
 import org.bukkit.Bukkit;
@@ -24,12 +23,6 @@ public class DisguiseManagerImpl implements DisguiseManager {
     @Override
     public void disguise(User user) {
         Player player = user.transform();
-
-        // Check if they have either nick or skin?
-        if (user.hasSkinApplied() || user.hasNickname()) {
-            user.sendMessage("player.failed-disguise");
-            return;
-        }
 
         // Try to get a random skin and nick
         // From the factory
@@ -49,7 +42,6 @@ public class DisguiseManagerImpl implements DisguiseManager {
 
         // Now apply the skin to the player
         this.dp.getProvider().updatePlayer(player, randomSkin, nickname);
-        user.addStatistic(new DisguiseStatistic(randomSkin, nickname));
         user.sendMessage("player.success-disguise");
     }
 }

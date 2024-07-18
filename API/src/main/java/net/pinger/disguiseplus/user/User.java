@@ -1,7 +1,6 @@
 package net.pinger.disguiseplus.user;
 
 import net.pinger.disguiseplus.rank.Rank;
-import net.pinger.disguiseplus.statistic.Statistic;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
@@ -36,6 +35,8 @@ public interface User {
 
     Rank getCurrentRank();
 
+    boolean isDisguised();
+
     /**
      * This method sets the rank of this player.
      *
@@ -43,34 +44,6 @@ public interface User {
      */
 
     void setRank(Rank rank);
-
-    /**
-     * Checks if this player is disguised.
-     *
-     * @return whether this player is disguised
-     */
-
-    boolean isDisguised();
-
-    /**
-     * Returns whether this player is nicked.
-     * <p>
-     * If the player is disguised,
-     * this method will return false.
-     *
-     * @return whether nicked
-     */
-
-    boolean hasNickname();
-
-    /**
-     * Returns whether this user
-     * has a skin applied to their
-     *
-     * @return whether a skin is applied
-     */
-
-    boolean hasSkinApplied();
 
     /**
      * Transforms the current user to a player.

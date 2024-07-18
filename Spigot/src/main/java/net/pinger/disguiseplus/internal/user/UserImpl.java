@@ -1,34 +1,31 @@
 package net.pinger.disguiseplus.internal.user;
 
-import net.pinger.disguise.DisguiseAPI;
-import net.pinger.disguise.DisguisePlayer;
+import java.util.UUID;
+import javax.annotation.Nonnull;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.internal.PlayerMeta;
 import net.pinger.disguiseplus.rank.Rank;
-import net.pinger.disguiseplus.statistic.DisguiseStatistic;
-import net.pinger.disguiseplus.statistic.NickStatistic;
-import net.pinger.disguiseplus.statistic.SkinStatistic;
-import net.pinger.disguiseplus.statistic.Statistic;
 import net.pinger.disguiseplus.user.User;
+import net.pinger.disguiseplus.utils.IndexedList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import javax.annotation.Nonnull;
-import java.util.UUID;
-
 public class UserImpl implements User {
-
     private final DisguisePlus dp;
     private final UUID id;
+    private final IndexedList<PlayerMeta> meta;
 
     private Rank currentRank = null;
-    private SkinStatistic skinStatistic;
-    private DisguiseStatistic disguiseStatistic;
-    private NickStatistic nickStatistic;
 
-    UserImpl(DisguisePlus dp, UUID id) {
+    public UserImpl(DisguisePlus dp, UUID id) {
+        this(dp, id, new IndexedList<>());
+   }
+
+   public UserImpl(DisguisePlus dp, UUID id, IndexedList<PlayerMeta> meta) {
         this.dp = dp;
         this.id = id;
-    }
+        this.meta = meta;
+   }
 
     /**
      * Returns the uuid of this player.
@@ -45,12 +42,8 @@ public class UserImpl implements User {
     @Nonnull
     @Override
     public String getName() {
-        if (this.isDisguised() || this.hasNickname()) {
-            return this.transform().getName();
-        }
-
-        DisguisePlayer player = DisguiseAPI.getDisguisePlayer(this.id);
-        return player.getDefaultName();
+        // TODO: Fix this
+        return this.transform().getName();
     }
 
     @Override
@@ -59,79 +52,13 @@ public class UserImpl implements User {
     }
 
     @Override
+    public boolean isDisguised() {
+        return false;
+    }
+
+    @Override
     public void setRank(Rank rank) {
         this.currentRank = rank;
-    }
-
-    @Override
-    public void addStatistic(Statistic statistic) {
-        if (statistic instanceof SkinStatistic) {
-            this.skinStatistic = (SkinStatistic) statistic;
-            return;
-        }
-
-        if (statistic instanceof NickStatistic) {
-            this.nickStatistic = (NickStatistic) statistic;
-            return;
-        }
-
-        if (statistic instanceof DisguiseStatistic) {
-            this.disguiseStatistic = (DisguiseStatistic) statistic;
-        }
-    }
-
-    @Override
-    public void removeStatistic(Class<? extends Statistic> statistic) {
-        if (statistic.isAssignableFrom(DisguiseStatistic.class)) {
-            this.disguiseStatistic = null;
-            return;
-        }
-
-        if (statistic.isAssignableFrom(SkinStatistic.class)) {
-            this.skinStatistic = null;
-            return;
-        }
-
-        if (statistic.isAssignableFrom(NickStatistic.class)) {
-            this.nickStatistic = null;
-        }
-    }
-
-    /**
-     * Checks if this player is disguised.
-     *
-     * @return whether this player is disguised
-     */
-
-    @Override
-    public boolean isDisguised() {
-        return this.disguiseStatistic != null;
-    }
-
-    /**
-     * Returns whether this player is nicked.
-     * <p>
-     * If the player is disguised,
-     * this method will return false.
-     *
-     * @return whether nicked
-     */
-
-    @Override
-    public boolean hasNickname() {
-        return this.nickStatistic != null;
-    }
-
-    /**
-     * Returns whether this user
-     * has a skin applied to their
-     *
-     * @return whether a skin is applied
-     */
-
-    @Override
-    public boolean hasSkinApplied() {
-        return this.skinStatistic != null;
     }
 
     /**
@@ -143,6 +70,18 @@ public class UserImpl implements User {
     @Override
     public Player transform() {
         return Bukkit.getPlayer(this.id);
+    }
+
+    public PlayerMeta getActiveMeta() {
+        final PlayerMeta meta = this.meta.lastSafe();
+        if (meta == null || meta.getEndTime() != null) {
+            return null;
+        }
+        return meta;
+    }
+
+    public IndexedList<PlayerMeta> getMeta() {
+        return this.meta;
     }
 
     /**

@@ -48,6 +48,17 @@ public class RankManagerImpl extends ExternalConfigurationAdapter implements Ran
     }
 
     @Override
+    public Rank getRank(String name) {
+        for (final Rank rank : this.ranks) {
+            if (rank.getName().equalsIgnoreCase(name)) {
+                return rank;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
     public boolean isEnabled() {
         return this.enabled;
     }

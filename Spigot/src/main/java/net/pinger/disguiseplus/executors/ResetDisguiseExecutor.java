@@ -6,8 +6,6 @@ import com.jonahseguin.drink.annotation.Sender;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.event.PlayerRemoveDisguiseEvent;
 import net.pinger.disguiseplus.internal.user.UserImpl;
-import net.pinger.disguiseplus.statistic.DisguiseStatistic;
-import net.pinger.disguiseplus.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -26,6 +24,7 @@ public class ResetDisguiseExecutor {
 
         // If the user is not disguised
         // There is no point in resetting the disguise?
+        // TODO: Fix this
         if (!user.isDisguised()) {
             user.sendMessage("player.not-disguised");
             return;
@@ -40,7 +39,6 @@ public class ResetDisguiseExecutor {
 
         // Reset the player nickname
         user.sendMessage("player.success-undisguise");
-        user.removeStatistic(DisguiseStatistic.class);
         user.setRank(null);
     }
 

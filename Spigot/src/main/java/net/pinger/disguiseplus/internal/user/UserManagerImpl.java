@@ -2,6 +2,7 @@ package net.pinger.disguiseplus.internal.user;
 
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.internal.PlayerMeta;
 import net.pinger.disguiseplus.user.User;
 import net.pinger.disguiseplus.user.UserManager;
 import org.bukkit.Bukkit;
@@ -12,22 +13,25 @@ import java.util.*;
 public class UserManagerImpl implements UserManager {
 
     private final DisguisePlus dp;
-    private final Map<UUID, UserImpl> users = new HashMap<>();
+    private final Map<UUID, UserImpl> users;
 
     public UserManagerImpl(DisguisePlus dp) {
         this.dp = dp;
+        this.users = Collections.synchronizedMap(new HashMap<>());
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            UserImpl user = new UserImpl(this.dp, p.getUniqueId());
-
-            // Add it to the map
+            final UserImpl user = this.dp.getStorage().loadUser(p.getUniqueId()).join();
             this.users.put(p.getUniqueId(), user);
 
             // Send update packets for this player
-            // This might need to happen
-            // When we need to reset
-            // The player name
-            DisguiseAPI.getProvider().sendServerPackets(p);
+            // This might need to happen when we restart
+            final PlayerMeta meta = user.getActiveMeta();
+            if (meta == null) {
+                continue;
+            }
+
+            this.dp.getProvider().updatePlayer(p, meta.getSkin(), meta.getName());
+            this.dp.getVaultManager().setPrefix(p, meta.getRank());
         }
     }
 
@@ -67,5 +71,9 @@ public class UserManagerImpl implements UserManager {
 
     public Collection<UserImpl> getUsers() {
         return this.users.values();
+    }
+
+    public Map<UUID, UserImpl> getUserMap() {
+        return this.users;
     }
 }

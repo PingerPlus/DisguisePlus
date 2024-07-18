@@ -5,7 +5,6 @@ import com.jonahseguin.drink.annotation.Require;
 import com.jonahseguin.drink.annotation.Sender;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.internal.user.UserImpl;
-import net.pinger.disguiseplus.statistic.NickStatistic;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -45,7 +44,6 @@ public class NicknameExecutor {
 
         this.dp.getProvider().updatePlayer(user.transform(), nickname);
         user.sendMessage("player.success-name", nickname);
-        user.addStatistic(new NickStatistic(nickname));
     }
 
     private boolean isValidName(String name) {

@@ -6,6 +6,7 @@ import com.jonahseguin.drink.CommandService;
 import com.jonahseguin.drink.Drink;
 import com.jonahseguin.drink.annotation.Sender;
 import com.tchristofferson.configupdater.ConfigUpdater;
+import java.util.logging.Level;
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.DisguiseProvider;
 import net.pinger.disguise.gson.GsonSkinAdapter;
@@ -28,10 +29,14 @@ import net.pinger.disguiseplus.placeholders.DisguisePlusExpansion;
 import net.pinger.disguiseplus.rank.RankManager;
 import net.pinger.disguiseplus.skin.SkinFactory;
 import net.pinger.disguiseplus.skin.SkinPack;
+import net.pinger.disguiseplus.storage.Storage;
+import net.pinger.disguiseplus.storage.credentials.StorageConfig;
+import net.pinger.disguiseplus.storage.credentials.StorageCredentials;
 import net.pinger.disguiseplus.utils.ConversationUtil;
 import net.pinger.disguiseplus.vault.VaultManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
@@ -51,6 +56,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             .setPrettyPrinting()
             .create();
 
+    private Storage storage;
     private DisguiseProvider provider;
     private FeatureManager featureManager;
     private MessageConfiguration configuration;
@@ -84,6 +90,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         if (!DisguiseAPI.isEnabled()) {
             this.getLogger().info("Disabling since DisguiseAPI is disabled");
             this.getPluginLoader().disablePlugin(this);
+            return;
+        }
+
+        if (!this.loadStorage()) {
             return;
         }
 
@@ -143,14 +153,70 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.reloadConfig();
     }
 
-    @Override
-    public void onDisable() {
-        for (final Player player : Bukkit.getOnlinePlayers()) {
-            this.getProvider().resetPlayerName(player);
+    private boolean loadStorage() {
+        if (!this.getConfig().getBoolean("database.enabled")) {
+            this.getLogger().info("DISABLING THIS PLUGIN AS IT REQUIRES MYSQL TO WORK!");
+            this.getLogger().info("DISABLING THIS PLUGIN AS IT REQUIRES MYSQL TO WORK!");
+            this.getLogger().info("DISABLING THIS PLUGIN AS IT REQUIRES MYSQL TO WORK!");
+            this.getPluginLoader().disablePlugin(this);
+            return false;
         }
 
-        this.conversation.cancelAllConversations();
-        this.skinFactory.saveSkins();
+        final ConfigurationSection section = this.getConfig().getConfigurationSection("database");
+        if (section == null) {
+            this.getLogger().log(Level.SEVERE, "Failed to create a database");
+            this.getPluginLoader().disablePlugin(this);
+            return false;
+        }
+
+        // Create the database credentials
+        final StorageCredentials credentials = new StorageCredentials(
+            section.getString("host"),
+            section.getString("username"),
+            section.getString("password")
+        );
+
+        final ConfigurationSection pool = section.getConfigurationSection("hikari-pool");
+        final StorageConfig config = new StorageConfig(
+            pool.getInt("connection-timeout"),
+            pool.getInt("keep-alive-time"),
+            pool.getInt("minimum-idle"),
+            pool.getInt("maximum-pool-size"),
+            pool.getInt("maximum-lifetime"),
+            section.getString("driverClass"),
+            section.getString("customJdbcUrl")
+        );
+
+        // Create the database
+        try {
+            this.storage = new Storage(this, credentials, config);
+        } catch (Exception e) {
+            this.getLogger().log(Level.SEVERE, "Failed to create a database", e);
+            this.getPluginLoader().disablePlugin(this);
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onDisable() {
+        if (this.storage != null) {
+            this.storage.shutdown();
+        }
+
+        if (this.conversation != null) {
+            this.conversation.cancelAllConversations();
+        }
+
+        if (this.skinFactory != null) {
+            this.skinFactory.saveSkins();
+        }
+
+        // TODO: FIx this
+        //for (final Player player : Bukkit.getOnlinePlayers()) {
+        //    this.getProvider().resetPlayerName(player);
+        //}
     }
 
     public static Logger getOutput() {
@@ -159,6 +225,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
     public DisguiseProvider getProvider() {
         return this.provider;
+    }
+
+    public Storage getStorage() {
+        return this.storage;
     }
 
     @Override

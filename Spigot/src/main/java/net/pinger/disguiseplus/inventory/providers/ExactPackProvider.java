@@ -12,7 +12,6 @@ import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.skin.SkinPack;
 import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.prompts.ConfirmDeletePackPrompt;
-import net.pinger.disguiseplus.statistic.SkinStatistic;
 import net.pinger.disguiseplus.user.User;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -52,7 +51,6 @@ public class ExactPackProvider implements GuiProvider {
 
                 // Send the confirmation message
                 this.dp.getProvider().updatePlayer(player, skin);
-                user.addStatistic(new SkinStatistic(skin));
                 user.sendMessage("player.skin-set", this.pack.getName());
             });
         }

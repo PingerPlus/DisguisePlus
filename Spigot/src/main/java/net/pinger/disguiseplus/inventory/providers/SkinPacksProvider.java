@@ -14,6 +14,7 @@ import net.pinger.disguiseplus.skin.SkinPack;
 import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.prompts.CreateCategoryPrompt;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -42,7 +43,7 @@ public class SkinPacksProvider implements GuiProvider {
         GuiItem[] items = new GuiItem[factory.getCategories().size()];
 
         // Get the default skull
-        ItemStack defaultSkull = this.dp.getSkullManager().getDefaultPlayerSkull();
+        ItemStack defaultSkull = this.dp.getSkullManager().getSkullFrom(player.getUniqueId());
 
         // Loop through every category
         // And add it to the inventory

@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface RankManager {
 
+    Rank getRank(String name);
+
     /**
      * This method returns whether this feature should
      * be enabled.

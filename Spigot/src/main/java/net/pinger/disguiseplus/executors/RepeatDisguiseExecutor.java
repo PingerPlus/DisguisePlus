@@ -28,10 +28,10 @@ public class RepeatDisguiseExecutor {
         }
 
         // Check if they have either nick or skin?
-        if (sender.hasSkinApplied() || sender.hasNickname()) {
-            sender.sendMessage("player.failed-disguise");
-            return;
-        }
+        //if (sender.hasSkinApplied() || sender.hasNickname()) {
+        //    sender.sendMessage("player.failed-disguise");
+        //    return;
+        //}
 
         if (this.dp.getRankManager().isEnabled()) {
             // Check for player permission

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>DisguisePlus</artifactId>
         <groupId>net.pinger.disguiseplus</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>2.6.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -49,6 +49,38 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <configuration>
+                            <outputDirectory>D:\Dica\Projekti\Servers\Plugins</outputDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <configuration>
+                            <outputDirectory>D:\Dica\Projekti\Plugin Releases</outputDirectory>
+                            <finalName>DisguisePlus-${project.version}</finalName>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <repositories>
         <repository>
             <id>placeholderapi</id>
@@ -81,7 +113,7 @@
         <dependency>
             <groupId>net.pinger.disguiseplus</groupId>
             <artifactId>API</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>2.6.6</version>
             <scope>compile</scope>
         </dependency>
 
@@ -142,6 +174,12 @@
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>4.0.3</version>
         </dependency>
 
 <!--        <dependency>-->
