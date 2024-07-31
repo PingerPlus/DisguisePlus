@@ -6,8 +6,9 @@ import me.neznamy.tab.api.TabPlayer;
 import me.neznamy.tab.api.event.player.PlayerLoadEvent;
 import net.milkbowl.vault.chat.Chat;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.meta.PlayerMeta;
 import net.pinger.disguiseplus.rank.Rank;
-import net.pinger.disguiseplus.user.User;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -40,20 +41,22 @@ public class VaultManager {
 
     public void onPlayerLoad(TabPlayer tp) {
         final Player player = Bukkit.getPlayer(tp.getUniqueId());
-        final User user = this.plus.getUserManager().getUser(player.getUniqueId());
+        final DisguiseUser user = this.plus.getUserManager().getUser(player.getUniqueId());
         if (user == null) {
             return;
         }
 
-        final Rank rank = user.getCurrentRank();
-        if (rank == null) {
+        final PlayerMeta meta = user.getActiveMeta();
+        if (meta == null) {
             return;
         }
 
-        final String rankName = PlaceholderAPI.setPlaceholders(player, rank.getDisplayName());
+        final Rank rank = meta.getRank();
+        this.resetPrefix(player);
+
         if (this.autoRank) {
-            this.tab.getTabListFormatManager().setPrefix(tp, rankName);
-            this.tab.getNameTagManager().setPrefix(tp, rankName);
+            this.tab.getTabListFormatManager().setPrefix(tp, rank.getDisplayName());
+            this.tab.getNameTagManager().setPrefix(tp, rank.getDisplayName());
         }
 
         tp.setTemporaryGroup(rank.getName());

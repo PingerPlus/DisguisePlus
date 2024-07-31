@@ -2,7 +2,7 @@ package net.pinger.disguiseplus.prompts;
 
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.skin.SkinPack;
-import net.pinger.disguiseplus.user.User;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -29,10 +29,10 @@ public class ConfirmDeletePackPrompt extends StringPrompt {
     @Override
     public Prompt acceptInput( ConversationContext conversationContext, @Nullable String s) {
         Player p = (Player) conversationContext.getForWhom();
-        User user = this.dp.getUserManager().getUser(p.getUniqueId());
-
-        if (s == null || !s.equalsIgnoreCase("confirm"))
+        DisguiseUser user = this.dp.getUserManager().getUser(p.getUniqueId());
+        if (s == null || !s.equalsIgnoreCase("confirm")) {
             return this;
+        }
 
         // Delete the skin pack
         this.dp.getSkinFactory().deleteSkinPack(this.pack);

@@ -4,7 +4,7 @@ import com.jonahseguin.drink.annotation.Command;
 import com.jonahseguin.drink.annotation.Require;
 import com.jonahseguin.drink.annotation.Sender;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.internal.user.UserImpl;
+import net.pinger.disguiseplus.user.DisguiseUser;
 
 public class ResetNicknameExecutor {
 
@@ -16,7 +16,7 @@ public class ResetNicknameExecutor {
 
     @Command(name = "", desc = "Reset the nickname for yourself")
     @Require("permission.dp.nickname")
-    public void resetNickname(@Sender UserImpl user) {
+    public void resetNickname(@Sender DisguiseUser user) {
         // Check if the user is nicked?
         // If they are not nicked, we don't have anything to reset
         if (!user.isDisguised()) {

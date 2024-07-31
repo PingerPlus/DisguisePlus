@@ -12,13 +12,13 @@ CREATE TABLE IF NOT EXISTS skins(
 );
 
 CREATE TABLE IF NOT EXISTS disguises(
-    uuid INT NOT NULL,
+    uuid VARCHAR(36) NOT NULL,
     skin_id INT,
     name VARCHAR(16) NOT NULL,
-    `rank` VARCHAR(100) NOT NULL,
+    `rank` VARCHAR(100),
     start_time DATETIME NOT NULL,
     end_time DATETIME,
     PRIMARY KEY (uuid, start_time),
     FOREIGN KEY (uuid) REFERENCES users(uuid),
     FOREIGN KEY (skin_id) REFERENCES skins(skin_id)
-)
+);

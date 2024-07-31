@@ -5,12 +5,15 @@ import io.pnger.gui.item.GuiItem;
 import io.pnger.gui.pagination.GuiPagination;
 import io.pnger.gui.provider.GuiProvider;
 import io.pnger.gui.slot.GuiIteratorType;
+import java.util.function.Consumer;
 import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.inventory.InventoryManager;
+import net.pinger.disguiseplus.meta.PlayerMeta;
+import net.pinger.disguiseplus.meta.PlayerMeta.Builder;
 import net.pinger.disguiseplus.rank.Rank;
-import net.pinger.disguiseplus.user.User;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -21,37 +24,45 @@ public class RankChooseProvider implements GuiProvider {
 
     private final DisguisePlus disguisePlus;
     private final List<Rank> ranks;
+    private final Consumer<DisguiseUser> disguiseConsumer;
 
-    public RankChooseProvider(DisguisePlus disguisePlus, List<Rank> ranks) {
+    public RankChooseProvider(DisguisePlus disguisePlus, List<Rank> ranks, Consumer<DisguiseUser> disguiseConsumer) {
         this.disguisePlus = disguisePlus;
         this.ranks = ranks;
+        this.disguiseConsumer = disguiseConsumer;
     }
 
     @Override
     public void initialize(Player player, GuiContents contents) {
         GuiPagination page = contents.getPagination();
-        User user = this.disguisePlus.getUserManager().getUser(player);
+        DisguiseUser user = this.disguisePlus.getUserManager().getUser(player);
 
         // Create items for all ranks
-        GuiItem[] items = new GuiItem[this.ranks.size()];
-        for (int i = 0; i < items.length; i++) {
-            // Get rank for this loop
+        GuiItem[] items = new GuiItem[this.ranks.size() + (5 - (this.ranks.size() % 5))];
+        for (int i = 0; i < this.ranks.size(); i++) {
             Rank rank = this.ranks.get(i);
 
             items[i] = GuiItem.of(this.getItemStack(rank), e -> {
-               // If clicked on the rank set the rank and call disguise
-                user.setRank(rank);
-
-                // Call disguise
-                this.disguisePlus.getManager().disguise(user);
+                final Builder meta = user.getMetaBuilder();
+                if (meta == null) {
+                    return;
+                }
+                meta.setRank(rank);
+                this.disguiseConsumer.accept(user);
             });
         }
+        for (int i = this.ranks.size(); i < items.length; i++) {
+            items[i] = GuiItem.of(
+                new ItemBuilder(XMaterial.BLACK_STAINED_GLASS_PANE)
+                    .name("&r ")
+                    .build()
+            );
+        }
 
-        page.setItems(36, items);
-        page.addToIterator(contents.newIterator(GuiIteratorType.HORIZONTAL, 0, 0));
+        page.setItems(5, items);
+        page.addToIterator(contents.newIterator(GuiIteratorType.HORIZONTAL, 0, 2));
 
-        InventoryManager.addReturnButton(5, 4, contents);
-        InventoryManager.addPageButtons(5, contents);
+        InventoryManager.addPageButtons(0, contents);
     }
 
     private ItemStack getItemStack(Rank rank) {

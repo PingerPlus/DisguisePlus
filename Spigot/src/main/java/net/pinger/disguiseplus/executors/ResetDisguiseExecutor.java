@@ -5,7 +5,7 @@ import com.jonahseguin.drink.annotation.Require;
 import com.jonahseguin.drink.annotation.Sender;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.event.PlayerRemoveDisguiseEvent;
-import net.pinger.disguiseplus.internal.user.UserImpl;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -19,7 +19,7 @@ public class ResetDisguiseExecutor {
 
     @Command(name = "", desc = "Remove disguise from yourself")
     @Require("permission.dp.undisguise")
-    public void undisguise(@Sender UserImpl user) {
+    public void undisguise(@Sender DisguiseUser user) {
         Player player = user.transform();
 
         // If the user is not disguised
@@ -39,7 +39,6 @@ public class ResetDisguiseExecutor {
 
         // Reset the player nickname
         user.sendMessage("player.success-undisguise");
-        user.setRank(null);
     }
 
 }

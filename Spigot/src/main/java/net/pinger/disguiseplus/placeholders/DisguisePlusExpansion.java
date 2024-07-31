@@ -3,7 +3,8 @@ package net.pinger.disguiseplus.placeholders;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.user.User;
+import net.pinger.disguiseplus.meta.PlayerMeta;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,10 +34,7 @@ public class DisguisePlusExpansion extends PlaceholderExpansion {
 
     @Override
     public @Nullable String onPlaceholderRequest(Player player, @NotNull String params) {
-        // Get the user for this player
-        User user = this.disguisePlus.getUserManager().getUser(player);
-
-        // Empty if unknown
+        final DisguiseUser user = this.disguisePlus.getUserManager().getUser(player);
         if (user == null) {
             return "";
         }
@@ -50,14 +48,9 @@ public class DisguisePlusExpansion extends PlaceholderExpansion {
             return DisguiseAPI.getDisguisePlayer(player).getDefaultName();
         }
 
-        // Check if the user is requesting
-        // A prefix
-        if (params.equalsIgnoreCase("prefix")) {
-            return this.disguisePlus.getPlayerPrefix().toPrefix(user);
-        }
-
         if (params.equalsIgnoreCase("rank")) {
-            return user.getCurrentRank() == null ? "" : user.getCurrentRank().getDisplayName();
+            final PlayerMeta meta = user.getActiveMeta();
+            return meta == null || meta.getRank() == null ? "" : meta.getRank().getDisplayName();
         }
 
         return "";

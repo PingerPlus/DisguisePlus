@@ -37,16 +37,6 @@ public class DisguisePlusAPI {
     }
 
     /**
-     * Returns the {@link DisguiseManager} instance.
-     *
-     * @return the disguise manager
-     */
-
-    public static DisguiseManager getDisguiseManager() {
-        return disguise.getManager();
-    }
-
-    /**
      * This method returns the {@link FeatureManager} instance
      * used for saving different features.
      *

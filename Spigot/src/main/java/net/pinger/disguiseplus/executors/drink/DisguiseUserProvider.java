@@ -4,14 +4,14 @@ import com.jonahseguin.drink.argument.CommandArg;
 import com.jonahseguin.drink.exception.CommandExitMessage;
 import com.jonahseguin.drink.parametric.DrinkProvider;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.internal.user.UserImpl;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 
-public class DisguiseUserProvider extends DrinkProvider<UserImpl> {
+public class DisguiseUserProvider extends DrinkProvider<DisguiseUser> {
     private final DisguisePlus dp;
 
     public DisguiseUserProvider(DisguisePlus dp) {
@@ -30,12 +30,12 @@ public class DisguiseUserProvider extends DrinkProvider<UserImpl> {
 
     @Nullable
     @Override
-    public UserImpl provide(@NotNull CommandArg arg, @NotNull List<? extends Annotation> annotations) throws CommandExitMessage {
+    public DisguiseUser provide(@NotNull CommandArg arg, @NotNull List<? extends Annotation> annotations) throws CommandExitMessage {
         if (!arg.isSenderPlayer()) {
             throw new CommandExitMessage("Sender must be a player.");
         }
 
-        final UserImpl player = this.dp.getUserManager().getUser(arg.getSenderAsPlayer().getUniqueId());
+        final DisguiseUser player = this.dp.getUserManager().getUser(arg.getSenderAsPlayer().getUniqueId());
         if (player == null) {
             throw new CommandExitMessage("No player with name " + arg.getSenderAsPlayer().getName());
         }

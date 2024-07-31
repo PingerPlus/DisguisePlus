@@ -6,7 +6,7 @@ import com.jonahseguin.drink.annotation.Sender;
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.skin.Skin;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.internal.user.UserImpl;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.Bukkit;
 
 public class SkinExecutor {
@@ -19,7 +19,7 @@ public class SkinExecutor {
 
     @Command(name = "", desc = "Set a skin by giving a player name", usage = "<playerName>")
     @Require("permission.dp.skin")
-    public void setSkin(@Sender UserImpl user, String playerName) {
+    public void setSkin(@Sender DisguiseUser user, String playerName) {
         // Check if the user is disguised
         // If so, we do not want to continue the action
         if (user.isDisguised()) {
@@ -40,7 +40,10 @@ public class SkinExecutor {
                     return;
                 }
 
-                this.dp.getProvider().updatePlayer(user.transform(), skin);
+                Bukkit.getScheduler().runTask(this.dp, () -> {
+                    this.dp.getProvider().updatePlayer(user.transform(), skin);
+                });
+
                 user.sendMessage("player.success-skin-name", playerName);
             } catch (Exception e) {
                 e.printStackTrace();

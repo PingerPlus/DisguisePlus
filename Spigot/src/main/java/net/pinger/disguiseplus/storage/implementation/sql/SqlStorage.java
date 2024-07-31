@@ -10,12 +10,11 @@ import java.util.UUID;
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.skin.Skin;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.internal.PlayerMeta;
-import net.pinger.disguiseplus.internal.user.UserImpl;
+import net.pinger.disguiseplus.meta.PlayerMeta;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import net.pinger.disguiseplus.rank.Rank;
 import net.pinger.disguiseplus.storage.Storage;
 import net.pinger.disguiseplus.storage.implementation.StorageImplementation;
-import net.pinger.disguiseplus.user.User;
 import net.pinger.disguiseplus.utils.IndexedList;
 
 public class SqlStorage implements StorageImplementation {
@@ -39,27 +38,28 @@ public class SqlStorage implements StorageImplementation {
     }
 
     @Override
-    public UserImpl loadUser(UUID id) throws SQLException {
+    public DisguiseUser loadUser(UUID id) throws SQLException {
         try (final Connection connection = this.storage.getConnection()) {
             try (final PreparedStatement statement = connection.prepareStatement(LOAD_PLAYER)) {
                 statement.setString(1, id.toString());
                 try (final ResultSet set = statement.executeQuery()) {
                     if (!set.next()) {
-                        return new UserImpl(this.dp, id);
+                        return new DisguiseUser(this.dp, id);
                     }
                 }
 
                 final IndexedList<PlayerMeta> meta = this.getPlayerMeta(connection, id);
-                return new UserImpl(this.dp, id, meta);
+                return new DisguiseUser(this.dp, id, meta);
             }
         }
     }
 
     @Override
-    public void saveUser(User user) throws SQLException {
+    public void saveUser(DisguiseUser user) throws SQLException {
         try (final Connection connection = this.storage.getConnection()) {
             if (this.existsPlayer(connection, user.getId())) {
                 try (final PreparedStatement statement = connection.prepareStatement(UPDATE_PLAYER)) {
+                    statement.setString(1, user.getId().toString());
                     statement.executeUpdate();
                     return;
                 }
@@ -90,7 +90,7 @@ public class SqlStorage implements StorageImplementation {
     }
 
     @Override
-    public void savePlayerMeta(User user, PlayerMeta meta) throws SQLException {
+    public void savePlayerMeta(DisguiseUser user, PlayerMeta meta) throws SQLException {
         try (final Connection connection = this.storage.getConnection()) {
             boolean saved = this.existsPlayerMeta(connection, user, meta);
             if (saved) {
@@ -108,7 +108,7 @@ public class SqlStorage implements StorageImplementation {
                 statement.setString(1, user.getId().toString());
                 statement.setObject(2, def == -1 ? null : def, Types.INTEGER);
                 statement.setString(3, meta.getName());
-                statement.setString(4, meta.getRank().getName());
+                statement.setObject(4, meta.getRank() == null ? null : meta.getRank().getName());
                 statement.setTimestamp(5, Timestamp.valueOf(meta.getStartTime()));
                 statement.executeUpdate();
             }
@@ -148,7 +148,7 @@ public class SqlStorage implements StorageImplementation {
         }
     }
 
-    private boolean existsPlayerMeta(Connection c, User user, PlayerMeta meta) throws SQLException {
+    private boolean existsPlayerMeta(Connection c, DisguiseUser user, PlayerMeta meta) throws SQLException {
         try (final PreparedStatement statement = c.prepareStatement(LOAD_DISGUISE_META)) {
             statement.setString(1, user.getId().toString());
             statement.setTimestamp(2, Timestamp.valueOf(meta.getStartTime()));

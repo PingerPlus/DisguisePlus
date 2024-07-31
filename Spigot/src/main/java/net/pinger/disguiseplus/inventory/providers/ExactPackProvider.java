@@ -12,7 +12,7 @@ import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.skin.SkinPack;
 import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.prompts.ConfirmDeletePackPrompt;
-import net.pinger.disguiseplus.user.User;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +31,7 @@ public class ExactPackProvider implements GuiProvider {
     @Override
     public void initialize(Player player, GuiContents contents) {
         GuiPagination page = contents.getPagination();
-        User user = this.dp.getUserManager().getUser(player);
+        DisguiseUser user = this.dp.getUserManager().getUser(player);
 
         // Get the skins
         List<Skin> skins = this.pack.getSkins();

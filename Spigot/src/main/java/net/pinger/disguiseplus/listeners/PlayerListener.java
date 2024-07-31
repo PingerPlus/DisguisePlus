@@ -1,13 +1,9 @@
 package net.pinger.disguiseplus.listeners;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.CompletableFuture;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.event.PlayerDisguiseEvent;
-import net.pinger.disguiseplus.event.PlayerRemoveDisguiseEvent;
-import net.pinger.disguiseplus.internal.PlayerMeta;
-import net.pinger.disguiseplus.internal.user.UserImpl;
-import net.pinger.disguiseplus.internal.user.UserManagerImpl;
+import net.pinger.disguiseplus.meta.PlayerMeta;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -26,7 +22,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
-        final UserImpl user = this.dp.getStorage().loadUser(event.getUniqueId()).join();
+        final DisguiseUser user = this.dp.getStorage().loadUser(event.getUniqueId()).join();
         if (user == null) {
             return;
         }
@@ -37,11 +33,12 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        final UserImpl user = this.dp.getUserManager().getUser(player);
+        final DisguiseUser user = this.dp.getUserManager().getUser(player);
         if (user == null) {
             return;
         }
 
+        this.dp.getStorage().savePlayer(user).join();
         this.processUndisguise(player);
 
         final PlayerMeta meta = user.getActiveMeta();
@@ -64,29 +61,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
-        this.dp.getUserManager().removePlayer(event.getPlayer());
-    }
 
-    @EventHandler
-    public void onDisguise(PlayerDisguiseEvent event) {
-        // Get the player
-        Player player = event.getPlayer();
-        UserImpl user = this.dp.getUserManager().getUser(player);
-        if (user.getCurrentRank() == null) {
-            return;
-        }
-
-        this.dp.getVaultManager().setPrefix(player, user.getCurrentRank());
-    }
-
-    @EventHandler
-    public void onRemoveDisguise(PlayerRemoveDisguiseEvent event) {
-        this.dp.getVaultManager().resetPrefix(event.getPlayer());
-    }
-
-    @EventHandler
-    public void onPlayerLeave(PlayerQuitEvent event) {
-        this.dp.getVaultManager().resetPrefix(event.getPlayer());
     }
 
     private boolean shouldDisguise(Player player, PlayerMeta meta) {
@@ -111,7 +86,7 @@ public class PlayerListener implements Listener {
                 continue;
             }
 
-            final UserImpl user = this.dp.getUserManager().getUser(other);
+            final DisguiseUser user = this.dp.getUserManager().getUser(other);
             final PlayerMeta meta = user.getActiveMeta();
 
             // Update the player data

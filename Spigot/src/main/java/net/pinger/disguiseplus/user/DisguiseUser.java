@@ -1,27 +1,26 @@
-package net.pinger.disguiseplus.internal.user;
+package net.pinger.disguiseplus.user;
 
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.internal.PlayerMeta;
-import net.pinger.disguiseplus.rank.Rank;
-import net.pinger.disguiseplus.user.User;
+import net.pinger.disguiseplus.meta.PlayerMeta;
+import net.pinger.disguiseplus.meta.PlayerMeta.Builder;
 import net.pinger.disguiseplus.utils.IndexedList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class UserImpl implements User {
+public class DisguiseUser {
     private final DisguisePlus dp;
     private final UUID id;
     private final IndexedList<PlayerMeta> meta;
 
-    private Rank currentRank = null;
+    private PlayerMeta.Builder metaBuilder;
 
-    public UserImpl(DisguisePlus dp, UUID id) {
+    public DisguiseUser(DisguisePlus dp, UUID id) {
         this(dp, id, new IndexedList<>());
    }
 
-   public UserImpl(DisguisePlus dp, UUID id, IndexedList<PlayerMeta> meta) {
+   public DisguiseUser(DisguisePlus dp, UUID id, IndexedList<PlayerMeta> meta) {
         this.dp = dp;
         this.id = id;
         this.meta = meta;
@@ -34,31 +33,18 @@ public class UserImpl implements User {
      */
 
     @Nonnull
-    @Override
     public UUID getId() {
         return this.id;
     }
 
     @Nonnull
-    @Override
     public String getName() {
         // TODO: Fix this
         return this.transform().getName();
     }
 
-    @Override
-    public Rank getCurrentRank() {
-        return this.currentRank;
-    }
-
-    @Override
     public boolean isDisguised() {
-        return false;
-    }
-
-    @Override
-    public void setRank(Rank rank) {
-        this.currentRank = rank;
+        return this.getActiveMeta() != null;
     }
 
     /**
@@ -67,7 +53,6 @@ public class UserImpl implements User {
      * @return the player
      */
 
-    @Override
     public Player transform() {
         return Bukkit.getPlayer(this.id);
     }
@@ -84,13 +69,26 @@ public class UserImpl implements User {
         return this.meta;
     }
 
+    public Builder getMetaBuilder() {
+        return this.metaBuilder;
+    }
+
+    public void setMetaBuilder(Builder metaBuilder) {
+        this.metaBuilder = metaBuilder;
+    }
+
+    public Builder newMetaBuilder() {
+        final Builder builder = new Builder();
+        this.setMetaBuilder(builder);
+        return builder;
+    }
+
     /**
      * This method sends a message within the messages.yml file of the plugin.
      *
      * @param key the key of the message
      */
 
-    @Override
     public void sendMessage(String key) {
         if (this.transform() == null || !this.dp.getConfiguration().has(key)) {
             return;
@@ -111,7 +109,6 @@ public class UserImpl implements User {
      * @param format the objects to format
      */
 
-    @Override
     public void sendMessage(String key, Object... format) {
         if (this.transform() == null || !this.dp.getConfiguration().has(key)) {
             return;
@@ -129,7 +126,6 @@ public class UserImpl implements User {
      * @param key the key from the config
      */
 
-    @Override
     public void sendRawMessage(String key) {
         if (this.transform() == null || !this.dp.getConfiguration().has(key)) {
             return;
@@ -150,7 +146,6 @@ public class UserImpl implements User {
      * @param format the objects to format
      */
 
-    @Override
     public void sendRawMessage(String key, Object... format) {
         if (this.transform() == null || !this.dp.getConfiguration().has(key)) {
             return;

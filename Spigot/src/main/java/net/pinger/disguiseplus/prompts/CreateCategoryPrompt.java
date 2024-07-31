@@ -1,7 +1,7 @@
 package net.pinger.disguiseplus.prompts;
 
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.user.User;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -28,12 +28,10 @@ public class CreateCategoryPrompt extends StringPrompt {
     @Nullable
     public Prompt acceptInput(@Nonnull ConversationContext conversationContext, @Nullable String s) {
         Player p = (Player) conversationContext.getForWhom();
-        User user = this.dp.getUserManager().getUser(p);
-
-        // Break this prompt
-        // If the input is null
-        if (s == null)
+        DisguiseUser user = this.dp.getUserManager().getUser(p);
+        if (s == null) {
             return this;
+        }
 
         // Create the category
         this.dp.getSkinFactory().createCategory(s);

@@ -3,7 +3,7 @@ package net.pinger.disguiseplus.prompts;
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.skin.SkinPack;
-import net.pinger.disguiseplus.user.User;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -13,7 +13,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class CreateSkinImagePrompt extends StringPrompt {
-
     private final DisguisePlus dp;
     private final SkinPack pack;
 
@@ -32,10 +31,7 @@ public class CreateSkinImagePrompt extends StringPrompt {
     @Nullable
     public Prompt acceptInput(@Nonnull ConversationContext conversationContext, @Nullable String s) {
         Player p = (Player) conversationContext.getForWhom();
-        User user = this.dp.getUserManager().getUser(p.getUniqueId());
-
-        // Check if the input is null
-        // If so break this prompt
+        DisguiseUser user = this.dp.getUserManager().getUser(p.getUniqueId());
         if (s == null) {
             return this;
         }

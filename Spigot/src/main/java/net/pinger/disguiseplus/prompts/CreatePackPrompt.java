@@ -2,7 +2,7 @@ package net.pinger.disguiseplus.prompts;
 
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.skin.SkinFactory;
-import net.pinger.disguiseplus.user.User;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -12,7 +12,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class CreatePackPrompt extends StringPrompt {
-
     private final DisguisePlus dm;
     private final String category;
 
@@ -27,28 +26,20 @@ public class CreatePackPrompt extends StringPrompt {
     }
 
     @Override @Nullable
-    public Prompt acceptInput(@Nonnull ConversationContext conversationContext, @Nullable String s) {
+    public Prompt acceptInput(@Nonnull ConversationContext conversationContext, @Nullable String in) {
         Player p = (Player) conversationContext.getForWhom();
-        User user = this.dm.getUserManager().getUser(p);
+        DisguiseUser user = this.dm.getUserManager().getUser(p);
         SkinFactory factory = this.dm.getSkinFactory();
-
-        // Check if the input is null
-        // If so break this prompt
-        if (s == null) {
+        if (in == null || factory.getSkinPack(this.category, in) != null) {
             return this;
         }
 
-        // Check if the skin pack already exists
-        // If so then don't create another one
-        if (factory.getSkinPack(this.category, s) != null)
-            return this;
-
         // Create the skin pack
-        factory.createSkinPack(this.category, s);
+        factory.createSkinPack(this.category, in);
 
         // Send message and return
         this.dm.getInventoryManager().getCategoryProvider(this.category).open(p);
-        user.sendRawMessage("skin-packs.success-create", s);
+        user.sendRawMessage("skin-packs.success-create", in);
         return Prompt.END_OF_CONVERSATION;
     }
 }

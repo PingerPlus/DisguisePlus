@@ -5,7 +5,7 @@ import net.pinger.disguise.exception.UserNotFoundException;
 import net.pinger.disguise.skin.Skin;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.skin.SkinPack;
-import net.pinger.disguiseplus.user.User;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -15,7 +15,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class CreateSkinNamePrompt extends StringPrompt {
-
     private final DisguisePlus dp;
     private final SkinPack pack;
 
@@ -34,7 +33,7 @@ public class CreateSkinNamePrompt extends StringPrompt {
     @Nullable
     public Prompt acceptInput(@Nonnull ConversationContext conversationContext, @Nullable String s) {
         Player p = (Player) conversationContext.getForWhom();
-        User user = this.dp.getUserManager().getUser(p);
+        DisguiseUser user = this.dp.getUserManager().getUser(p);
 
         // Check if input is empty
         if (s == null) {

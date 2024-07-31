@@ -4,7 +4,7 @@ import com.jonahseguin.drink.annotation.Command;
 import com.jonahseguin.drink.annotation.Require;
 import com.jonahseguin.drink.annotation.Sender;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.internal.user.UserImpl;
+import net.pinger.disguiseplus.user.DisguiseUser;
 
 public class ResetSkinExecutor {
 
@@ -16,7 +16,7 @@ public class ResetSkinExecutor {
 
     @Command(name = "", desc = "Reset skin for yourself")
     @Require("permission.dp.skin")
-    public void resetSkin(@Sender UserImpl user) {
+    public void resetSkin(@Sender DisguiseUser user) {
         this.dp.getProvider().resetPlayerSkin(user.transform());
         user.sendMessage("player.skin-reset");
     }

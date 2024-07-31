@@ -6,12 +6,15 @@ import io.pnger.gui.contents.GuiContents;
 import io.pnger.gui.item.GuiItem;
 import io.pnger.gui.manager.GuiManager;
 import io.pnger.gui.pagination.GuiPagination;
+import java.util.function.Consumer;
 import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.meta.PlayerMeta;
 import net.pinger.disguiseplus.skin.SkinPack;
 import net.pinger.disguiseplus.inventory.providers.*;
 import net.pinger.disguiseplus.rank.Rank;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -76,9 +79,10 @@ public class InventoryManager {
                 .build();
     }
 
-    public GuiInventory getRankInventory(List<Rank> ranks) {
+    public GuiInventory getRankInventory(List<Rank> ranks, Consumer<DisguiseUser> disguiseConsumer) {
         return GuiBuilder.of()
-                .provider(new RankChooseProvider(this.disguise, ranks))
+                .provider(new RankChooseProvider(this.disguise, ranks, disguiseConsumer))
+                .size(1, 9)
                 .manager(this.inventoryManager)
                 .title(ChatColor.DARK_GRAY + "Disguise > Choose Rank")
                 .build();

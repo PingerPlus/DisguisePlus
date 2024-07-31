@@ -82,12 +82,3 @@ display:
 tab:
   autoRank: true
   enabled: false
-
-  # This will automatically set the prefix to whatever the value between the parentheses is
-  # - For example you want to hide your owner rank when you are disguised, and only show MVP rank from rank manager above,
-  # - you would set the placeholder to %dp_rank%.
-  #
-  # -- It supports both colors and placeholders.
-  # When using placeholders make sure that the expansion of the placeholder is enabled.
-  # If you want the prefix to be blank leave an empty string, otherwise set the enabled value to false.
-  disguise-prefix: "%dp_rank%"

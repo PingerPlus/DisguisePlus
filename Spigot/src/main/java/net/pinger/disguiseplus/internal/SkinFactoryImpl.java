@@ -231,7 +231,7 @@ public class SkinFactoryImpl implements SkinFactory {
                                 }
 
                                 // Create the file reader
-                                try (BufferedReader fileReader = Files.newBufferedReader(packFile)) {
+                                try (final BufferedReader fileReader = Files.newBufferedReader(packFile)) {
                                     final SkinPack skinPack = DisguisePlus.GSON.fromJson(fileReader, SkinPack.class);
                                     skinPack.setFile(packFile);
                                 }

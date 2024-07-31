@@ -12,13 +12,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import net.pinger.disguiseplus.DisguisePlus;
-import net.pinger.disguiseplus.internal.PlayerMeta;
-import net.pinger.disguiseplus.internal.user.UserImpl;
+import net.pinger.disguiseplus.meta.PlayerMeta;
+import net.pinger.disguiseplus.user.DisguiseUser;
 import net.pinger.disguiseplus.storage.credentials.StorageConfig;
 import net.pinger.disguiseplus.storage.credentials.StorageCredentials;
 import net.pinger.disguiseplus.storage.implementation.StorageImplementation;
 import net.pinger.disguiseplus.storage.implementation.sql.SqlStorage;
-import net.pinger.disguiseplus.user.User;
 
 public class Storage {
     private static final ScheduledExecutorService STORAGE_EXECUTOR = Executors.newScheduledThreadPool(4);
@@ -86,18 +85,18 @@ public class Storage {
         }, Storage.STORAGE_EXECUTOR);
     }
 
-    public CompletableFuture<UserImpl> loadUser(UUID id) {
+    public CompletableFuture<DisguiseUser> loadUser(UUID id) {
         return this.future(() -> this.implementation.loadUser(id));
     }
 
-    public CompletableFuture<Void> savePlayerMeta(User user, PlayerMeta meta) {
+    public CompletableFuture<Void> savePlayerMeta(DisguiseUser user, PlayerMeta meta) {
         return this.future(() -> {
             this.implementation.savePlayerMeta(user, meta);
             return null;
         });
     }
 
-    public CompletableFuture<Void> savePlayer(User user) {
+    public CompletableFuture<Void> savePlayer(DisguiseUser user) {
         return this.future(() -> {
             this.implementation.saveUser(user);
             return null;
