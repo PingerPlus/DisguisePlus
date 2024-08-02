@@ -48,8 +48,10 @@ public class SqlStorage implements StorageImplementation {
                     }
                 }
 
-                final IndexedList<PlayerMeta> meta = this.getPlayerMeta(connection, id);
-                return new DisguiseUser(this.dp, id, meta);
+                final DisguiseUser user = new DisguiseUser(this.dp, id);
+                final IndexedList<PlayerMeta> meta = this.getPlayerMeta(connection, user);
+                user.getMeta().addAll(meta);
+                return user;
             }
         }
     }
@@ -92,18 +94,19 @@ public class SqlStorage implements StorageImplementation {
     @Override
     public void savePlayerMeta(DisguiseUser user, PlayerMeta meta) throws SQLException {
         try (final Connection connection = this.storage.getConnection()) {
-            boolean saved = this.existsPlayerMeta(connection, user, meta);
+            final boolean saved = this.existsPlayerMeta(connection, user, meta);
             if (saved) {
                 try (final PreparedStatement statement = connection.prepareStatement(UPDATE_META)) {
                     statement.setTimestamp(1, Timestamp.valueOf(meta.getEndTime()));
                     statement.setString(2, user.getId().toString());
                     statement.setTimestamp(3, Timestamp.valueOf(meta.getStartTime()));
+                    statement.executeUpdate();
                     return;
                 }
             }
 
             // If the meta doesn't exist in the database, save both skin and meta
-            int def = this.saveAndGetSkin(meta.getSkin());
+            final int def = this.saveAndGetSkin(meta.getSkin());
             try (final PreparedStatement statement = connection.prepareStatement(INSERT_META)) {
                 statement.setString(1, user.getId().toString());
                 statement.setObject(2, def == -1 ? null : def, Types.INTEGER);
@@ -169,16 +172,17 @@ public class SqlStorage implements StorageImplementation {
         }
     }
 
-    private IndexedList<PlayerMeta> getPlayerMeta(Connection c, UUID id) throws SQLException {
+    private IndexedList<PlayerMeta> getPlayerMeta(Connection c, DisguiseUser user) throws SQLException {
         final IndexedList<PlayerMeta> meta = new IndexedList<>();
         try (final PreparedStatement statement = c.prepareStatement(LOAD_DISGUISES)) {
-            statement.setString(1, id.toString());
+            statement.setString(1, user.getId().toString());
             try (final ResultSet set = statement.executeQuery()) {
                 while (set.next()) {
                     final Rank rank = this.dp.getRankManager().getRank(set.getString("rank"));
                     final Skin skin = this.retrieveSkin(c, set.getInt("skin_id"));
                     final Timestamp endTime = set.getTimestamp("end_time");
                     meta.add(new PlayerMeta(
+                        user,
                         skin,
                         rank,
                         set.getString("name"),

@@ -18,7 +18,7 @@ import net.pinger.disguiseplus.config.MessageConfiguration;
 import net.pinger.disguiseplus.executors.*;
 import net.pinger.disguiseplus.executors.drink.DisguiseUserProvider;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
-import net.pinger.disguiseplus.internal.rank.RankManagerImpl;
+import net.pinger.disguiseplus.rank.RankManager;
 import net.pinger.disguiseplus.user.DisguiseUser;
 import net.pinger.disguiseplus.user.DisguisePlayerManager;
 import net.pinger.disguiseplus.inventory.InventoryManager;
@@ -60,7 +60,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private InventoryManager inventoryManager;
     private SkullManager skullManager;
     private DisguisePlayerManager userManager;
-    private RankManagerImpl rankManager;
+    private RankManager rankManager;
     private VaultManager vaultManager;
 
     @Override
@@ -87,7 +87,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         }
 
         this.featureManager = new BukkitFeatureManager();
-        this.rankManager = new RankManagerImpl(this);
+        this.rankManager = new RankManager(this);
         this.vaultManager = new VaultManager(this);
 
         if (!this.loadStorage()) {
@@ -205,11 +205,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         if (this.skinFactory != null) {
             this.skinFactory.saveSkins();
         }
-
-        // TODO: FIx this
-        //for (final Player player : Bukkit.getOnlinePlayers()) {
-        //    this.getProvider().resetPlayerName(player);
-        //}
     }
 
     public static Logger getOutput() {
@@ -233,7 +228,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         return this.userManager;
     }
 
-    public RankManagerImpl getRankManager() {
+    public RankManager getRankManager() {
         return this.rankManager;
     }
 

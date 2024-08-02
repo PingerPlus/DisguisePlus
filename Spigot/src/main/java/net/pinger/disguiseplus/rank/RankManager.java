@@ -1,8 +1,7 @@
-package net.pinger.disguiseplus.internal.rank;
+package net.pinger.disguiseplus.rank;
 
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.configuration.ExternalConfigurationAdapter;
-import net.pinger.disguiseplus.rank.Rank;
 import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -11,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class RankManagerImpl extends ExternalConfigurationAdapter {
+public class RankManager extends ExternalConfigurationAdapter {
     private final List<Rank> ranks = new ArrayList<>();
     private final String permission;
     private final boolean enabled;
 
-    public RankManagerImpl(DisguisePlus disguise) {
+    public RankManager(DisguisePlus disguise) {
         super(disguise, "ranks.yml");
 
         // Default settings

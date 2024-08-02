@@ -9,6 +9,7 @@ import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguise.skin.Skin;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.meta.PlayerMeta.Builder;
 import net.pinger.disguiseplus.skin.SkinPack;
 import net.pinger.disguiseplus.inventory.InventoryManager;
 import net.pinger.disguiseplus.prompts.ConfirmDeletePackPrompt;
@@ -19,7 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public class ExactPackProvider implements GuiProvider {
-
     private final SkinPack pack;
     private final DisguisePlus dp;
 
@@ -42,15 +42,8 @@ public class ExactPackProvider implements GuiProvider {
             Skin skin = skins.get(i);
 
             items[i] = GuiItem.of(this.getSkinPack(skin, (i + 1)), e -> {
-                // Here perform action
-                // For every skin
-                if (user.isDisguised()) {
-                    user.sendMessage("player.currently-disguised");
-                    return;
-                }
-
-                // Send the confirmation message
-                this.dp.getProvider().updatePlayer(player, skin);
+                final Builder builder = user.copyActiveMeta().setSkin(skin);
+                this.dp.getUserManager().disguise(user, builder.build());
                 user.sendMessage("player.skin-set", this.pack.getName());
             });
         }
@@ -71,9 +64,9 @@ public class ExactPackProvider implements GuiProvider {
 
         // Add a skin to this inventory
         ItemStack cre = new ItemBuilder(XMaterial.COMPASS)
-                .name(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Add Skin")
-                .lore(ChatColor.GRAY + "Click to add a new skin")
-                .build();
+            .name(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Add Skin")
+            .lore(ChatColor.GRAY + "Click to add a new skin")
+            .build();
 
         contents.setItem(5, 1, GuiItem.of(cre, e -> {
             this.dp.getInventoryManager().getAddSkinProvider(this.pack).open((Player) e.getWhoClicked());
@@ -81,9 +74,9 @@ public class ExactPackProvider implements GuiProvider {
 
         // Delete this skin pack
         ItemStack dl = new ItemBuilder(XMaterial.TRIPWIRE_HOOK)
-                .name(ChatColor.AQUA + ChatColor.BOLD.toString() + "Delete Skin Pack")
-                .lore(ChatColor.GRAY + "Click to delete this pack")
-                .build();
+            .name(ChatColor.AQUA + ChatColor.BOLD.toString() + "Delete Skin Pack")
+            .lore(ChatColor.GRAY + "Click to delete this pack")
+            .build();
 
         contents.setItem(5, 7, GuiItem.of(dl, e -> {
             this.dp.getConversation().createConversation((Player) e.getWhoClicked(), new ConfirmDeletePackPrompt(this.dp, this.pack));

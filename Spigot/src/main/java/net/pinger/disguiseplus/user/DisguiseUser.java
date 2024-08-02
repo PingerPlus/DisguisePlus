@@ -43,10 +43,6 @@ public class DisguiseUser {
         return this.transform().getName();
     }
 
-    public boolean isDisguised() {
-        return this.getActiveMeta() != null;
-    }
-
     /**
      * Transforms the current user to a player.
      *
@@ -65,6 +61,22 @@ public class DisguiseUser {
         return meta;
     }
 
+    public PlayerMeta.Builder copyActiveMeta() {
+        final PlayerMeta meta = this.getActiveMeta();
+        if (meta == null) {
+            return new Builder(this);
+        }
+        return Builder.copyOf(meta);
+    }
+
+    public void addMeta(PlayerMeta meta) {
+        this.meta.add(meta);
+    }
+
+    public boolean isDisguised() {
+        return this.getActiveMeta() != null;
+    }
+
     public IndexedList<PlayerMeta> getMeta() {
         return this.meta;
     }
@@ -78,7 +90,7 @@ public class DisguiseUser {
     }
 
     public Builder newMetaBuilder() {
-        final Builder builder = new Builder();
+        final Builder builder = new Builder(this);
         this.setMetaBuilder(builder);
         return builder;
     }

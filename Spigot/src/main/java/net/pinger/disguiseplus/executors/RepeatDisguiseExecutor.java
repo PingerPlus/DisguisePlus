@@ -36,44 +36,18 @@ public class RepeatDisguiseExecutor {
         builder.setName(StringUtil.randomize());
 
         if (!this.dp.getRankManager().isEnabled()) {
-            this.disguiseUser(user);
+            this.dp.getUserManager().disguise(user);
             return;
         }
 
         final List<Rank> ranks = this.dp.getRankManager().getAvailableRanks(user);
-        if (ranks != null && !ranks.isEmpty()) {
-            this.disguiseUser(user);
+        if (ranks == null || ranks.isEmpty()) {
+            this.dp.getUserManager().disguise(user);
             return;
         }
 
         // Do the rank inventory
-        this.dp.getInventoryManager().getRankInventory(ranks, this::disguiseUser).open(user.transform());
+        this.dp.getInventoryManager().getRankInventory(ranks, this.dp.getUserManager()::disguise).open(user.transform());
         return;
     }
-
-    private void disguiseUser(DisguiseUser user) {
-        final Builder metaBuilder = user.getMetaBuilder();
-        if (metaBuilder == null) {
-            return;
-        }
-
-        // If previous meta has not been saved, we will save it
-        final PlayerMeta activeMeta = user.getActiveMeta();
-        if (activeMeta != null) {
-            activeMeta.setEndTime(LocalDateTime.now());
-            this.dp.getStorage().savePlayerMeta(user, activeMeta).join();
-        }
-
-        final PlayerMeta meta = metaBuilder.build();
-        this.dp.getStorage().savePlayerMeta(user, meta).join();
-        user.getMeta().add(meta);
-
-        // Perform the user computations
-        this.dp.getProvider().updatePlayer(user.transform(), meta.getSkin(), meta.getName());
-
-        if (meta.getRank() != null) {
-            this.dp.getVaultManager().setPrefix(user.transform(), meta.getRank());
-        }
-    }
-
 }

@@ -61,7 +61,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
-
+        this.dp.getUserManager().forgetPlayer(event.getPlayer());
     }
 
     private boolean shouldDisguise(Player player, PlayerMeta meta) {

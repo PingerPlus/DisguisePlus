@@ -4,6 +4,7 @@ import com.jonahseguin.drink.annotation.Command;
 import com.jonahseguin.drink.annotation.Require;
 import com.jonahseguin.drink.annotation.Sender;
 import net.pinger.disguiseplus.DisguisePlus;
+import net.pinger.disguiseplus.meta.PlayerMeta.Builder;
 import net.pinger.disguiseplus.user.DisguiseUser;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -21,14 +22,6 @@ public class NicknameExecutor {
     @Command(name = "", desc = "Set a custom nickname for yourself", usage = "<nickname>")
     @Require("permission.dp.nickname")
     public void setNickname(@Sender DisguiseUser user, @Nonnull String nickname) {
-        // Check if the user is disguised
-        if (user.isDisguised()) {
-            user.sendMessage("player.currently-disguised");
-            return;
-        }
-
-        // Check if the length of this nickname
-        // Succeeds the allowed length
         if (nickname.length() < 3 || nickname.length() > 16) {
             user.sendMessage("player.invalid-nick");
             return;
@@ -42,7 +35,9 @@ public class NicknameExecutor {
             return;
         }
 
-        this.dp.getProvider().updatePlayer(user.transform(), nickname);
+        // Copy the current meta of the player, if the meta doesn't exist create a new one
+        final Builder builder = user.copyActiveMeta().setName(nickname);
+        this.dp.getUserManager().disguise(user, builder.build());
         user.sendMessage("player.success-name", nickname);
     }
 
