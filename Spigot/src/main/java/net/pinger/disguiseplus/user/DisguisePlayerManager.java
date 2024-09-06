@@ -19,7 +19,7 @@ public class DisguisePlayerManager {
         this.dp = dp;
         this.users = Collections.synchronizedMap(new HashMap<>());
 
-        for (Player p : Bukkit.getOnlinePlayers()) {
+        for (final Player p : Bukkit.getOnlinePlayers()) {
             final DisguiseUser user = this.dp.getStorage().loadUser(p.getUniqueId()).join();
             this.users.put(p.getUniqueId(), user);
 
@@ -54,7 +54,7 @@ public class DisguisePlayerManager {
         this.dp.getVaultManager().resetPrefix(user.transform());
     }
 
-    private void updatePlayer(Player player, PlayerMeta meta) {
+    public void updatePlayer(Player player, PlayerMeta meta) {
         if (meta.getRank() == null) {
             this.dp.getProvider().updatePlayer(player, meta.getSkin(), meta.getName());
             return;
@@ -66,7 +66,7 @@ public class DisguisePlayerManager {
 
     public void replacePlayerMeta(DisguiseUser user, PlayerMeta newMeta) {
         this.resetActiveMeta(user);
-        if (emptyMeta(DisguiseAPI.getDisguisePlayer(user.getId()), newMeta)) {
+        if (this.emptyMeta(DisguiseAPI.getDisguisePlayer(user.getId()), newMeta)) {
             return;
         }
         this.dp.getStorage().savePlayerMeta(user, newMeta).join();
@@ -84,7 +84,9 @@ public class DisguisePlayerManager {
     }
 
     private boolean emptyMeta(DisguisePlayer player, PlayerMeta newMeta) {
-        return player.getDefaultName().equals(newMeta.getName()) && Objects.equals(player.getDefaultSkin(), newMeta.getSkin());
+        return player.getDefaultName().equals(newMeta.getName()) &&
+               Objects.equals(player.getDefaultSkin(), newMeta.getSkin()) &&
+               newMeta.getRank() == null;
     }
 
     public void forgetPlayer(Player player) {

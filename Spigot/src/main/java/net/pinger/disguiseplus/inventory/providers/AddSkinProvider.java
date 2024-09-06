@@ -25,13 +25,11 @@ public class AddSkinProvider implements GuiProvider {
     }
 
     @Override
-    public void initialize(Player player, GuiContents contents) {
-
-    }
+    public void initialize(Player player, GuiContents contents) {}
 
     @Override
     public void update(Player player, GuiContents contents) {
-        int refresh = contents.getProperty("refresh", 0);
+        final int refresh = contents.getProperty("refresh", 0);
         contents.setProperty("refresh", refresh + 1);
 
         // Refresh every

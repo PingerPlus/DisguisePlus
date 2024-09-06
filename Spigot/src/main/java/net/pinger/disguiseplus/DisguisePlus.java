@@ -18,6 +18,7 @@ import net.pinger.disguiseplus.config.MessageConfiguration;
 import net.pinger.disguiseplus.executors.*;
 import net.pinger.disguiseplus.executors.drink.DisguiseUserProvider;
 import net.pinger.disguiseplus.internal.SkinFactoryImpl;
+import net.pinger.disguiseplus.libraries.DependencyManager;
 import net.pinger.disguiseplus.rank.RankManager;
 import net.pinger.disguiseplus.user.DisguiseUser;
 import net.pinger.disguiseplus.user.DisguisePlayerManager;
@@ -54,6 +55,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private Storage storage;
     private DisguiseProvider provider;
     private FeatureManager featureManager;
+    private DependencyManager dependencyManager;
     private MessageConfiguration configuration;
     private SkinFactory skinFactory;
     private ConversationUtil conversation;
@@ -69,10 +71,10 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
 
         // Load the config and register default events
         this.addDefaultConfig();
-        boolean baseSkins = getConfig().getBoolean("downloadBaseSkins");
+        final boolean baseSkins = this.getConfig().getBoolean("downloadBaseSkins");
 
         // Check if the PlaceholderAPI is enabled
-        if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+        if (this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new DisguisePlusExpansion(this).register();
         }
 
@@ -85,6 +87,9 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             this.getPluginLoader().disablePlugin(this);
             return;
         }
+
+        this.dependencyManager = new DependencyManager(this);
+        this.dependencyManager.loadDependencies();
 
         this.featureManager = new BukkitFeatureManager();
         this.rankManager = new RankManager(this);
@@ -106,7 +111,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.skinFactory = new SkinFactoryImpl(this, baseSkins);
         this.vaultManager = new VaultManager(this);
 
-        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
         // Load all the features
         this.featureManager.load();
@@ -116,7 +121,7 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.skinFactory.downloadSkins();
 
         // Register all commands here
-        CommandService service = Drink.get(this);
+        final CommandService service = Drink.get(this);
         service.bind(DisguiseUser.class).annotatedWith(Sender.class).toProvider(new DisguiseUserProvider(this));
         service.register(new DisguisePlusExecutor(this), "dp");
         service.register(new NicknameExecutor(this),  "nickname", "setnick");
@@ -133,8 +138,8 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     }
 
     private void addDefaultConfig() {
-        saveDefaultConfig();
-        File config = new File(getDataFolder(), "config.yml");
+        this.saveDefaultConfig();
+        final File config = new File(this.getDataFolder(), "config.yml");
 
         try {
             ConfigUpdater.update(this, "config.yml", config, new ArrayList<>());
@@ -254,6 +259,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     }
 
     public VaultManager getVaultManager() {
-        return vaultManager;
+        return this.vaultManager;
     }
 }

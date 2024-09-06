@@ -1,6 +1,7 @@
 package net.pinger.disguiseplus.listeners;
 
 import java.time.LocalDateTime;
+import net.md_5.bungee.api.ChatColor;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.meta.PlayerMeta;
 import net.pinger.disguiseplus.user.DisguiseUser;
@@ -55,8 +56,7 @@ public class PlayerListener implements Listener {
         }
 
         user.sendMessage("nick.join");
-        this.dp.getProvider().updatePlayerSilently(player, meta.getSkin(), meta.getName());
-        this.dp.getVaultManager().setPrefix(player, meta.getRank());
+        this.dp.getUserManager().updatePlayer(player, meta);
     }
 
     @EventHandler

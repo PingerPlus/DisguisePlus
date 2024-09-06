@@ -3,6 +3,7 @@ package net.pinger.disguiseplus.rank;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.configuration.ExternalConfigurationAdapter;
 import net.pinger.disguiseplus.user.DisguiseUser;
+import net.pinger.disguiseplus.utils.Text;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -33,7 +34,8 @@ public class RankManager extends ExternalConfigurationAdapter {
             }
 
             final String permission = rank.getString("permission");
-            final String display = rank.getString("display");
+            final String display = Text.translate(rank.getString("display"));
+            System.out.println(display);
             this.ranks.add(new Rank(name, display, permission));
         }
     }

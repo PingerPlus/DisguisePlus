@@ -17,6 +17,6 @@ public class IndexedList<E> extends ArrayList<E> {
     }
 
     public E lastSafe() {
-        return this.isEmpty() ? null : last();
+        return this.isEmpty() ? null : this.last();
     }
 }
