@@ -21,7 +21,7 @@ public class DisguisePlusProvider implements GuiProvider {
     @Override
     public void initialize(Player player, GuiContents contents) {
         // Get skull for this player
-        ItemStack skull = new ItemBuilder(this.dp.getSkullManager().getSkullFrom(player.getUniqueId()))
+        final ItemStack skull = new ItemBuilder(this.dp.getSkullManager().getSkullFrom(player.getUniqueId()))
                 .name(ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD + "Users")
                 .lore(ChatColor.GRAY + "Coming soon...")
                 .build();
@@ -29,7 +29,7 @@ public class DisguisePlusProvider implements GuiProvider {
         contents.setItem(1, 2, GuiItem.of(skull));
 
         // Settings
-        ItemStack settings = new ItemBuilder(XMaterial.COMMAND_BLOCK)
+        final ItemStack settings = new ItemBuilder(XMaterial.COMMAND_BLOCK)
                 .name(ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD + "Settings")
                 .lore(ChatColor.GRAY + "Coming soon...")
                 .build();
@@ -39,7 +39,7 @@ public class DisguisePlusProvider implements GuiProvider {
 
     @Override
     public void update(Player player, GuiContents contents) {
-        int refresh = contents.getProperty("refresh", 0);
+        final int refresh = contents.getProperty("refresh", 0);
         contents.setProperty("refresh", refresh + 1);
 
         // Refresh every
@@ -49,7 +49,7 @@ public class DisguisePlusProvider implements GuiProvider {
 
         // Item for viewing
         // All skin packs
-        ItemStack skinPack = new ItemBuilder(XMaterial.GOLD_NUGGET)
+        final ItemStack skinPack = new ItemBuilder(XMaterial.GOLD_NUGGET)
                 .name(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Skin Packs")
                 .lore(ChatColor.GRAY + "Click to open skin packs.")
                 .build();

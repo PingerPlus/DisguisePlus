@@ -31,7 +31,7 @@ public class SkinExecutor {
                 }
 
                 Bukkit.getScheduler().runTask(this.dp, () -> {
-                    final Builder builder = user.copyActiveMeta().setSkin(skin);
+                    final Builder builder = user.copyActiveMeta().skin(skin);
                     this.dp.getUserManager().disguise(user, builder.build());
                 });
 

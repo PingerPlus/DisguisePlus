@@ -13,7 +13,7 @@ import org.bukkit.Bukkit;
 public class StorageLoader {
 
     public static void init(Storage storage, InputStream stream) {
-        String contents;
+        final String contents;
         try (final BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
             contents = reader.lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {

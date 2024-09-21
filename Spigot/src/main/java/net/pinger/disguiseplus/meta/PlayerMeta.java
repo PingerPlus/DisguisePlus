@@ -16,13 +16,17 @@ public class PlayerMeta {
 
     private LocalDateTime endTime;
 
-    public PlayerMeta(DisguiseUser user, Skin skin, Rank rank, String name, LocalDateTime startTime, LocalDateTime endTime) {
-        this.user = user;
-        this.skin = skin;
-        this.rank = rank;
-        this.name = name;
-        this.startTime = startTime;
-        this.endTime = endTime;
+    public PlayerMeta(Builder builder) {
+        this.user = builder.user;
+        this.skin = builder.skin;
+        this.rank = builder.rank;
+        this.name = builder.name;
+        this.startTime = builder.startTime;
+        this.endTime = builder.endTime;
+    }
+
+    public static Builder builder(DisguiseUser user) {
+        return new Builder(user);
     }
 
     public void setEndTime(LocalDateTime endTime) {
@@ -55,56 +59,55 @@ public class PlayerMeta {
 
     public static class Builder {
         private final DisguiseUser user;
-        private final DisguisePlayer player;
 
         private Skin skin;
         private Rank rank;
         private String name;
         private LocalDateTime endTime;
+        private LocalDateTime startTime = LocalDateTime.now();
 
         public Builder(DisguiseUser user) {
             this.user = user;
-            this.player = DisguiseAPI.getDisguisePlayer(user.getId());
-            this.skin = this.player.getDefaultSkin();
-            this.name = this.player.getDefaultName();
+
+            final DisguisePlayer player = DisguiseAPI.getDisguisePlayer(user.getId());
+            this.skin = player.getDefaultSkin();
+            this.name = player.getDefaultName();
         }
 
         public static Builder copyOf(PlayerMeta meta) {
             return new Builder(meta.getUser())
-                .setSkin(meta.skin)
-                .setRank(meta.rank)
-                .setName(meta.name);
+                .skin(meta.skin)
+                .rank(meta.rank)
+                .name(meta.name);
         }
 
-        public Builder setSkin(Skin skin) {
+        public Builder skin(Skin skin) {
             this.skin = skin;
             return this;
         }
 
-        public Builder setRank(Rank rank) {
+        public Builder rank(Rank rank) {
             this.rank = rank;
             return this;
         }
 
-        public Builder setName(String name) {
+        public Builder name(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder setEndTime(LocalDateTime endTime) {
+        public Builder endTime(LocalDateTime endTime) {
             this.endTime = endTime;
             return this;
         }
 
+        public Builder startTime(LocalDateTime startTime) {
+            this.startTime = startTime;
+            return this;
+        }
+
         public PlayerMeta build() {
-            return new PlayerMeta(
-                this.user,
-                this.skin,
-                this.rank,
-                this.name,
-                LocalDateTime.now(),
-                this.endTime
-            );
+            return new PlayerMeta(this);
         }
 
     }

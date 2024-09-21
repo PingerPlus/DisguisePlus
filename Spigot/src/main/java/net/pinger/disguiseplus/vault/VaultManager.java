@@ -1,6 +1,5 @@
 package net.pinger.disguiseplus.vault;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.neznamy.tab.api.TabAPI;
 import me.neznamy.tab.api.TabPlayer;
 import me.neznamy.tab.api.event.player.PlayerLoadEvent;
@@ -27,7 +26,7 @@ public class VaultManager {
         final boolean tabEnabled = Bukkit.getPluginManager().isPluginEnabled("TAB");
         final boolean vaultEnabled = Bukkit.getPluginManager().isPluginEnabled("Vault");
         if (vaultEnabled) {
-            RegisteredServiceProvider<Chat> reg = plus.getServer().getServicesManager().getRegistration(Chat.class);
+            final RegisteredServiceProvider<Chat> reg = plus.getServer().getServicesManager().getRegistration(Chat.class);
             if (reg != null) {
                 this.chat = reg.getProvider();
             }
@@ -35,12 +34,17 @@ public class VaultManager {
 
         if (tabEnabled) {
             this.tab = TabAPI.getInstance();
-            this.tab.getEventBus().register(PlayerLoadEvent.class, e -> this.onPlayerLoad(e.getPlayer()));
+            if (this.tab.getEventBus() != null) {
+                this.tab.getEventBus().register(PlayerLoadEvent.class, e -> this.onPlayerLoad(e.getPlayer()));
+            }
         }
     }
 
     public void onPlayerLoad(TabPlayer tp) {
         final Player player = Bukkit.getPlayer(tp.getUniqueId());
+        if (player == null) {
+            return;
+        }
         final DisguiseUser user = this.plus.getUserManager().getUser(player.getUniqueId());
         if (user == null) {
             return;
@@ -55,8 +59,13 @@ public class VaultManager {
         this.resetPrefix(player);
 
         if (this.autoRank) {
-            this.tab.getTabListFormatManager().setPrefix(tp, rank.getDisplayName());
-            this.tab.getNameTagManager().setPrefix(tp, rank.getDisplayName());
+            if (this.tab.getTabListFormatManager() != null) {
+                this.tab.getTabListFormatManager().setPrefix(tp, rank.getDisplayName());
+            }
+
+            if (this.tab.getNameTagManager() != null) {
+                this.tab.getNameTagManager().setPrefix(tp, rank.getDisplayName());
+            }
         }
 
         tp.setTemporaryGroup(rank.getName());
@@ -68,15 +77,20 @@ public class VaultManager {
         }
 
         if (this.tab != null) {
-            TabPlayer tp = this.tab.getPlayer(player.getUniqueId());
+            final TabPlayer tp = this.tab.getPlayer(player.getUniqueId());
             if (tp == null || !tp.isLoaded()) {
                 return;
             }
 
             // Check if the player isn't null and apply the name
             if (this.autoRank) {
-                this.tab.getTabListFormatManager().setPrefix(tp, rank.getDisplayName());
-                this.tab.getNameTagManager().setPrefix(tp, rank.getDisplayName());
+                if (this.tab.getTabListFormatManager() != null) {
+                    this.tab.getTabListFormatManager().setPrefix(tp, rank.getDisplayName());
+                }
+
+                if (this.tab.getNameTagManager() != null) {
+                    this.tab.getNameTagManager().setPrefix(tp, rank.getDisplayName());
+                }
             }
 
             tp.setTemporaryGroup(rank.getName());
@@ -89,15 +103,20 @@ public class VaultManager {
         }
 
         if (this.tab != null) {
-            TabPlayer tp = this.tab.getPlayer(player.getUniqueId());
+            final TabPlayer tp = this.tab.getPlayer(player.getUniqueId());
             if (tp == null || !tp.isLoaded()) {
                 return;
             }
 
             // Check if the player isn't null and apply the name
             if (this.autoRank) {
-                this.tab.getTabListFormatManager().setPrefix(tp, null);
-                this.tab.getNameTagManager().setPrefix(tp, null);
+                if (this.tab.getTabListFormatManager() != null) {
+                    this.tab.getTabListFormatManager().setPrefix(tp, null);
+                }
+
+                if (this.tab.getNameTagManager() != null) {
+                    this.tab.getNameTagManager().setPrefix(tp, null);
+                }
             }
 
             tp.setTemporaryGroup(null);

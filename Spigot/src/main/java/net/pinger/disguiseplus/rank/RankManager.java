@@ -35,7 +35,6 @@ public class RankManager extends ExternalConfigurationAdapter {
 
             final String permission = rank.getString("permission");
             final String display = Text.translate(rank.getString("display"));
-            System.out.println(display);
             this.ranks.add(new Rank(name, display, permission));
         }
     }

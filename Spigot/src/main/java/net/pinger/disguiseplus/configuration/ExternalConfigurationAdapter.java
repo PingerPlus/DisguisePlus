@@ -71,7 +71,7 @@ public abstract class ExternalConfigurationAdapter extends DisguiseFeature {
 
             // Try to add defaults from resourceConfig
             // To the main configuration, by looping over the keys
-            for (Map.Entry<String, Object> entries : keyed.getValues(true).entrySet()) {
+            for (final Map.Entry<String, Object> entries : keyed.getValues(true).entrySet()) {
                 this.configuration.addDefault(entries.getKey(), entries.getValue());
             }
 

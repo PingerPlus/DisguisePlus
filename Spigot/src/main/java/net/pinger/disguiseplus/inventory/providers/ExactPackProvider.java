@@ -30,19 +30,19 @@ public class ExactPackProvider implements GuiProvider {
 
     @Override
     public void initialize(Player player, GuiContents contents) {
-        GuiPagination page = contents.getPagination();
-        DisguiseUser user = this.dp.getUserManager().getUser(player);
+        final GuiPagination page = contents.getPagination();
+        final DisguiseUser user = this.dp.getUserManager().getUser(player);
 
         // Get the skins
-        List<Skin> skins = this.pack.getSkins();
-        GuiItem[] items = new GuiItem[skins.size()];
+        final List<Skin> skins = this.pack.getSkins();
+        final GuiItem[] items = new GuiItem[skins.size()];
 
         for (int i = 0; i < items.length; i++) {
             // Get the pack
-            Skin skin = skins.get(i);
+            final Skin skin = skins.get(i);
 
             items[i] = GuiItem.of(this.getSkinPack(skin, (i + 1)), e -> {
-                final Builder builder = user.copyActiveMeta().setSkin(skin);
+                final Builder builder = user.copyActiveMeta().skin(skin);
                 this.dp.getUserManager().disguise(user, builder.build());
                 user.sendMessage("player.skin-set", this.pack.getName());
             });
@@ -54,7 +54,7 @@ public class ExactPackProvider implements GuiProvider {
 
     @Override
     public void update(Player player, GuiContents contents) {
-        int refresh = contents.getProperty("refresh", 0);
+        final int refresh = contents.getProperty("refresh", 0);
         contents.setProperty("refresh", refresh + 1);
 
         // Refresh
@@ -63,7 +63,7 @@ public class ExactPackProvider implements GuiProvider {
             return;
 
         // Add a skin to this inventory
-        ItemStack cre = new ItemBuilder(XMaterial.COMPASS)
+        final ItemStack cre = new ItemBuilder(XMaterial.COMPASS)
             .name(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Add Skin")
             .lore(ChatColor.GRAY + "Click to add a new skin")
             .build();
@@ -73,7 +73,7 @@ public class ExactPackProvider implements GuiProvider {
         }));
 
         // Delete this skin pack
-        ItemStack dl = new ItemBuilder(XMaterial.TRIPWIRE_HOOK)
+        final ItemStack dl = new ItemBuilder(XMaterial.TRIPWIRE_HOOK)
             .name(ChatColor.AQUA + ChatColor.BOLD.toString() + "Delete Skin Pack")
             .lore(ChatColor.GRAY + "Click to delete this pack")
             .build();

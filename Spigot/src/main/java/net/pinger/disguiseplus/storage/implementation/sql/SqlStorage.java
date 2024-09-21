@@ -181,14 +181,15 @@ public class SqlStorage implements StorageImplementation {
                     final Rank rank = this.dp.getRankManager().getRank(set.getString("rank"));
                     final Skin skin = this.retrieveSkin(c, set.getInt("skin_id"));
                     final Timestamp endTime = set.getTimestamp("end_time");
-                    meta.add(new PlayerMeta(
-                        user,
-                        skin,
-                        rank,
-                        set.getString("name"),
-                        set.getTimestamp("start_time").toLocalDateTime(),
-                        endTime == null ? null : endTime.toLocalDateTime()
-                    ));
+                    meta.add(
+                        PlayerMeta.builder(user)
+                            .name(set.getString("name"))
+                            .rank(rank)
+                            .skin(skin)
+                            .startTime(set.getTimestamp("start_time").toLocalDateTime())
+                            .endTime(endTime == null ? null : endTime.toLocalDateTime())
+                            .build()
+                    );
                 }
             }
         }

@@ -23,6 +23,7 @@ public class Text {
 
         return ChatColor.translateAlternateColorCodes('&', message);
     }
+
     private static String code(String hexCode) {
         final StringBuilder builder = new StringBuilder(Text.DEFAULT_CODE);
         for (int i = 0; i <= 5; i++) {

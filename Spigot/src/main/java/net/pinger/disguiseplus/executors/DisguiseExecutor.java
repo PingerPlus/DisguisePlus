@@ -3,10 +3,8 @@ package net.pinger.disguiseplus.executors;
 import com.jonahseguin.drink.annotation.Command;
 import com.jonahseguin.drink.annotation.Require;
 import com.jonahseguin.drink.annotation.Sender;
-import java.time.LocalDateTime;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.meta.PlayerMeta;
-import net.pinger.disguiseplus.meta.PlayerMeta.Builder;
 import net.pinger.disguiseplus.user.DisguiseUser;
 import net.pinger.disguiseplus.rank.Rank;
 
@@ -25,8 +23,8 @@ public class DisguiseExecutor {
     @Require("permission.dp.disguise")
     public void disguise(@Sender DisguiseUser user) {
         final PlayerMeta.Builder builder = user.newMetaBuilder();
-        builder.setSkin(this.dp.getSkinFactory().getRandomSkin());
-        builder.setName(StringUtil.randomize());
+        builder.skin(this.dp.getSkinFactory().getRandomSkin());
+        builder.name(StringUtil.randomize());
 
         if (!this.dp.getRankManager().isEnabled()) {
             this.dp.getUserManager().disguise(user);

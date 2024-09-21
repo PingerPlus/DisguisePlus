@@ -10,7 +10,6 @@ import net.pinger.disguise.item.ItemBuilder;
 import net.pinger.disguise.item.XMaterial;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.inventory.InventoryManager;
-import net.pinger.disguiseplus.meta.PlayerMeta;
 import net.pinger.disguiseplus.meta.PlayerMeta.Builder;
 import net.pinger.disguiseplus.rank.Rank;
 import net.pinger.disguiseplus.user.DisguiseUser;
@@ -47,7 +46,7 @@ public class RankChooseProvider implements GuiProvider {
                 if (meta == null) {
                     return;
                 }
-                meta.setRank(rank);
+                meta.rank(rank);
                 this.disguiseConsumer.accept(user);
             });
         }

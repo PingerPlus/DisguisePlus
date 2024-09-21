@@ -28,7 +28,7 @@ public class ResetNicknameExecutor {
             return;
         }
 
-        final Builder builder = Builder.copyOf(meta).setName(player.getDefaultName());
+        final Builder builder = Builder.copyOf(meta).name(player.getDefaultName());
         this.dp.getUserManager().disguise(user, builder.build());
         user.sendMessage("player.nickname-reset");
     }

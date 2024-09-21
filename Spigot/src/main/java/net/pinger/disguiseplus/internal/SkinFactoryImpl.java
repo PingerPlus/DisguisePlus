@@ -151,7 +151,7 @@ public class SkinFactoryImpl implements SkinFactory {
     @Nullable
     @Override
     public SkinPack getSkinPack(String name) {
-        for (SkinPack pack : this.getSkinPacks()) {
+        for (final SkinPack pack : this.getSkinPacks()) {
             if (pack.getName().equalsIgnoreCase(name)) {
                 return pack;
             }
@@ -163,7 +163,7 @@ public class SkinFactoryImpl implements SkinFactory {
     @Nullable
     @Override
     public SkinPack getSkinPack(String category, String name) {
-        for (SkinPack pack : this.getSkinPacks(category)) {
+        for (final SkinPack pack : this.getSkinPacks(category)) {
             if (pack.getName().equalsIgnoreCase(name)) {
                 return pack;
             }
@@ -211,14 +211,14 @@ public class SkinFactoryImpl implements SkinFactory {
 
         // Attempt to download skins
         DisguisePlus.getOutput().info("Started the downloading skins process");
-        DisguisePlus.getOutput().info(String.format("Option for downloading default skins: %s", this.downloadBaseSkins));
+        DisguisePlus.getOutput().info("Option for downloading default skins: {}", this.downloadBaseSkins);
         DisguisePlus.getOutput().info("This might take a few seconds if no local files are saved");
         DisguisePlus.getOutput().info("Attempting to download skins from local files");
 
         CompletableFuture.runAsync(() -> {
             try {
                 if (Files.exists(this.categoriesFile)) {
-                    try (BufferedReader reader = Files.newBufferedReader(this.categoriesFile)) {
+                    try (final BufferedReader reader = Files.newBufferedReader(this.categoriesFile)) {
                         final JsonObject categories = DisguisePlus.GSON.fromJson(reader, JsonObject.class);
 
                         for (final Map.Entry<String, JsonElement> category : categories.entrySet()) {
@@ -248,7 +248,7 @@ public class SkinFactoryImpl implements SkinFactory {
 
             // Output for different occasions
             if (skinPacks > 0 && totalSkins > 0) {
-                DisguisePlus.getOutput().info(String.format("Downloaded %s skins from %s different skin packs", totalSkins, skinPacks));
+                DisguisePlus.getOutput().info("Downloaded {} skins from {} different skin packs", totalSkins, skinPacks);
             } else {
                 DisguisePlus.getOutput().info("No skins were found within the local cache");
             }
@@ -266,7 +266,7 @@ public class SkinFactoryImpl implements SkinFactory {
                 final HttpRequest request = new HttpGetRequest(HttpUtil.CATEGORY_URL);
                 final HttpResponse response = request.connect();
 
-                JsonObject categories = DisguisePlus.GSON.fromJson(response.getResponse(), JsonObject.class);
+                final JsonObject categories = DisguisePlus.GSON.fromJson(response.getResponse(), JsonObject.class);
                 for (final Map.Entry<String, JsonElement> category : categories.entrySet()) {
                     final String categoryName = category.getKey();
                     for (final JsonElement pack : category.getValue().getAsJsonArray()) {
@@ -301,7 +301,7 @@ public class SkinFactoryImpl implements SkinFactory {
 
             // Output for different occasions
             if (skinPacks > 0 && totalSkins > 0) {
-                DisguisePlus.getOutput().info(String.format("Fetched %s skins from %s different skin packs from the database", totalSkins, skinPacks));
+                DisguisePlus.getOutput().info("Fetched {} skins from {} different skin packs from the database", totalSkins, skinPacks);
             } else {
                 DisguisePlus.getOutput().info("No new skins were found within the database");
             }

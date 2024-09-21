@@ -36,7 +36,7 @@ public class NicknameExecutor {
         }
 
         // Copy the current meta of the player, if the meta doesn't exist create a new one
-        final Builder builder = user.copyActiveMeta().setName(nickname);
+        final Builder builder = user.copyActiveMeta().name(nickname);
         this.dp.getUserManager().disguise(user, builder.build());
         user.sendMessage("player.success-name", nickname);
     }
@@ -45,7 +45,7 @@ public class NicknameExecutor {
         // Loop through all players online
         // And check whether they already have this name
         // If so, set this as invalid name
-        for (Player p : Bukkit.getOnlinePlayers()) {
+        for (final Player p : Bukkit.getOnlinePlayers()) {
             if (p.getName().equalsIgnoreCase(name)) {
                 return false;
             }

@@ -28,7 +28,7 @@ public class ResetSkinExecutor {
             return;
         }
 
-        final Builder builder = Builder.copyOf(meta).setSkin(player.getDefaultSkin());
+        final Builder builder = Builder.copyOf(meta).skin(player.getDefaultSkin());
         this.dp.getUserManager().disguise(user, builder.build());
         user.sendMessage("player.skin-reset");
     }
