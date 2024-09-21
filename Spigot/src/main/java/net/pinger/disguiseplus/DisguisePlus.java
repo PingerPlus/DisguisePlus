@@ -6,6 +6,8 @@ import com.jonahseguin.drink.CommandService;
 import com.jonahseguin.drink.Drink;
 import com.jonahseguin.drink.annotation.Sender;
 import com.tchristofferson.configupdater.ConfigUpdater;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.logging.Level;
 import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguise.DisguiseProvider;
@@ -151,13 +153,13 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
         this.reloadConfig();
     }
 
+    public boolean isDatabaseEnabled() {
+        return this.storage != null;
+    }
+
     private boolean loadStorage() {
         if (!this.getConfig().getBoolean("database.enabled")) {
-            this.getLogger().info("DISABLING THIS PLUGIN AS IT REQUIRES MYSQL TO WORK!");
-            this.getLogger().info("DISABLING THIS PLUGIN AS IT REQUIRES MYSQL TO WORK!");
-            this.getLogger().info("DISABLING THIS PLUGIN AS IT REQUIRES MYSQL TO WORK!");
-            this.getPluginLoader().disablePlugin(this);
-            return false;
+            return true;
         }
 
         final ConfigurationSection section = this.getConfig().getConfigurationSection("database");

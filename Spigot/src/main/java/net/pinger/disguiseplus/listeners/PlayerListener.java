@@ -1,7 +1,7 @@
 package net.pinger.disguiseplus.listeners;
 
 import java.time.LocalDateTime;
-import net.md_5.bungee.api.ChatColor;
+import java.util.UUID;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.meta.PlayerMeta;
 import net.pinger.disguiseplus.user.DisguiseUser;
@@ -23,7 +23,14 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
-        final DisguiseUser user = this.dp.getStorage().loadUser(event.getUniqueId()).join();
+        final UUID id = event.getUniqueId();
+        final DisguiseUser user;
+        if (this.dp.isDatabaseEnabled()) {
+            user = this.dp.getStorage().loadUser(id).join();
+        } else {
+            user = new DisguiseUser(this.dp, id);
+        }
+
         if (user == null) {
             return;
         }
@@ -39,7 +46,10 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        this.dp.getStorage().savePlayer(user).join();
+        if (this.dp.isDatabaseEnabled()) {
+            this.dp.getStorage().savePlayer(user).join();
+        }
+
         this.processUndisguise(player);
 
         final PlayerMeta meta = user.getActiveMeta();

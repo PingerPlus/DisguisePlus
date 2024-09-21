@@ -52,6 +52,10 @@ public class Storage {
         this.implementation = new SqlStorage(plus, this);
     }
 
+    public Storage(DisguisePlus plus) throws Exception {
+        this(plus, null, null);
+    }
+
     /**
      * This method returns a new connection fetched from
      * the pool.

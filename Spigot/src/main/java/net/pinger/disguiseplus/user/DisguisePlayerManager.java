@@ -20,7 +20,13 @@ public class DisguisePlayerManager {
         this.users = Collections.synchronizedMap(new HashMap<>());
 
         for (final Player p : Bukkit.getOnlinePlayers()) {
-            final DisguiseUser user = this.dp.getStorage().loadUser(p.getUniqueId()).join();
+            final DisguiseUser user;
+            if (this.dp.isDatabaseEnabled()) {
+                user = this.dp.getStorage().loadUser(p.getUniqueId()).join();
+            } else {
+                user = new DisguiseUser(this.dp, p.getUniqueId());
+            }
+
             this.users.put(p.getUniqueId(), user);
 
             // Send update packets for this player
@@ -69,7 +75,10 @@ public class DisguisePlayerManager {
         if (this.emptyMeta(DisguiseAPI.getDisguisePlayer(user.getId()), newMeta)) {
             return;
         }
-        this.dp.getStorage().savePlayerMeta(user, newMeta).join();
+
+        if (this.dp.isDatabaseEnabled()) {
+            this.dp.getStorage().savePlayerMeta(user, newMeta).join();
+        }
         user.addMeta(newMeta);
     }
 
@@ -80,7 +89,10 @@ public class DisguisePlayerManager {
         }
 
         meta.setEndTime(LocalDateTime.now());
-        this.dp.getStorage().savePlayerMeta(user, meta).join();
+
+        if (this.dp.isDatabaseEnabled()) {
+            this.dp.getStorage().savePlayerMeta(user, meta).join();
+        }
     }
 
     private boolean emptyMeta(DisguisePlayer player, PlayerMeta newMeta) {
