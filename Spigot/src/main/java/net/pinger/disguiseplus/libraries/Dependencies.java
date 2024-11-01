@@ -7,7 +7,7 @@ public enum Dependencies implements Dependency {
     MARIA_DB(
         "org.mariadb.jdbc",
         "mariadb-java-client",
-        "2.5.2"
+        "3.4.1"
     );
 
     private final String groupId;

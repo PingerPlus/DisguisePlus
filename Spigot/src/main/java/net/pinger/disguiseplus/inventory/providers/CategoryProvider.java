@@ -35,7 +35,7 @@ public class CategoryProvider implements GuiProvider {
 
     @Override
     public void update(Player player, GuiContents contents) {
-        int refresh = contents.getProperty("refresh", 0);
+        final int refresh = contents.getProperty("refresh", 0);
         contents.setProperty("refresh", refresh + 1);
 
         // Refresh every
@@ -44,16 +44,16 @@ public class CategoryProvider implements GuiProvider {
             return;
 
         // Pagination
-        GuiPagination page = contents.getPagination();
-        SkinFactory factory = this.dp.getSkinFactory();
+        final GuiPagination page = contents.getPagination();
+        final SkinFactory factory = this.dp.getSkinFactory();
 
         // Get the skins
-        List<? extends SkinPack> packs = factory.getSkinPacks(this.category);
-        GuiItem[] items = new GuiItem[packs.size()];
+        final List<? extends SkinPack> packs = factory.getSkinPacks(this.category);
+        final GuiItem[] items = new GuiItem[packs.size()];
 
         for (int i = 0; i < items.length; i++) {
             // Get the pack
-            SkinPack pack = packs.get(i);
+            final SkinPack pack = packs.get(i);
 
             // Add the pack to the inventory
             items[i] = GuiItem.of(this.getSkinPack(pack), e -> {
@@ -68,7 +68,7 @@ public class CategoryProvider implements GuiProvider {
         // Item Responsible
         // For creating new inventories
         // Within the prompt
-        ItemStack cp = new ItemBuilder(XMaterial.COMPASS)
+        final ItemStack cp = new ItemBuilder(XMaterial.COMPASS)
                 .name(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Create Pack")
                 .lore(ChatColor.GRAY + "Click to create a new skin pack")
                 .build();
@@ -78,7 +78,7 @@ public class CategoryProvider implements GuiProvider {
         }));
 
         // Deleting the skin pack item
-        ItemStack dp = new ItemBuilder(XMaterial.TRIPWIRE_HOOK)
+        final ItemStack dp = new ItemBuilder(XMaterial.TRIPWIRE_HOOK)
                 .name(ChatColor.AQUA + ChatColor.BOLD.toString() + "Delete Category")
                 .lore(ChatColor.GRAY + "Click to delete this category")
                 .build();

@@ -5,6 +5,7 @@ import net.pinger.disguise.DisguiseAPI;
 import net.pinger.disguiseplus.DisguisePlus;
 import net.pinger.disguiseplus.meta.PlayerMeta;
 import net.pinger.disguiseplus.user.DisguiseUser;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

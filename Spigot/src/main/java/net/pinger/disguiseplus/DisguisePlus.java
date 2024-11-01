@@ -35,6 +35,7 @@ import net.pinger.disguiseplus.storage.credentials.StorageCredentials;
 import net.pinger.disguiseplus.utils.ConversationUtil;
 import net.pinger.disguiseplus.vault.VaultManager;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
@@ -57,7 +58,6 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
     private Storage storage;
     private DisguiseProvider provider;
     private FeatureManager featureManager;
-    private DependencyManager dependencyManager;
     private MessageConfiguration configuration;
     private SkinFactory skinFactory;
     private ConversationUtil conversation;
@@ -90,8 +90,13 @@ public class DisguisePlus extends JavaPlugin implements Disguise {
             return;
         }
 
-        this.dependencyManager = new DependencyManager(this);
-        this.dependencyManager.loadDependencies();
+        new DependencyManager(this).loadDependencies();
+
+        try {
+            Class.forName("org.mariadb.jdbc.Driver");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         this.featureManager = new BukkitFeatureManager();
         this.rankManager = new RankManager(this);
